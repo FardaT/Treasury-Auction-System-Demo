@@ -1,4 +1,4 @@
-# name-MS-Treasury-Auction-System
+# MIghty Rooster-MS-Treasury-Auction-System
 
 ## Dependencies
 
