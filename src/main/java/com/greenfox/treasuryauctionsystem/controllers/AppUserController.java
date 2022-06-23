@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.mail.MessagingException;
 
@@ -24,16 +25,23 @@ public class AppUserController {
         this.emailService = emailService;
     }
 
-    // REGISTER PAGE
+    // SHOW REGISTER FORM
     @GetMapping("register")
     public String register() {
         return "register.html";
     }
 
-    // CONFIRM page right after reg
+    // TELL THE USER TO CHECK HIS EMAIL
     @GetMapping("confirm")
     public String confirm() {
         return "confirm.html";
+    }
+
+    // ACTIVATE ACCOUNT BY TOKEN
+    @GetMapping("confirm_token")
+    public String confirm_token(@RequestParam String activationToken) {
+        appUserService.activateAccount(activationToken);
+        return "confirm_token";
     }
 
     // STORE

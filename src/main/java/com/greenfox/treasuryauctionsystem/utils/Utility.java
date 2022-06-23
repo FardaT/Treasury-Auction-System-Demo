@@ -19,12 +19,12 @@ public class Utility {
     // https://stackoverflow.com/questions/5289849/how-do-i-send-html-email-in-spring-mvc
     public static String setConfirmationEmailText(String username, String activationToken) {
 
-        String href = "http://localhost:8080/confirm_token/?activationToken=" + activationToken;
+        String href = "http://localhost:8080/confirm_token?activationToken=" + activationToken;
 
         return "<p>Dear <b>" + username + "</b>!</p>" +
-                "<p>You have successully registered your account in our auction system.</p>" +
+                "<p>You have successfully registered your account in our auction system.</p>" +
                 "<p>In order to activate your account please click on the link below:</p>" +
                 "<a href=" + href + ">Click here</a>" +
-                "<p>Regadrs, US Treasury</p>";
+                "<p>Regards, US Treasury</p>";
     }
 }

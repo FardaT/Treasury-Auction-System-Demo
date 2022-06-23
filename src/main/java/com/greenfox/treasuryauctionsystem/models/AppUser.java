@@ -44,10 +44,10 @@ public class AppUser {
   private boolean isAdmin = false;
   private String institution;
   private String activationToken = Utility.generateString();
-  private Date activationTokenExpiration = Utility.setExpiration(60); // current time + 60 minutes
+  private Date activationTokenExpiration = Utility.setExpiration(1); // current time + 1 minutes
   private boolean isActivated = false;
   private String reactivationToken = Utility.generateString();
-  private Date reactivationTokenExpiration = Utility.setExpiration(60); // current time + 60 minutes;
+  private Date reactivationTokenExpiration = Utility.setExpiration(1); // current time + 1 minutes;
 
   // CUSTOM
   public void addBid(Bid bid) {
