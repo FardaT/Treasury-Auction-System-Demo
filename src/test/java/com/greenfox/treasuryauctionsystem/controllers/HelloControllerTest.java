@@ -28,7 +28,4 @@ class HelloControllerTest {
 		//Unauthorized because of spring security
 		mockMvc.perform(MockMvcRequestBuilders.get("/hello")).andExpect(status().isUnauthorized());
 	}
-	@Test
-	void contextLoads(){
-	}
 }
