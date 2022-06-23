@@ -58,10 +58,10 @@ public class TestService {
     appUser1.setAdmin(true);
     appUser1.setInstitution("A");
     appUser1.setActivationToken("a_token");
-    appUser1.setActivationTokenExpiration(LocalDateTime.now());
+    // appUser1.setActivationTokenExpiration(LocalDateTime.now());
     appUser1.setActivated(false);
     appUser1.setReactivationToken("a_reactivationtoken");
-    appUser1.setReactivationTokenExpiration(LocalDateTime.now());
+    // appUser1.setReactivationTokenExpiration(LocalDateTime.now());
     appUser1.addBid(bid1);
 
     Auction auction1 = new Auction();
