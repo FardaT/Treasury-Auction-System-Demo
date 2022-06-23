@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.models;
 
+import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,24 +17,33 @@ public class TreasurySecurity {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  // TODO: 2022. 06. 22.  relation
   @ManyToOne(fetch = FetchType.LAZY)
   private Auction auction;
 
   private String securityName;
   private String securityType;
   private String securityTerm;
+  private long totalAmount;
+  private LocalDate issueDate;
+  private LocalDate maturityDate;
+  private float highRate;
+
 
   public TreasurySecurity() {
   }
 
   public TreasurySecurity(Long id, Auction auction, String securityName, String securityType,
-                          String securityTerm) {
+                          String securityTerm, long totalAmount, LocalDate issueDate,
+                          LocalDate maturityDate, float highRate) {
     this.id = id;
     this.auction = auction;
     this.securityName = securityName;
     this.securityType = securityType;
     this.securityTerm = securityTerm;
+    this.totalAmount = totalAmount;
+    this.issueDate = issueDate;
+    this.maturityDate = maturityDate;
+    this.highRate = highRate;
   }
 
   public Long getId() {
@@ -74,5 +84,37 @@ public class TreasurySecurity {
 
   public void setSecurityTerm(String securityTerm) {
     this.securityTerm = securityTerm;
+  }
+
+  public long getTotalAmount() {
+    return totalAmount;
+  }
+
+  public void setTotalAmount(long totalAmount) {
+    this.totalAmount = totalAmount;
+  }
+
+  public LocalDate getIssueDate() {
+    return issueDate;
+  }
+
+  public void setIssueDate(LocalDate issueDate) {
+    this.issueDate = issueDate;
+  }
+
+  public LocalDate getMaturityDate() {
+    return maturityDate;
+  }
+
+  public void setMaturityDate(LocalDate maturityDate) {
+    this.maturityDate = maturityDate;
+  }
+
+  public float getHighRate() {
+    return highRate;
+  }
+
+  public void setHighRate(float highRate) {
+    this.highRate = highRate;
   }
 }

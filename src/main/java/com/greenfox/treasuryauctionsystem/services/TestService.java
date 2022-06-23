@@ -46,6 +46,10 @@ public class TestService {
     treasurySecurity1.setSecurityName("Long Bond 1");
     treasurySecurity1.setSecurityType("Bond");
     treasurySecurity1.setSecurityTerm("2032-06-22");
+    treasurySecurity1.setTotalAmount(555);
+    treasurySecurity1.setIssueDate(LocalDate.now());
+    treasurySecurity1.setMaturityDate(LocalDate.now());
+    treasurySecurity1.setHighRate(9.9f);
 
     AppUser appUser1 = new AppUser();
     appUser1.setUsername("a_user");
@@ -61,13 +65,9 @@ public class TestService {
     appUser1.addBid(bid1);
 
     Auction auction1 = new Auction();
-    auction1.setOfferingAmount(555);
     auction1.setAuctionStartDate(LocalDateTime.now());
     auction1.setAuctionEndDate(LocalDateTime.now());
     auction1.setProcessed(true);
-    auction1.setIssueDate(LocalDate.now());
-    auction1.setMaturityDate(LocalDate.now());
-    auction1.setHighRate(9.9f);
     auction1.addBid(bid1);
     auction1.addTreasurySecurity(treasurySecurity1);
 
