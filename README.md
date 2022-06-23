@@ -1,5 +1,7 @@
 # MIghty Rooster-MS-Treasury-Auction-System
 
+## Installation guide
+
 ## Dependencies
 
 - Java Development Kit - JDK 11
