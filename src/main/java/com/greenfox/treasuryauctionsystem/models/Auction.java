@@ -43,30 +43,22 @@ public class Auction {
   )
   private List<Bid> bidList = new ArrayList<>();
 
-  private long offeringAmount;
   private LocalDateTime auctionStartDate;
   private LocalDateTime auctionEndDate;
   private boolean isProcessed;
-  private LocalDate issueDate;
-  private LocalDate maturityDate;
-  private float highRate;
 
   public Auction() {
   }
 
-  public Auction(Long cusip, List<TreasurySecurity> treasurySecurities, List<Bid> bidList,
-                 long offeringAmount, LocalDateTime auctionStartDate, LocalDateTime auctionEndDate,
-                 boolean isProcessed, LocalDate issueDate, LocalDate maturityDate, float highRate) {
+  public Auction(Long cusip, List<TreasurySecurity> treasurySecurityList, List<Bid> bidList,
+                 LocalDateTime auctionStartDate, LocalDateTime auctionEndDate,
+                 boolean isProcessed) {
     this.cusip = cusip;
-    this.treasurySecurityList = treasurySecurities;
+    this.treasurySecurityList = treasurySecurityList;
     this.bidList = bidList;
-    this.offeringAmount = offeringAmount;
     this.auctionStartDate = auctionStartDate;
     this.auctionEndDate = auctionEndDate;
     this.isProcessed = isProcessed;
-    this.issueDate = issueDate;
-    this.maturityDate = maturityDate;
-    this.highRate = highRate;
   }
 
   public Long getCusip() {
@@ -77,13 +69,13 @@ public class Auction {
     this.cusip = cusip;
   }
 
-  public List<TreasurySecurity> getTreasurySecurities() {
+  public List<TreasurySecurity> getTreasurySecurityList() {
     return treasurySecurityList;
   }
 
-  public void setTreasurySecurities(
-      List<TreasurySecurity> treasurySecurities) {
-    this.treasurySecurityList = treasurySecurities;
+  public void setTreasurySecurityList(
+      List<TreasurySecurity> treasurySecurityList) {
+    this.treasurySecurityList = treasurySecurityList;
   }
 
   public List<Bid> getBidList() {
@@ -92,14 +84,6 @@ public class Auction {
 
   public void setBidList(List<Bid> bidList) {
     this.bidList = bidList;
-  }
-
-  public long getOfferingAmount() {
-    return offeringAmount;
-  }
-
-  public void setOfferingAmount(long offeringAmount) {
-    this.offeringAmount = offeringAmount;
   }
 
   public LocalDateTime getAuctionStartDate() {
@@ -124,30 +108,6 @@ public class Auction {
 
   public void setProcessed(boolean processed) {
     isProcessed = processed;
-  }
-
-  public LocalDate getIssueDate() {
-    return issueDate;
-  }
-
-  public void setIssueDate(LocalDate issueDate) {
-    this.issueDate = issueDate;
-  }
-
-  public LocalDate getMaturityDate() {
-    return maturityDate;
-  }
-
-  public void setMaturityDate(LocalDate maturityDate) {
-    this.maturityDate = maturityDate;
-  }
-
-  public float getHighRate() {
-    return highRate;
-  }
-
-  public void setHighRate(float highRate) {
-    this.highRate = highRate;
   }
 
   public void addBid(Bid bid) {
