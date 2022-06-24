@@ -1,9 +1,11 @@
 package com.greenfox.treasuryauctionsystem.services;
 
 import com.greenfox.treasuryauctionsystem.exceptions.AppUserNotFoundException;
+import com.greenfox.treasuryauctionsystem.exceptions.IllegalRegexException;
 import com.greenfox.treasuryauctionsystem.exceptions.TokenExpiredException;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.repositories.AppUserRepository;
+import com.greenfox.treasuryauctionsystem.utils.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,21 @@ public class AppUserServiceImpl implements AppUserService {
     // STORE
     @Override
     public void saveAppUser(AppUser appUser) {
-        appUserRepository.save(appUser);
+
+        // check if fields are empty
+        if (
+                appUser.getUsername().equals("") ||
+                        appUser.getEmail().equals("") ||
+                        appUser.getInstitution().equals("") ||
+                        appUser.getPassword().equals("")) {
+            throw new IllegalArgumentException("Registration fields are all required!");
+        } else if (!Utility.validatePassword(appUser.getPassword())) {
+            // password checking (regex)
+            throw new IllegalRegexException("Password regex failed.");
+        } else {
+            // if validation is ok, then save user
+            appUserRepository.save(appUser);
+        }
     }
 
     // ACTIVATE ACCOUNT BY TOKEN
