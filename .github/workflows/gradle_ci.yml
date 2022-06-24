@@ -4,6 +4,8 @@ on:
     branches: [develop, master]  
   push:
     branches: [integrate_CI]
+env:
+  GMAIL_APP_PASSWORD: tnikpnypkzpefydl
 jobs:
   build:
     runs-on: ubuntu-latest

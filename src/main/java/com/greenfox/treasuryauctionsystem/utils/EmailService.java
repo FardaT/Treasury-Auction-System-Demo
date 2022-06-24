@@ -11,7 +11,7 @@ import java.util.Properties;
 @Component
 public class EmailService {
 
-	//@Value("${GMAIL_APP_PASSWORD}")
+	@Value("${GMAIL_APP_PASSWORD}")
 	private String gmailAppPassword;
 
 	public JavaMailSender getJavaMailSender() {
@@ -20,7 +20,8 @@ public class EmailService {
 		mailSender.setPort(587);
 
 		mailSender.setUsername("mightyroosterteam@gmail.com");
-		mailSender.setPassword("tnikpnypkzpefydl");
+		//mailSender.setPassword("tnikpnypkzpefydl");
+		mailSender.setPassword(gmailAppPassword);
 
 		Properties props = mailSender.getJavaMailProperties();
 		props.put("mail.transport.protocol", "smtp");
