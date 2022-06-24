@@ -37,6 +37,7 @@ public class EmailService {
     return mailSender;
   }
 
+  // PLAIN TEXT EMAIL
   public void sendSimpleMessage(
       String to, String subject, String text) {
     SimpleMailMessage message = new SimpleMailMessage();
@@ -47,6 +48,7 @@ public class EmailService {
     getJavaMailSender().send(message);
   }
 
+  // HTML EMAIL
   public void sendHtmlMessage(String to, String subject, String text) throws MessagingException {
     MimeMessage mimeMessage = getJavaMailSender().createMimeMessage();
     MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
