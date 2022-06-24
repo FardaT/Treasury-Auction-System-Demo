@@ -64,6 +64,19 @@ public class TestService {
     // appUser1.setReactivationTokenExpiration(LocalDateTime.now());
     appUser1.addBid(bid1);
 
+    AppUser appUser2 = new AppUser();
+    appUser2.setUsername("szecsiistvan");
+    appUser2.setPassword("password");
+    appUser2.setEmail("szecsi.istvan@gmail.com");
+    appUser2.setAdmin(true);
+    appUser2.setInstitution("Mighty Rooster Team");
+//    appUser2.setActivationToken(null);
+//    appUser2.setActivationTokenExpiration(null);
+    appUser2.setActivated(true);
+//    appUser2.setReactivationToken(null);
+//    appUser2.setReactivationTokenExpiration(null);
+//    appUser2.addBid(null);
+
     Auction auction1 = new Auction();
     auction1.setAuctionStartDate(LocalDateTime.now());
     auction1.setAuctionEndDate(LocalDateTime.now());
@@ -72,6 +85,7 @@ public class TestService {
     auction1.addTreasurySecurity(treasurySecurity1);
 
     appUserRepository.save(appUser1);
+    appUserRepository.save(appUser2);
     auctionRepository.save(auction1);
     bidRepository.save(bid1);
     treasurySecurityRepository.save(treasurySecurity1);

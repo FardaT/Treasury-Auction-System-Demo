@@ -46,8 +46,8 @@ public class AppUser {
   private String activationToken = Utility.generateString();
   private Date activationTokenExpiration = Utility.setExpiration(1); // current time + 1 minutes
   private boolean isActivated = false;
-  private String reactivationToken = Utility.generateString();
-  private Date reactivationTokenExpiration = Utility.setExpiration(1); // current time + 1 minutes;
+  private String reactivationToken;
+  private LocalDateTime reactivationTokenExpiration;
 
   // CUSTOM
   public void addBid(Bid bid) {
