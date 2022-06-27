@@ -1,14 +1,9 @@
 package com.greenfox.treasuryauctionsystem.security.filters;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -29,51 +24,44 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
   public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
     this.authenticationManager = authenticationManager;
   }
-
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request,
                                               HttpServletResponse response)
       throws AuthenticationException {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
-    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+    UsernamePasswordAuthenticationToken authenticationToken =
+        new UsernamePasswordAuthenticationToken(username, password);
     return authenticationManager.authenticate(authenticationToken);
   }
-
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                           FilterChain chain, Authentication authentication)
       throws IOException, ServletException {
-    User user = (User)authentication.getPrincipal();
-
+    User user = (User) authentication.getPrincipal();
+    //TODO handle security key securely
     Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
     String access_token = JWT.create()
-            .withSubject(user.getUsername())
-            .withExpiresAt(new Date(System.currentTimeMillis() + 120 * 60 * 1000))
-            .withIssuer(request.getRequestURL().toString())
-            .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-            .sign(algorithm);
+        .withSubject(user.getUsername())
+        .withExpiresAt(new Date(System.currentTimeMillis() + 8 * 60 * 60 * 1000))
+        .withIssuer(request.getRequestURL().toString())
+        .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList()))
+        .sign(algorithm);
 
-
-/*    Map<String, String> tokens = new HashMap<>();
-    tokens.put("access_token", access_token);
-    response.setContentType(APPLICATION_JSON_VALUE);
-    new ObjectMapper().writeValue(response.getOutputStream(), tokens);*/
-
-//    response.setHeader("access_token", access_token);
-    Cookie cookie = new Cookie("Authorization", access_token);
+    Cookie cookie = new Cookie("jwtoken", access_token);
+    cookie.setMaxAge(8 * 60 * 60);
     cookie.setSecure(true);
     cookie.setHttpOnly(true);
     response.addCookie(cookie);
     response.sendRedirect("/test");
   }
-
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             AuthenticationException failed)
       throws IOException, ServletException {
-    response.sendRedirect(request.getContextPath()+"/login?error");
+    response.sendRedirect(request.getContextPath() + "/login?error");
   }
 
 

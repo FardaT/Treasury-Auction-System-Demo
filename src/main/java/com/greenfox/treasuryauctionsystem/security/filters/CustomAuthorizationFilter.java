@@ -12,11 +12,14 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,10 +34,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     if(request.getServletPath().equals("/login")) {
       filterChain.doFilter(request, response);
     } else {
-      String authorizationHeader = request.getHeader(AUTHORIZATION);
-      if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
+      Cookie[] cookies = request.getCookies();
+      Optional<Cookie> authorizationCookie = Arrays.stream(request.getCookies())
+          .filter(cookie->"jwtoken".equals(cookie.getName())).findAny();
+      if(authorizationCookie.isPresent()){
         try {
-          String token = authorizationHeader.substring("Bearer ".length());
+          String token = authorizationCookie.get().getValue();
           Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
           JWTVerifier verifier = JWT.require(algorithm).build();
           DecodedJWT decodedJWT = verifier.verify(token);
@@ -49,19 +54,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
               new UsernamePasswordAuthenticationToken(username, null, authorities);
           SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-
           filterChain.doFilter(request, response);
 
         } catch (Exception exception){
-
-          response.setHeader("error", exception.getMessage());
-          response.setStatus(FORBIDDEN.value());
-
-          Map<String, String> error = new HashMap<>();
-          error.put("error_message", exception.getMessage());
-          response.setContentType(APPLICATION_JSON_VALUE);
-          new ObjectMapper().writeValue(response.getOutputStream(), error);
-
+          //TODO add error page to filter authorization exception
+          response.sendError(403);
         }
       } else {
         filterChain.doFilter(request, response);

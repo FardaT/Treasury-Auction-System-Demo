@@ -47,19 +47,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/login")
         .permitAll().and()
         .formLogin()
-        .loginPage("/login")
-        .defaultSuccessUrl("/hello")
-        .failureUrl("/login?error=true");
+        .loginPage("/login").and()
+        .logout()
+        .deleteCookies("jwtoken")
+        .logoutSuccessUrl("/login");
+
     http.authorizeRequests().anyRequest().authenticated();
     http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
     http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
   }
-
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
   }
-
   @Bean
   @Override
   public AuthenticationManager authenticationManagerBean() throws Exception {
