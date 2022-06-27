@@ -1,9 +1,7 @@
 name: CI 2.1
 on:
   pull_request:
-    branches: [develop, master]  
-  push:
-    branches: [integrate_CI]
+    branches: [develop, master]
 env:
   GMAIL_APP_PASSWORD: ${{secrets.GMAIL_APP_PASSWORD}}
 jobs:
