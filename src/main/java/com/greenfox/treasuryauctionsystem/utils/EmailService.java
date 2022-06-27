@@ -20,7 +20,6 @@ public class EmailService {
 		mailSender.setPort(587);
 
 		mailSender.setUsername("mightyroosterteam@gmail.com");
-		//mailSender.setPassword("tnikpnypkzpefydl");
 		mailSender.setPassword(gmailAppPassword);
 
 		Properties props = mailSender.getJavaMailProperties();

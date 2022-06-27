@@ -5,7 +5,7 @@ on:
   push:
     branches: [integrate_CI]
 env:
-  GMAIL_APP_PASSWORD: tnikpnypkzpefydl
+  GMAIL_APP_PASSWORD: ${{secrets.GMAIL_APP_PASSWORD}}
 jobs:
   build:
     runs-on: ubuntu-latest
