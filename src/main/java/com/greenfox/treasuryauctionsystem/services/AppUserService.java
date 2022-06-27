@@ -14,7 +14,7 @@ import javax.mail.MessagingException;
 public interface AppUserService {
 
     // STORE
-    void registerAppUser(AppUser appUser) throws MessagingException;
+    Map<String, String> registerAppUser(AppUser appUser, String confirmpassword) throws MessagingException;
 
     // ACTIVATE ACCOUNT BY TOKEN
     void activateAccount(String activationToken);
