@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.utils;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,8 +13,8 @@ public class Utility {
     }
 
     // set expiration
-    public static Date setExpiration(int minutes) {
-        return new Date(System.currentTimeMillis() + (long) minutes * 60 * 1000);
+    public static LocalDateTime setExpiration(int minutes) {
+        return LocalDateTime.now().plusMinutes(minutes);
     }
 
     // set confirmation email text

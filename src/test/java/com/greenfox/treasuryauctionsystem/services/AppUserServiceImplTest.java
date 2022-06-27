@@ -5,6 +5,7 @@ import com.greenfox.treasuryauctionsystem.exceptions.IllegalArgumentException;
 import com.greenfox.treasuryauctionsystem.exceptions.IllegalRegexException;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.repositories.AppUserRepository;
+import com.greenfox.treasuryauctionsystem.utils.EmailService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -17,6 +18,7 @@ class AppUserServiceImplTest {
     void saveAppUser() {
 
         AppUserRepository fakeAppUserRepository = Mockito.mock(AppUserRepository.class);
+        EmailService fakeEmailService = Mockito.mock(EmailService.class);
 
         AppUser fakeAppUser = new AppUser(
                 1L,
@@ -34,7 +36,7 @@ class AppUserServiceImplTest {
 
         Mockito.when(fakeAppUserRepository.save(Mockito.any())).thenReturn(fakeAppUser);
 
-        AppUserService appUserService = new AppUserServiceImpl(fakeAppUserRepository);
+        AppUserService appUserService = new AppUserServiceImpl(fakeAppUserRepository, fakeEmailService);
 
         AppUser result = appUserService.saveAppUser(fakeAppUser);
 
@@ -57,6 +59,7 @@ class AppUserServiceImplTest {
     void saveAppUserFails() {
 
         AppUserRepository fakeAppUserRepository = Mockito.mock(AppUserRepository.class);
+        EmailService fakeEmailService = Mockito.mock(EmailService.class);
 
         // empty fields
         AppUser fakeAppUser = new AppUser(
@@ -75,7 +78,7 @@ class AppUserServiceImplTest {
 
         Mockito.when(fakeAppUserRepository.save(Mockito.any())).thenReturn(fakeAppUser);
 
-        AppUserService appUserService = new AppUserServiceImpl(fakeAppUserRepository);
+        AppUserService appUserService = new AppUserServiceImpl(fakeAppUserRepository, fakeEmailService);
 
         assertThrows(IllegalArgumentException.class, () -> appUserService.saveAppUser(fakeAppUser));
 
@@ -93,6 +96,7 @@ class AppUserServiceImplTest {
     void activateAccount() {
 
         AppUserRepository fakeAppUserRepository = Mockito.mock(AppUserRepository.class);
+        EmailService fakeEmailService = Mockito.mock(EmailService.class);
 
         AppUser fakeAppUser = new AppUser(
                 3L,
@@ -110,7 +114,7 @@ class AppUserServiceImplTest {
 
         Mockito.when(fakeAppUserRepository.save(Mockito.any())).thenReturn(fakeAppUser);
 
-        AppUserService appUserService = new AppUserServiceImpl(fakeAppUserRepository);
+        AppUserService appUserService = new AppUserServiceImpl(fakeAppUserRepository, fakeEmailService);
 
         AppUser result = appUserService.saveAppUser(fakeAppUser);
 
@@ -129,6 +133,7 @@ class AppUserServiceImplTest {
     void activateAccountFails() {
 
         AppUserRepository fakeAppUserRepository = Mockito.mock(AppUserRepository.class);
+        EmailService fakeEmailService = Mockito.mock(EmailService.class);
 
         AppUser fakeAppUser = new AppUser(
                 4L,
@@ -146,7 +151,7 @@ class AppUserServiceImplTest {
 
         Mockito.when(fakeAppUserRepository.save(Mockito.any())).thenReturn(fakeAppUser);
 
-        AppUserService appUserService = new AppUserServiceImpl(fakeAppUserRepository);
+        AppUserService appUserService = new AppUserServiceImpl(fakeAppUserRepository, fakeEmailService);
 
         AppUser result = appUserService.saveAppUser(fakeAppUser);
 

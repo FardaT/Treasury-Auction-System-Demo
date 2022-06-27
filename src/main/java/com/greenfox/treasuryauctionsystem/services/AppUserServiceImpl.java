@@ -53,9 +53,6 @@ public class AppUserServiceImpl implements AppUserService {
   @Override
   public void activateAccount(String activationToken) {
 
-    // current DateTime
-    Date currentDateTime = new Date(System.currentTimeMillis());
-
     // we need to get the user by the token from the email
     AppUser appUser = appUserRepository.findByActivationToken(activationToken);
 
@@ -65,7 +62,7 @@ public class AppUserServiceImpl implements AppUserService {
       throw new AppUserNotFoundException("There is no user with this token in the db.");
 
       // if token is expired
-    } else if (appUser.getActivationTokenExpiration().before(currentDateTime)) {
+    } else if (appUser.getActivationTokenExpiration().isBefore(LocalDateTime.now())) {
 
       throw new TokenExpiredException("This activationToken is already expired");
 
