@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.models;
 
+import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
 import com.greenfox.treasuryauctionsystem.utils.Utility;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +9,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -44,7 +44,7 @@ public class AppUser {
     private boolean isAdmin = false;
     private String institution;
     private String activationToken = Utility.generateString();
-    private LocalDateTime activationTokenExpiration = Utility.setExpiration(1); // current time + 1 minutes
+    private LocalDateTime activationTokenExpiration = Utility.setExpiration(ApplicationDetails.expiration);
     private boolean isActivated = false;
     private String reactivationToken;
     private LocalDateTime reactivationTokenExpiration;
