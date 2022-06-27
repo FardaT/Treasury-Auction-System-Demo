@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -53,10 +54,18 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
             .sign(algorithm);
 
-    Map<String, String> tokens = new HashMap<>();
+
+/*    Map<String, String> tokens = new HashMap<>();
     tokens.put("access_token", access_token);
     response.setContentType(APPLICATION_JSON_VALUE);
-    new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+    new ObjectMapper().writeValue(response.getOutputStream(), tokens);*/
+
+//    response.setHeader("access_token", access_token);
+    Cookie cookie = new Cookie("Authorization", access_token);
+    cookie.setSecure(true);
+    cookie.setHttpOnly(true);
+    response.addCookie(cookie);
+    response.sendRedirect("/test");
   }
 
   @Override
@@ -66,4 +75,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
       throws IOException, ServletException {
     response.sendRedirect(request.getContextPath()+"/login?error");
   }
+
+
 }

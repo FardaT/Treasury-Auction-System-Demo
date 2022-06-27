@@ -22,7 +22,11 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String loginDetail) throws UsernameNotFoundException {
-     AppUser appUser = appUserRepository.findByUsernameOrEmail(loginDetail, loginDetail);
+     if(loginDetail == null){
+       throw new  IllegalArgumentException("Username or email cannot be null.");
+     }
+
+    AppUser appUser = appUserRepository.findByUsernameOrEmail(loginDetail, loginDetail);
      if(appUser == null){
        throw new UsernameNotFoundException("No username or email can be found in the database");
      }
