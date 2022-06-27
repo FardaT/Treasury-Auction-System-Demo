@@ -10,12 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TreasuryAuctionSystemApplication implements CommandLineRunner {
 
-  private EmailService emailService;
   private TestService testService;
 
   @Autowired
-  public TreasuryAuctionSystemApplication(EmailService emailService, TestService testService) {
-    this.emailService = emailService;
+  public TreasuryAuctionSystemApplication(TestService testService) {
     this.testService = testService;
   }
 
@@ -26,6 +24,6 @@ public class TreasuryAuctionSystemApplication implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     //emailService.sendSimpleMessage("szecsi.istvan@gmail.com", "Hi, from the Mighty Rooster Team", "This is a test email template for your treasury application");
-    //testService.fillDatabase();
+    testService.fillDatabase();
   }
 }

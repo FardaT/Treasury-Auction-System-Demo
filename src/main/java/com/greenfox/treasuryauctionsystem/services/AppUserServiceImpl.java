@@ -5,69 +5,123 @@ import com.greenfox.treasuryauctionsystem.exceptions.IllegalArgumentException;
 import com.greenfox.treasuryauctionsystem.exceptions.IllegalRegexException;
 import com.greenfox.treasuryauctionsystem.exceptions.TokenExpiredException;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
+import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInput;
+import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
 import com.greenfox.treasuryauctionsystem.repositories.AppUserRepository;
+import com.greenfox.treasuryauctionsystem.utils.EmailService;
+import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
 import com.greenfox.treasuryauctionsystem.utils.Utility;
+import java.time.LocalDateTime;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 @Service
 public class AppUserServiceImpl implements AppUserService {
 
-    // DI
-    private final AppUserRepository appUserRepository;
+  // DI
+  private final AppUserRepository appUserRepository;
+  private final EmailService emailService;
 
-    @Autowired
-    public AppUserServiceImpl(AppUserRepository appUserRepository) {
-        this.appUserRepository = appUserRepository;
+  @Autowired
+  public AppUserServiceImpl(AppUserRepository appUserRepository, EmailService emailService) {
+    this.appUserRepository = appUserRepository;
+    this.emailService = emailService;
+  }
+
+  // STORE
+  @Override
+  public AppUser saveAppUser(AppUser appUser) {
+
+    // check if fields are empty
+    if (
+        appUser.getUsername().equals("") ||
+            appUser.getEmail().equals("") ||
+            appUser.getInstitution().equals("") ||
+            appUser.getPassword().equals("")) {
+      throw new IllegalArgumentException("Registration fields are all required!");
+    } else if (!Utility.validatePassword(appUser.getPassword())) {
+      // password checking (regex)
+      throw new IllegalRegexException("Password regex failed.");
+    } else {
+      // if validation is ok, then save user
+      return appUserRepository.save(appUser);
     }
+  }
 
-    // STORE
-    @Override
-    public AppUser saveAppUser(AppUser appUser) {
+  // ACTIVATE ACCOUNT BY TOKEN
+  @Override
+  public void activateAccount(String activationToken) {
 
-        // check if fields are empty
-        if (
-                appUser.getUsername().equals("") ||
-                        appUser.getEmail().equals("") ||
-                        appUser.getInstitution().equals("") ||
-                        appUser.getPassword().equals("")) {
-            throw new IllegalArgumentException("Registration fields are all required!");
-        } else if (!Utility.validatePassword(appUser.getPassword())) {
-            // password checking (regex)
-            throw new IllegalRegexException("Password regex failed.");
-        } else {
-            // if validation is ok, then save user
-            return appUserRepository.save(appUser);
-        }
+    // current DateTime
+    Date currentDateTime = new Date(System.currentTimeMillis());
+
+    // we need to get the user by the token from the email
+    AppUser appUser = appUserRepository.findByActivationToken(activationToken);
+
+    // if user is not found
+    if (appUser == null) {
+
+      throw new AppUserNotFoundException("There is no user with this token in the db.");
+
+      // if token is expired
+    } else if (appUser.getActivationTokenExpiration().before(currentDateTime)) {
+
+      throw new TokenExpiredException("This activationToken is already expired");
+
+    } else {
+
+      // if everything is ok, then activate acc and save
+      appUser.setActivated(true);
+      appUserRepository.save(appUser);
     }
+  }
 
-    // ACTIVATE ACCOUNT BY TOKEN
-    @Override
-    public void activateAccount(String activationToken) {
+  @Override
+  public AppUser findUserByEmail(ForgottenPasswordEmailInput emailInput) {
+    return appUserRepository.findAppUserByEmail(emailInput.getEmail());
+  }
 
-        // current DateTime
-        Date currentDateTime = new Date(System.currentTimeMillis());
+  @Override
+  public String saveToken(AppUser appUser) {
+    String token = PasswordResetTokenGenerator.generatePasswordResetToken();
 
-        // we need to get the user by the token from the email
-        AppUser appUser = appUserRepository.findByActivationToken(activationToken);
+    appUser.setReactivationToken(token);
+    appUser.setReactivationTokenExpiration(LocalDateTime.now().plusDays(1));
 
-        // if user is not found
-        if (appUser == null) {
+    emailService.sendSimpleMessage(appUser.getEmail(), "Reset your password",
+        "Dear " + appUser.getUsername() +
+            ", please click the link to reset your Treasury Auction Site password: http://localhost:8080/resetpassword/reset?token=" +
+            token);
+    appUserRepository.save(appUser);
+    return token;
+  }
 
-            throw new AppUserNotFoundException("There is no user with this token in the db.");
+  @Override
+  public AppUser validateToken(String token) {
+    return appUserRepository.findAppUserByReactivationToken(token);
+  }
 
-            // if token is expired
-        } else if (appUser.getActivationTokenExpiration().before(currentDateTime)) {
+  @Override
+  public String saveNewPassword(PasswordReset passwordReset) {
 
-            throw new TokenExpiredException("This activationToken is already expired");
+    boolean passwordIsSecure = Utility.validatePassword(passwordReset.getPassword());
 
-        } else {
+    AppUser user = appUserRepository.findAppUserByReactivationToken(passwordReset.getToken());
+    if (user == null) {
+      return "INVALID_TOKEN";
+    } else if (!passwordReset.getPassword().equals(passwordReset.getConfirm())) {
+      return "PASSWORDS_DONT_MATCH";
+    } else if (!passwordIsSecure) {
+      return "ENTER_MORE_SECURE_PASSWORD";
+    } else {
 
-            // if everything is ok, then activate acc and save
-            appUser.setActivated(true);
-            appUserRepository.save(appUser);
-        }
+      // TODO: 2022. 06. 24. hash password
+      user.setPassword(passwordReset.getPassword());
+      user.setReactivationToken(null);
+      user.setReactivationTokenExpiration(null);
+      appUserRepository.save(user);
+      return null;
     }
+  }
 }
