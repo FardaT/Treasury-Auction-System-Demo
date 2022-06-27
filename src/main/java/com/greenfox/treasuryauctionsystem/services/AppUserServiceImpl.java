@@ -1,6 +1,7 @@
 package com.greenfox.treasuryauctionsystem.services;
 
 import com.greenfox.treasuryauctionsystem.exceptions.AppUserNotFoundException;
+import com.greenfox.treasuryauctionsystem.exceptions.IllegalArgumentException;
 import com.greenfox.treasuryauctionsystem.exceptions.IllegalRegexException;
 import com.greenfox.treasuryauctionsystem.exceptions.TokenExpiredException;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
@@ -24,7 +25,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     // STORE
     @Override
-    public void saveAppUser(AppUser appUser) {
+    public AppUser saveAppUser(AppUser appUser) {
 
         // check if fields are empty
         if (
@@ -38,7 +39,7 @@ public class AppUserServiceImpl implements AppUserService {
             throw new IllegalRegexException("Password regex failed.");
         } else {
             // if validation is ok, then save user
-            appUserRepository.save(appUser);
+            return appUserRepository.save(appUser);
         }
     }
 

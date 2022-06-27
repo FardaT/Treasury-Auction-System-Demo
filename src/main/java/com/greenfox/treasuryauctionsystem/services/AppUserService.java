@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public interface AppUserService {
 
     // STORE
-    void saveAppUser(AppUser appUser);
+    AppUser saveAppUser(AppUser appUser);
 
     // ACTIVATE ACCOUNT BY TOKEN
     void activateAccount(String activationToken);
