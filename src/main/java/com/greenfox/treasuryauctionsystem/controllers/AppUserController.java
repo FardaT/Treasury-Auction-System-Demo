@@ -21,12 +21,10 @@ public class AppUserController {
 
     // DI
     private final AppUserService appUserService;
-    private final EmailService emailService;
 
     @Autowired
-    public AppUserController(AppUserService appUserService, EmailService emailService) {
+    public AppUserController(AppUserService appUserService) {
         this.appUserService = appUserService;
-        this.emailService = emailService;
     }
 
     // SHOW REGISTER FORM
@@ -52,14 +50,8 @@ public class AppUserController {
     @PostMapping("store")
     public String store(AppUser appUser) throws MessagingException {
 
-        // save to db
-        appUserService.saveAppUser(appUser);
-
-        // send confirm email with token
-        emailService.sendHtmlMessage(
-                appUser.getEmail(),
-                "Successfull registration",
-                Utility.setConfirmationEmailText(appUser.getUsername(), appUser.getActivationToken()));
+        // save to db and send confirmation email
+        appUserService.registerAppUser(appUser);
 
         // redirect to page
         return "redirect:confirm";

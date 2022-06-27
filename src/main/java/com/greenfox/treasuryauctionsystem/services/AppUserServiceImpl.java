@@ -12,9 +12,10 @@ import com.greenfox.treasuryauctionsystem.utils.EmailService;
 import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
 import com.greenfox.treasuryauctionsystem.utils.Utility;
 import java.time.LocalDateTime;
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
 
 @Service
 public class AppUserServiceImpl implements AppUserService {
@@ -31,7 +32,7 @@ public class AppUserServiceImpl implements AppUserService {
 
   // STORE
   @Override
-  public AppUser saveAppUser(AppUser appUser) {
+  public void registerAppUser(AppUser appUser) throws MessagingException {
 
     // check if fields are empty
     if (
@@ -44,8 +45,15 @@ public class AppUserServiceImpl implements AppUserService {
       // password checking (regex)
       throw new IllegalRegexException("Password regex failed.");
     } else {
+
       // if validation is ok, then save user
-      return appUserRepository.save(appUser);
+      appUserRepository.save(appUser);
+
+      // send confirm email with token
+      emailService.sendHtmlMessage(
+              appUser.getEmail(),
+              "Successfull registration",
+              Utility.setConfirmationEmailText(appUser.getUsername(), appUser.getActivationToken()));
     }
   }
 

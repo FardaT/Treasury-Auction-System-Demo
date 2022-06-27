@@ -7,11 +7,13 @@ import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+
 @Service
 public interface AppUserService {
 
     // STORE
-    AppUser saveAppUser(AppUser appUser);
+    void registerAppUser(AppUser appUser) throws MessagingException;
 
     // ACTIVATE ACCOUNT BY TOKEN
     void activateAccount(String activationToken);
