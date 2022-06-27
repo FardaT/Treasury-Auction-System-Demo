@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width" , initial-scale="1.0"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-<head th:replace="fragments/header::header"></head>
-
+    <title>Register</title>
+    <link rel="stylesheet" href="../css/register.css"/>
+</head>
 <body>
 <header>
     <div class="pre-header">
@@ -76,11 +83,13 @@
                             <label for="confirmpassword" class="text-info">Confirm password:</label><br>
                             <input type="password" name="confirmpassword" id="confirmpassword" class="form-control">
 
+                            <div th:if="${REQUIRED_PASSWORD_CONFIRM != null}">
+                                <p th:text="${REQUIRED_PASSWORD_CONFIRM}" style="color: red;"></p>
+                            </div>
                             <div th:if="${PASSWORDS_DONT_MATCH != null}">
                                 <p th:text="${PASSWORDS_DONT_MATCH}" style="color: red;"></p>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <p>
                                 By clicking on "Register" you agree to The Company's' <a
@@ -88,12 +97,13 @@
                                 Conditions</a>
                             </p>
 
-                            <input type="submit" class="btn btn-info btn-md" value="Register">
+                            <input type="submit" name="register" class="btn btn-info btn-md" value="Register">
                         </div>
-
                         <div id="login-link" class="text-right">
                             <h6>Already have an account? <a href="#" class="text-info">Log in</a></h6>
+
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -101,7 +111,15 @@
     </div>
 </div>
 
-<footer th:replace="fragments/footer::footer"></footer>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 
 </body>
 </html>

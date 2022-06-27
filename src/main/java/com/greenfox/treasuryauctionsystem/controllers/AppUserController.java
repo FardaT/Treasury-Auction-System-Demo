@@ -54,6 +54,8 @@ public class AppUserController {
             RedirectAttributes redirectAttributes,
             @RequestParam String confirmpassword) throws MessagingException {
 
+        // https://stackoverflow.com/questions/41467779/how-to-pass-only-string-in-thymeleaf-form
+
         // save to db and send confirmation email
         Map<String, String> saveResultMessage = appUserService.registerAppUser(appUser, confirmpassword);
 
@@ -80,6 +82,9 @@ public class AppUserController {
             }
             if (saveResultMessage.containsKey("REQUIRED_PASSWORD")) {
                 redirectAttributes.addFlashAttribute("REQUIRED_PASSWORD", saveResultMessage.get("REQUIRED_PASSWORD"));
+            }
+            if (saveResultMessage.containsKey("REQUIRED_PASSWORD_CONFIRM")) {
+                redirectAttributes.addFlashAttribute("REQUIRED_PASSWORD_CONFIRM", saveResultMessage.get("REQUIRED_PASSWORD_CONFIRM"));
             }
 
             // regex

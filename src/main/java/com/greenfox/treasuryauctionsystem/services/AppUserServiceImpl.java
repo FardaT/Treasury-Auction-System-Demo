@@ -66,6 +66,9 @@ public class AppUserServiceImpl implements AppUserService {
         if (appUser.getPassword().equals("")) {
             errors.put("REQUIRED_PASSWORD", "Password field is required!");
         }
+        if (confirmpassword.equals("")) {
+            errors.put("REQUIRED_PASSWORD_CONFIRM", "Password confirm field is required!");
+        }
 
         // regex
         if (!Utility.validatePassword(appUser.getPassword())) {
