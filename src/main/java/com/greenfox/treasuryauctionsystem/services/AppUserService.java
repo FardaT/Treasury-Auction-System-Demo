@@ -5,6 +5,7 @@ import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInpu
 import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
 import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
 import java.time.LocalDateTime;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,5 +23,5 @@ public interface AppUserService {
 
     public AppUser validateToken(String token);
 
-    public String saveNewPassword(PasswordReset passwordReset);
+    public Map<String, String> saveNewPassword(PasswordReset passwordReset);
 }

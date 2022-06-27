@@ -12,6 +12,8 @@ import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
 import com.greenfox.treasuryauctionsystem.utils.Utility;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -102,25 +104,34 @@ public class AppUserServiceImpl implements AppUserService {
   }
 
   @Override
-  public String saveNewPassword(PasswordReset passwordReset) {
+  public Map<String, String> saveNewPassword(PasswordReset passwordReset) {
 
     boolean passwordIsSecure = Utility.validatePassword(passwordReset.getPassword());
 
     AppUser user = appUserRepository.findAppUserByReactivationToken(passwordReset.getToken());
-    if (user == null) {
-      return "INVALID_TOKEN";
-    } else if (!passwordReset.getPassword().equals(passwordReset.getConfirm())) {
-      return "PASSWORDS_DONT_MATCH";
-    } else if (!passwordIsSecure) {
-      return "ENTER_MORE_SECURE_PASSWORD";
-    } else {
+    boolean isTokenExpired = LocalDateTime.now().isAfter(user.getReactivationTokenExpiration());
+    Map<String, String> errors = new HashMap<>();
 
-      // TODO: 2022. 06. 24. hash password
-      user.setPassword(passwordReset.getPassword());
-      user.setReactivationToken(null);
-      user.setReactivationTokenExpiration(null);
-      appUserRepository.save(user);
-      return null;
+    if (user == null) {
+      errors.put("INVALID_TOKEN", "Please use a valid token");
+      return errors;
     }
+    if (isTokenExpired) {
+      errors.put("TOKEN_EXPIRED", "Your token expired. Please reset your password again.");
+      return errors;
+    }
+    if (!passwordReset.getPassword().equals(passwordReset.getConfirm())) {
+      errors.put("PASSWORDS_DONT_MATCH", "The passwords don't match");
+      return errors;
+    }
+    if (!passwordIsSecure) {
+      errors.put("ENTER_MORE_SECURE_PASSWORD", "Please enter a more secure password");
+      return errors;
+    }
+    user.setPassword(passwordReset.getPassword());
+    user.setReactivationToken(null);
+    user.setReactivationTokenExpiration(null);
+    appUserRepository.save(user);
+    return errors;
   }
 }
