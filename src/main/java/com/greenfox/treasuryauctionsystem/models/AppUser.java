@@ -31,9 +31,14 @@ public class AppUser {
   private List<Bid> bids = new ArrayList<>();
   private boolean isAdmin;
   private String institution;
+  private boolean isActivated;
+
+  private boolean isApproved;
+
+  private boolean isDisabled;
+
   private String activationToken;
   private LocalDateTime activationTokenExpiration;
-  private boolean isActivated;
   private String reactivationToken;
   private LocalDateTime reactivationTokenExpiration;
 
@@ -41,8 +46,9 @@ public class AppUser {
   }
 
   public AppUser(Long id, String username, String password, String email, List<Bid> bids,
-                 boolean isAdmin, String institution, String activationToken,
-                 LocalDateTime activationTokenExpiration, boolean isActivated,
+                 boolean isAdmin, String institution, boolean isActivated, boolean isApproved,
+                 boolean isDisabled, String activationToken,
+                 LocalDateTime activationTokenExpiration,
                  String reactivationToken, LocalDateTime reactivationTokenExpiration) {
     this.id = id;
     this.username = username;
@@ -51,9 +57,11 @@ public class AppUser {
     this.bids = bids;
     this.isAdmin = isAdmin;
     this.institution = institution;
+    this.isActivated = isActivated;
+    this.isApproved = isApproved;
+    this.isDisabled = isDisabled;
     this.activationToken = activationToken;
     this.activationTokenExpiration = activationTokenExpiration;
-    this.isActivated = isActivated;
     this.reactivationToken = reactivationToken;
     this.reactivationTokenExpiration = reactivationTokenExpiration;
   }
@@ -114,6 +122,30 @@ public class AppUser {
     this.institution = institution;
   }
 
+  public boolean isActivated() {
+    return isActivated;
+  }
+
+  public void setActivated(boolean activated) {
+    isActivated = activated;
+  }
+
+  public boolean isApproved() {
+    return isApproved;
+  }
+
+  public void setApproved(boolean approved) {
+    isApproved = approved;
+  }
+
+  public boolean isDisabled() {
+    return isDisabled;
+  }
+
+  public void setDisabled(boolean disabled) {
+    isDisabled = disabled;
+  }
+
   public String getActivationToken() {
     return activationToken;
   }
@@ -128,14 +160,6 @@ public class AppUser {
 
   public void setActivationTokenExpiration(LocalDateTime activationTokenExpiration) {
     this.activationTokenExpiration = activationTokenExpiration;
-  }
-
-  public boolean isActivated() {
-    return isActivated;
-  }
-
-  public void setActivated(boolean activated) {
-    isActivated = activated;
   }
 
   public String getReactivationToken() {
@@ -154,13 +178,13 @@ public class AppUser {
     this.reactivationTokenExpiration = reactivationTokenExpiration;
   }
 
-  public void addBid(Bid bid) {
+  public void adBid(Bid bid) {
     bids.add(bid);
     bid.setUser(this);
   }
 
   public void removeBid(Bid bid) {
     bids.remove(bid);
-    bid.setUser(null);
+    bid.setTreasurySecurity(null);
   }
 }
