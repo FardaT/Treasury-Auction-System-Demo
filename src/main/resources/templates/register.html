@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width" , initial-scale="1.0"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Register</title>
+    <link rel="stylesheet" href="../css/register.css"/>
+</head>
+<body>
+<header>
+    <div class="pre-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>Treasury Auction System</p>
+                </div>
+                <div class="col-md-6">
+                    <ul class="main-menu">
+                        <li><a href="#">Login</a></li>
+                        <li><a href="#">Register</a></li>
+                        <li><p><a href="mailto:mightyroosterteam@gmail.com">Contact us</a></p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</header>
+
+<div id="register">
+    <div class="reg-container">
+        <div id="register-row" class="row justify-content-center align-items-center">
+            <div id="register-column" class="col-md-6">
+                <div id="register-box" class="col-md-12">
+                    <form id="register-form" class="form" th:action="@{/store}" method="post">
+                        <h3 class="txt">Register</h3>
+                        <div class="form-group">
+                            <label for="username" class="text-info">Username:</label><br>
+                            <input type="text" name="username" id="username" class="form-control">
+
+                            <div th:if="${REQUIRED_USERNAME != null}">
+                                <p th:text="${REQUIRED_USERNAME}" style="color: red;"></p>
+                            </div>
+                            <div th:if="${UNIQUE_USERNAME != null}">
+                                <p th:text="${UNIQUE_USERNAME}" style="color: red;"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="text-info">E-mail:</label><br>
+                            <input type="text" name="email" id="email" class="form-control">
+
+                            <div th:if="${REQUIRED_EMAIL != null}">
+                                <p th:text="${REQUIRED_EMAIL}" style="color: red;"></p>
+                            </div>
+                            <div th:if="${UNIQUE_EMAIL != null}">
+                                <p th:text="${UNIQUE_EMAIL}" style="color: red;"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="institution" class="text-info">Institution:</label><br>
+                            <input type="text" name="institution" id="institution" class="form-control">
+
+                            <div th:if="${REQUIRED_INSTITUTION != null}">
+                                <p th:text="${REQUIRED_INSTITUTION}" style="color: red;"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="text-info">Password:</label><br>
+                            <input type="password" name="password" id="password" class="form-control">
+
+                            <div th:if="${REQUIRED_PASSWORD != null}">
+                                <p th:text="${REQUIRED_PASSWORD}" style="color: red;"></p>
+                            </div>
+                            <div th:if="${REGEX_PASSWORD != null}">
+                                <p th:text="${REGEX_PASSWORD}" style="color: red;"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmpassword" class="text-info">Confirm password:</label><br>
+                            <input type="password" name="confirmpassword" id="confirmpassword" class="form-control">
+
+                            <div th:if="${REQUIRED_PASSWORD_CONFIRM != null}">
+                                <p th:text="${REQUIRED_PASSWORD_CONFIRM}" style="color: red;"></p>
+                            </div>
+                            <div th:if="${PASSWORDS_DONT_MATCH != null}">
+                                <p th:text="${PASSWORDS_DONT_MATCH}" style="color: red;"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <p>
+                                By clicking on "Register" you agree to The Company's' <a
+                                    href="https://communityauctions.com/online-auction-terms-conditions/">Terms &
+                                Conditions</a>
+                            </p>
+
+                            <input type="submit" name="register" class="btn btn-info btn-md" value="Register">
+                        </div>
+                        <div id="login-link" class="text-right">
+                            <h6>Already have an account? <a href="#" class="text-info">Log in</a></h6>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

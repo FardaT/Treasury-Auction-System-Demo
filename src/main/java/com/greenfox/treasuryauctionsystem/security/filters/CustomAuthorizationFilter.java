@@ -24,9 +24,9 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                   FilterChain filterChain) throws ServletException, IOException {
-    if(request.getServletPath().equals("/login")) {
+    if(request.getServletPath().equals("/login") || request.getServletPath().equals("/register")) {
       filterChain.doFilter(request, response);
-    } else {
+  } else {
       Cookie[] cookies = request.getCookies();
       Optional<Cookie> authorizationCookie = Arrays.stream(request.getCookies())
           .filter(cookie->"jwtoken".equals(cookie.getName())).findAny();
@@ -57,6 +57,5 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
       }
     }
-
   }
 }

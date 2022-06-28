@@ -10,6 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -27,7 +31,7 @@ public class Auction {
           @Parameter(name = "increment_size", value = "1")
       })
   @GeneratedValue(generator = "auction-sequence-generator")
-  private Long cusip;
+  private Long id;
 
   @OneToMany(
       mappedBy = "auction",
@@ -36,37 +40,31 @@ public class Auction {
   )
   private List<TreasurySecurity> treasurySecurityList = new ArrayList<>();
 
-  @OneToMany(
-      mappedBy = "auction",
-      cascade = CascadeType.MERGE,
-      orphanRemoval = true
-  )
-  private List<Bid> bidList = new ArrayList<>();
-
   private LocalDateTime auctionStartDate;
   private LocalDateTime auctionEndDate;
   private boolean isProcessed;
+  private boolean isDisabled;
 
   public Auction() {
   }
 
-  public Auction(Long cusip, List<TreasurySecurity> treasurySecurityList, List<Bid> bidList,
-                 LocalDateTime auctionStartDate, LocalDateTime auctionEndDate,
-                 boolean isProcessed) {
-    this.cusip = cusip;
+  public Auction(Long id, List<TreasurySecurity> treasurySecurityList,
+                 LocalDateTime auctionStartDate,
+                 LocalDateTime auctionEndDate, boolean isProcessed, boolean isDisabled) {
+    this.id = id;
     this.treasurySecurityList = treasurySecurityList;
-    this.bidList = bidList;
     this.auctionStartDate = auctionStartDate;
     this.auctionEndDate = auctionEndDate;
     this.isProcessed = isProcessed;
+    this.isDisabled = isDisabled;
   }
 
-  public Long getCusip() {
-    return cusip;
+  public Long getId() {
+    return id;
   }
 
-  public void setCusip(Long cusip) {
-    this.cusip = cusip;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public List<TreasurySecurity> getTreasurySecurityList() {
@@ -76,14 +74,6 @@ public class Auction {
   public void setTreasurySecurityList(
       List<TreasurySecurity> treasurySecurityList) {
     this.treasurySecurityList = treasurySecurityList;
-  }
-
-  public List<Bid> getBidList() {
-    return bidList;
-  }
-
-  public void setBidList(List<Bid> bidList) {
-    this.bidList = bidList;
   }
 
   public LocalDateTime getAuctionStartDate() {
@@ -110,14 +100,12 @@ public class Auction {
     isProcessed = processed;
   }
 
-  public void addBid(Bid bid) {
-    bidList.add(bid);
-    bid.setAuction(this);
+  public boolean isDisabled() {
+    return isDisabled;
   }
 
-  public void removeBid(Bid bid) {
-    bidList.remove(bid);
-    bid.setUser(null);
+  public void setDisabled(boolean disabled) {
+    isDisabled = disabled;
   }
 
   public void addTreasurySecurity(TreasurySecurity treasurySecurity) {
