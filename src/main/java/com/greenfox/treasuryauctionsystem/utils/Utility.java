@@ -1,18 +1,10 @@
 package com.greenfox.treasuryauctionsystem.utils;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class Utility {
 
     // FIELDS
-
-    // generate random string for email confirmation and forgot password
-    // https://stackoverflow.com/questions/41107/how-to-generate-a-random-alpha-numeric-string/41762#41762
-    public static String generateString() {
-        return UUID.randomUUID().toString();
-    }
-
     // set expiration
     public static LocalDateTime setExpiration(int minutes) {
         return LocalDateTime.now().plusMinutes(minutes);

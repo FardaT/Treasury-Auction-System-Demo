@@ -1,6 +1,7 @@
 package com.greenfox.treasuryauctionsystem.models;
 
 import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
+import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
 import com.greenfox.treasuryauctionsystem.utils.Utility;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,7 +44,7 @@ public class AppUser {
     private List<Bid> bids = new ArrayList<>();
     private boolean isAdmin = false;
     private String institution;
-    private String activationToken = Utility.generateString();
+    private String activationToken = PasswordResetTokenGenerator.generatePasswordResetToken();
     private LocalDateTime activationTokenExpiration = Utility.setExpiration(ApplicationDetails.expiration);
     private boolean isActivated = false;
     private String reactivationToken;
