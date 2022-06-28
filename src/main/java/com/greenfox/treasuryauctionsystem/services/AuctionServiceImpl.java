@@ -22,7 +22,7 @@ public class AuctionServiceImpl implements AuctionService {
     this.auctionRepository = auctionRepository;
   }
 
-  public Map<String, List<Auction>> getAllAuctionsBy() throws NullPointerException {
+  public Map<String, List<Auction>> getAllAuctionsByStatus() throws NullPointerException {
 
     Map<String, List<Auction>> auctionsMap = new HashMap<>();
     auctionsMap.put("finished", new ArrayList<>());
