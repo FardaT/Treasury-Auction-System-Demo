@@ -17,7 +17,7 @@ public class Bid {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  private Auction auction;
+  private TreasurySecurity treasurySecurity;
 
   @ManyToOne(fetch = FetchType.LAZY)
   private AppUser user;
@@ -31,11 +31,11 @@ public class Bid {
   public Bid() {
   }
 
-  public Bid(Long id, Auction auction, AppUser user, boolean isCompetitive, long amount, float rate,
+  public Bid(Long id, TreasurySecurity treasurySecurity, AppUser user, boolean isCompetitive, long amount, float rate,
              boolean isAccepted, boolean isArchived) {
     this.id = id;
-    this.auction = auction;
     this.user = user;
+    this.treasurySecurity = treasurySecurity;
     this.isCompetitive = isCompetitive;
     this.amount = amount;
     this.rate = rate;
@@ -51,12 +51,13 @@ public class Bid {
     this.id = id;
   }
 
-  public Auction getAuction() {
-    return auction;
+  public TreasurySecurity getTreasurySecurity() {
+    return treasurySecurity;
   }
 
-  public void setAuction(Auction auction) {
-    this.auction = auction;
+  public void setTreasurySecurity(
+      TreasurySecurity treasurySecurity) {
+    this.treasurySecurity = treasurySecurity;
   }
 
   public AppUser getUser() {

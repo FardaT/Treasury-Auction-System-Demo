@@ -1,25 +1,33 @@
 package com.greenfox.treasuryauctionsystem.models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "treasury_securities")
 public class TreasurySecurity {
 
+  @OneToMany(
+      mappedBy = "treasurySecurity",
+      cascade = CascadeType.MERGE,
+      orphanRemoval = true
+  )
+  private final List<Bid> bidList = new ArrayList<>();
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-
   @ManyToOne(fetch = FetchType.LAZY)
   private Auction auction;
-
   private String securityName;
   private String securityType;
   private String securityTerm;
@@ -116,5 +124,15 @@ public class TreasurySecurity {
 
   public void setHighRate(float highRate) {
     this.highRate = highRate;
+  }
+
+  public void addBid(Bid bid) {
+    bidList.add(bid);
+    bid.setTreasurySecurity(this);
+  }
+
+  public void removeBid(Bid bid) {
+    bidList.remove(bid);
+    bid.setTreasurySecurity(null);
   }
 }
