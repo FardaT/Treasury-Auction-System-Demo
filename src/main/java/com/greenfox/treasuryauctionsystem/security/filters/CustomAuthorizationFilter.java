@@ -33,6 +33,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
       if(authorizationCookie.isPresent()){
         try {
           String token = authorizationCookie.get().getValue();
+          //TODO handle security key securely
           Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
           JWTVerifier verifier = JWT.require(algorithm).build();
           DecodedJWT decodedJWT = verifier.verify(token);
@@ -50,8 +51,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
           filterChain.doFilter(request, response);
 
         } catch (Exception exception){
-          //TODO add error page to filter authorization exception
-          response.sendError(403);
+          filterChain.doFilter(request, response);
         }
       } else {
         filterChain.doFilter(request, response);
