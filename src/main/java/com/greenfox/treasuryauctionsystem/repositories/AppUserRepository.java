@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
+  // login method
+  AppUser findByUsernameOrEmail(String username, String email);
 
   // registration activation token
   AppUser findByActivationToken(String activationToken);
