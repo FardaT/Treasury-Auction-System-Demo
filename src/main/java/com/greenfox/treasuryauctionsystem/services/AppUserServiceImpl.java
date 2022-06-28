@@ -99,7 +99,9 @@ public class AppUserServiceImpl implements AppUserService {
 
     // ACTIVATE ACCOUNT BY TOKEN
     @Override
-    public void activateAccount(String activationToken) {
+    public Map<String, String> activateAccount(String activationToken) {
+
+        Map<String, String> errors = new HashMap<>();
 
         // we need to get the user by the token from the email
         AppUser appUser = appUserRepository.findByActivationToken(activationToken);
@@ -107,18 +109,22 @@ public class AppUserServiceImpl implements AppUserService {
         // if user is not found
         if (appUser == null) {
 
-            throw new AppUserNotFoundException("There is no user with this token in the db.");
+            errors.put("INVALID_TOKEN", "Please use a valid token");
+            return errors;
 
             // if token is expired
         } else if (appUser.getActivationTokenExpiration().isBefore(LocalDateTime.now())) {
 
-            throw new TokenExpiredException("This activationToken is already expired");
+            // TODO send new email
+            errors.put("TOKEN_EXPIRED", "Your token expired.");
+            return errors;
 
         } else {
 
             // if everything is ok, then activate acc and save
             appUser.setActivated(true);
             appUserRepository.save(appUser);
+            return errors;
         }
     }
 

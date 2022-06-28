@@ -42,9 +42,21 @@ public class AppUserController {
 
     // ACTIVATE ACCOUNT BY TOKEN
     @GetMapping("confirm_token")
-    public String confirm_token(@RequestParam String activationToken) {
-        appUserService.activateAccount(activationToken);
-        return "confirm_token";
+    public String confirm_token(@RequestParam String activationToken, Model model) {
+
+        Map<String, String> saveResultMessage = appUserService.activateAccount(activationToken);
+
+        if (!saveResultMessage.isEmpty()) {
+            if (saveResultMessage.containsKey("INVALID_TOKEN")) {
+                model.addAttribute("INVALID_TOKEN", saveResultMessage.get("INVALID_TOKEN"));
+            }
+            if (saveResultMessage.containsKey("TOKEN_EXPIRED")) {
+                model.addAttribute("TOKEN_EXPIRED", saveResultMessage.get("TOKEN_EXPIRED"));
+            }
+            return "confirm_token";
+        } else {
+            return "confirm_token";
+        }
     }
 
     // STORE

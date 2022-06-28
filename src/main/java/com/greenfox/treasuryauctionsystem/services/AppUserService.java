@@ -17,7 +17,7 @@ public interface AppUserService {
     Map<String, String> registerAppUser(AppUser appUser, String confirmpassword) throws MessagingException;
 
     // ACTIVATE ACCOUNT BY TOKEN
-    void activateAccount(String activationToken);
+    Map<String, String> activateAccount(String activationToken);
 
     public AppUser findUserByEmail(ForgottenPasswordEmailInput emailInput);
 

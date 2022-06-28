@@ -33,15 +33,29 @@
 <div class="container">
     <div class="row">
         <form class="form" action="" method="post">
-            <h3 class="txt">Verification Success</h3>
 
-            <div class="pic">
-                <img src="https://i.ibb.co/cXW9d1g/rsz-kisspng-check-mark-computer-icons-desktop-wallpaper-clip-a-accept-tick-icon-5ab0e2113c88a5842125.png">
+            <div th:if="${INVALID_TOKEN == null && TOKEN_EXPIRED == null}">
+
+                <h3 class="txt">Verification Success</h3>
+
+                <div class="pic">
+                    <img src="https://i.ibb.co/cXW9d1g/rsz-kisspng-check-mark-computer-icons-desktop-wallpaper-clip-a-accept-tick-icon-5ab0e2113c88a5842125.png">
+                </div>
+
+                <h6 class="txt">
+                    Thank you for registering to Treasury Auction System. Your account was successfully
+                    verified. You can now proceed to your dashboard.
+                </h6>
+
             </div>
 
-            <h6 class="txt">Thank you for registering to Treasury Auction System. Your account was successfully
-                verified. You can now proceed to your dashboard. </h6>
+            <div th:if="${INVALID_TOKEN != null}">
+                <p th:text="${INVALID_TOKEN}" style="color: red;"></p>
+            </div>
 
+            <div th:if="${TOKEN_EXPIRED != null}">
+                <p th:text="${TOKEN_EXPIRED}" style="color: red;"></p>
+            </div>
 
         </form>
     </div>
