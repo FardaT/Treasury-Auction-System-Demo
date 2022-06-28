@@ -1,5 +1,13 @@
 package com.greenfox.treasuryauctionsystem.models;
 
+import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
+import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
+import com.greenfox.treasuryauctionsystem.utils.Utility;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +21,19 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
+@Getter
+@Setter
 public class AppUser {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+    // FIELDS
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-  private String username;
-  private String password;
-  private String email;
+    private String username;
+    private String email;
+    private String password;
 
   @OneToMany(
       mappedBy = "user",
@@ -42,8 +54,11 @@ public class AppUser {
   private String reactivationToken;
   private LocalDateTime reactivationTokenExpiration;
 
-  public AppUser() {
-  }
+    // CUSTOM
+    public void addBid(Bid bid) {
+        bids.add(bid);
+        bid.setUser(this);
+    }
 
   public AppUser(Long id, String username, String password, String email, List<Bid> bids,
                  boolean isAdmin, String institution, boolean isActivated, boolean isApproved,

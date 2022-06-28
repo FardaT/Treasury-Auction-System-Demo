@@ -5,7 +5,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 @Component
 public class EmailService {
@@ -33,6 +37,7 @@ public class EmailService {
     return mailSender;
   }
 
+  // PLAIN TEXT EMAIL
   public void sendSimpleMessage(
       String to, String subject, String text) {
     SimpleMailMessage message = new SimpleMailMessage();
@@ -41,5 +46,16 @@ public class EmailService {
     message.setSubject(subject);
     message.setText(text);
     getJavaMailSender().send(message);
+  }
+
+  // HTML EMAIL
+  public void sendHtmlMessage(String to, String subject, String text) throws MessagingException {
+    MimeMessage mimeMessage = getJavaMailSender().createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+    helper.setFrom("mightyroosterteam@gmail.com");
+    helper.setTo(to);
+    helper.setSubject(subject);
+    helper.setText(text, true);
+    getJavaMailSender().send(mimeMessage);
   }
 }
