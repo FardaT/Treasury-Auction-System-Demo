@@ -37,13 +37,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   public static NoOpPasswordEncoder passwordEncoder() {
     return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
   }
-
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
     http.csrf().disable();
     http.sessionManagement().sessionCreationPolicy(STATELESS);
     http.authorizeRequests()
+        .antMatchers("/admin/**").hasRole("ADMIN")
         .antMatchers("/login")
         .permitAll().and()
         .formLogin()
