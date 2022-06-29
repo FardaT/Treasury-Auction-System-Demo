@@ -19,7 +19,7 @@ public class GetProfile {
 	}
 
 	@GetMapping("/profile")
-	public String getProfile (@RequestParam String userName, Model model){
+	public String getProfile (@RequestParam(defaultValue = "a_user") String userName, Model model){
 		AppUser user = appUserService.findUserByUsername(userName);
 		model.addAttribute("user", user);
 		return "profile";
