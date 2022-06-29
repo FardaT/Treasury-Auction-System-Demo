@@ -8,22 +8,24 @@ import com.greenfox.treasuryauctionsystem.repositories.AppUserRepository;
 import com.greenfox.treasuryauctionsystem.utils.EmailService;
 import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
 import com.greenfox.treasuryauctionsystem.utils.Utility;
-import java.util.ArrayList;
-import java.util.Collection;
+
+import java.util.*;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.mail.MessagingException;
 
 @Service
-public class AppUserServiceImpl implements AppUserService, UserDetailsService  {
+public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     // DI
     private final AppUserRepository appUserRepository;
@@ -35,11 +37,18 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService  {
         this.emailService = emailService;
     }
 
+    /**********
+     *
+     *
+     * HOME SECTION
+     *
+     * **********/
+
     // STORE
     @Override
     public Map<String, String> registerAppUser(
-        AppUser appUser,
-        String confirmpassword) throws MessagingException {
+            AppUser appUser,
+            String confirmpassword) throws MessagingException {
 
         Map<String, String> errors = new HashMap<>();
 
@@ -88,10 +97,10 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService  {
 
             // send confirm email with token
             emailService.sendHtmlMessage(
-                appUser.getEmail(),
-                "Successfull registration",
-                Utility.setConfirmationEmailText(appUser.getUsername(),
-                    appUser.getActivationToken()));
+                    appUser.getEmail(),
+                    "Successfull registration",
+                    Utility.setConfirmationEmailText(appUser.getUsername(),
+                            appUser.getActivationToken()));
 
             return errors;
         }
@@ -141,9 +150,9 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService  {
         appUser.setReactivationTokenExpiration(LocalDateTime.now().plusDays(1));
 
         emailService.sendSimpleMessage(appUser.getEmail(), "Reset your password",
-            "Dear " + appUser.getUsername() +
-                ", please click the link to reset your Treasury Auction Site password: http://localhost:8080/resetpassword/reset?token=" +
-                token);
+                "Dear " + appUser.getUsername() +
+                        ", please click the link to reset your Treasury Auction Site password: http://localhost:8080/resetpassword/reset?token=" +
+                        token);
         appUserRepository.save(appUser);
         return token;
     }
@@ -185,6 +194,18 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService  {
         return errors;
     }
 
+    /**********
+     *
+     *
+     * ADMIN SECTION
+     *
+     * **********/
+
+    @Override
+    public List<AppUser> getAllAppUsers() {
+        return appUserRepository.findAll();
+    }
+
     //Authentication details based on username or email
     @Override
     public UserDetails loadUserByUsername(String loginDetail) throws UsernameNotFoundException {
@@ -194,7 +215,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService  {
         AppUser appUser = appUserRepository.findByUsernameOrEmail(loginDetail, loginDetail);
         if (appUser == null) {
             throw new UsernameNotFoundException(
-                "No username or email can be found in the database");
+                    "No username or email can be found in the database");
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(appUser.isAdmin() ? "ADMIN" : "USER"));

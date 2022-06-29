@@ -5,6 +5,7 @@ import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInpu
 import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
 import com.greenfox.treasuryauctionsystem.services.AppUserService;
 
+import java.util.List;
 import java.util.Map;
 import javax.mail.MessagingException;
 
@@ -27,6 +28,13 @@ public class AppUserController {
     public AppUserController(AppUserService appUserService) {
         this.appUserService = appUserService;
     }
+
+    /**********
+     *
+     *
+     * HOME SECTION
+     *
+     * **********/
 
     // SHOW REGISTER FORM
     @GetMapping("register")
@@ -170,5 +178,24 @@ public class AppUserController {
             return "redirect:/resetpassword/reset?token=" + passwordReset.getToken();
         }
         return "redirect:/";
+    }
+
+    /**********
+     *
+     *
+     * ADMIN SECTION
+     *
+     * **********/
+
+    // READ
+    @GetMapping("admin/users")
+    public String read(Model model) {
+
+        // get all users from db
+        List<AppUser> appUsers = appUserService.getAllAppUsers();
+
+        model.addAttribute("appUsers", appUsers);
+
+        return "admin/users";
     }
 }
