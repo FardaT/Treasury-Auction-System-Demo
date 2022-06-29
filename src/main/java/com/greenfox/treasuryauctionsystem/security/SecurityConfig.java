@@ -54,8 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .addFilter(new CustomAuthenticationFilter(authenticationManagerBean()))
         .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-      //Bypass authentication & authorization for development
-/*    http.csrf().disable();
+    // To bypass authentication & authorization for development, comment out the code above and use the one below
+   /*http.csrf().disable();
     http.sessionManagement().sessionCreationPolicy(STATELESS);
     http.authorizeRequests().anyRequest().permitAll();*/
 

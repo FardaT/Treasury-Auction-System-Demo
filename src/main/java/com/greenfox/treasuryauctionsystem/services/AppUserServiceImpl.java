@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.services;
 
+import com.greenfox.treasuryauctionsystem.exceptions.AppUserStatusException;
 import com.greenfox.treasuryauctionsystem.exceptions.IllegalArgumentException;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInput;
@@ -193,8 +194,13 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService  {
         }
         AppUser appUser = appUserRepository.findByUsernameOrEmail(loginDetail, loginDetail);
         if (appUser == null) {
-            throw new UsernameNotFoundException(
-                "No username or email can be found in the database");
+            throw new UsernameNotFoundException("No username or email can be found in the database");
+        }
+        if (!appUser.isApproved()){
+            throw new AppUserStatusException("User account has not been approved by Admin");
+        }
+        if (appUser.isDisabled()){
+            throw new AppUserStatusException("User account has been disabled");
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(appUser.isAdmin() ? "ADMIN" : "USER"));
