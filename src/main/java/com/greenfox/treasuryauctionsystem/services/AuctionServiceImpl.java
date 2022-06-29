@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,5 +65,15 @@ public class AuctionServiceImpl implements AuctionService {
       }
     }
     return auctionsMap;
+  }
+
+  @Override
+  public void disable(Long id) {
+    Optional<Auction> auction = auctionRepository.findById(id);
+    if(auction.isPresent()) {
+      Auction currentAuction = auction.get();
+      currentAuction.setDisabled(true);
+      auctionRepository.save(currentAuction);
+    }
   }
 }

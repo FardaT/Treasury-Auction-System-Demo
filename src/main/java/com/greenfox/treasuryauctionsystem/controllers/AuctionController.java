@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -26,5 +27,12 @@ public class AuctionController {
     model.addAttribute("auctions", auctions);
 
     return "auctionslist";
+  }
+
+  //disable auction by id
+  @GetMapping("/disable/{id}")
+  public String deleteAuction(@PathVariable Long id){
+    auctionService.disable(id);
+    return "redirect:/auctions";
   }
 }

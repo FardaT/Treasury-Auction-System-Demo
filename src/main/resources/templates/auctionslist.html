@@ -61,8 +61,8 @@
             <td th:text="*{startDate}"></td>
             <td th:text="*{endTime}"></td>
             <td>
-                <a th:href="@{'/auctions/delete/'  + *{id}}">
-                    <button>delete auction</button>
+                <a th:href="@{'/auctions/disable/'  + *{id}}">
+                    <button type="submit">delete auction</button>
                 </a>
             </td>
             <!--        <td sec:authorize="hasRole('ADMIN')">-->
