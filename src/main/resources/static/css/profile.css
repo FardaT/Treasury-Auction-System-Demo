@@ -1,0 +1,9 @@
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-family: Arial, serif;
+    align-content: center;
+    word-wrap: break-word;
+    margin: 20px;
+    padding: 2px 10px 2px 10px;
+}
