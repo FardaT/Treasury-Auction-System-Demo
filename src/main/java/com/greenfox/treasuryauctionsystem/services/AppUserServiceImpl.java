@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,11 +32,13 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     // DI
     private final AppUserRepository appUserRepository;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AppUserServiceImpl(AppUserRepository appUserRepository, EmailService emailService) {
+    public AppUserServiceImpl(AppUserRepository appUserRepository, EmailService emailService, PasswordEncoder passwordEncoder) {
         this.appUserRepository = appUserRepository;
         this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // STORE
@@ -87,6 +90,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
             return errors;
         } else {
             // if validation is ok, then save user
+            appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
             appUserRepository.save(appUser);
 
             // send confirm email with token
