@@ -91,18 +91,21 @@ public class TestService {
         auction1.setProcessed(true);
         auction1.addTreasurySecurity(treasurySecurity1);
 
+        // save user 1 & 2
         appUserRepository.save(appUser1);
         appUserRepository.save(appUser2);
+
+        // save auction and security
         auctionRepository.save(auction1);
         treasurySecurityRepository.save(treasurySecurity1);
-        appUserRepository.save(appUser1);
 
+        // add bid to security (sec has many bids)
         treasurySecurity1.addBid(bid1);
-        appUser1.adBid(bid1);
 
+        // add bid to user (user has many bids)
+        appUser1.addBid(bid1);
+
+        // save bid
         bidRepository.save(bid1);
-
-        treasurySecurityRepository.save(treasurySecurity1);
-        appUserRepository.save(appUser1);
     }
 }
