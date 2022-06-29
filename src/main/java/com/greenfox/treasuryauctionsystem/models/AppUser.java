@@ -15,6 +15,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class AppUser {
 
 	// FIELDS
@@ -51,135 +55,4 @@ public class AppUser {
 		bid.setTreasurySecurity(null);
 	}
 
-	public AppUser () {
-	}
-
-	public AppUser (Long id, String username, String email, String password, List<Bid> bids, String institution, String activationToken, LocalDateTime activationTokenExpiration, String reactivationToken, LocalDateTime reactivationTokenExpiration, boolean isAdmin, boolean isActivated, boolean isApproved, boolean isDisabled) {
-		this.id = id;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.bids = bids;
-		this.institution = institution;
-		this.activationToken = activationToken;
-		this.activationTokenExpiration = activationTokenExpiration;
-		this.reactivationToken = reactivationToken;
-		this.reactivationTokenExpiration = reactivationTokenExpiration;
-		this.isAdmin = isAdmin;
-		this.isActivated = isActivated;
-		this.isApproved = isApproved;
-		this.isDisabled = isDisabled;
-	}
-
-	public Long getId () {
-		return id;
-	}
-
-	public void setId (Long id) {
-		this.id = id;
-	}
-
-	public String getUsername () {
-		return username;
-	}
-
-	public void setUsername (String username) {
-		this.username = username;
-	}
-
-	public String getEmail () {
-		return email;
-	}
-
-	public void setEmail (String email) {
-		this.email = email;
-	}
-
-	public String getPassword () {
-		return password;
-	}
-
-	public void setPassword (String password) {
-		this.password = password;
-	}
-
-	public List<Bid> getBids () {
-		return bids;
-	}
-
-	public void setBids (List<Bid> bids) {
-		this.bids = bids;
-	}
-
-	public String getInstitution () {
-		return institution;
-	}
-
-	public void setInstitution (String institution) {
-		this.institution = institution;
-	}
-
-	public String getActivationToken () {
-		return activationToken;
-	}
-
-	public void setActivationToken (String activationToken) {
-		this.activationToken = activationToken;
-	}
-
-	public LocalDateTime getActivationTokenExpiration () {
-		return activationTokenExpiration;
-	}
-
-	public void setActivationTokenExpiration (LocalDateTime activationTokenExpiration) {
-		this.activationTokenExpiration = activationTokenExpiration;
-	}
-
-	public String getReactivationToken () {
-		return reactivationToken;
-	}
-
-	public void setReactivationToken (String reactivationToken) {
-		this.reactivationToken = reactivationToken;
-	}
-
-	public LocalDateTime getReactivationTokenExpiration () {
-		return reactivationTokenExpiration;
-	}
-
-	public void setReactivationTokenExpiration (LocalDateTime reactivationTokenExpiration) {
-		this.reactivationTokenExpiration = reactivationTokenExpiration;
-	}
-
-	public boolean isAdmin () {
-		return isAdmin;
-	}
-
-	public void setAdmin (boolean admin) {
-		isAdmin = admin;
-	}
-
-	public boolean isActivated () {
-		return isActivated;
-	}
-
-	public void setActivated (boolean activated) {
-		isActivated = activated;
-	}
-
-	public boolean isApproved () {
-		return isApproved;
-	}
-
-	public void setApproved (boolean approved) {
-		isApproved = approved;
-	}
-
-	public boolean isDisabled () {
-		return isDisabled;
-	}
-
-	public void setDisabled (boolean disabled) {
-		isDisabled = disabled;
-	}
 }

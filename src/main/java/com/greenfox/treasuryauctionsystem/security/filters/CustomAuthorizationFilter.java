@@ -27,7 +27,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     if(request.getServletPath().equals("/login") || request.getServletPath().equals("/register")) {
       filterChain.doFilter(request, response);
   } else {
-      Cookie[] cookies = request.getCookies();
       Optional<Cookie> authorizationCookie = Arrays.stream(request.getCookies())
           .filter(cookie->"jwtoken".equals(cookie.getName())).findAny();
       if(authorizationCookie.isPresent()){

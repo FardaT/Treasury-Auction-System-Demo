@@ -6,6 +6,7 @@ import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @Service
@@ -17,7 +18,7 @@ public interface AppUserService {
 	// ACTIVATE ACCOUNT BY TOKEN
 	Map<String, String> activateAccount (String activationToken);
 
-	AppUser findUserByUsername (String userName);
+	AppUser getUserFromRequest (HttpServletRequest request);
 
 	AppUser findUserByEmail (ForgottenPasswordEmailInput emailInput);
 

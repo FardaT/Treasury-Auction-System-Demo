@@ -1,5 +1,9 @@
 package com.greenfox.treasuryauctionsystem.services;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.greenfox.treasuryauctionsystem.exceptions.IllegalArgumentException;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInput;
@@ -17,11 +21,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 
 @Service
 public class AppUserServiceImpl implements AppUserService, UserDetailsService {
@@ -128,19 +132,20 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 		}
 	}
 
+	//get currently logged in user from a jwt token
 	@Override
-	public AppUser findUserByUsername (String userName) {
-		/*
-		      Cookie[] cookies = request.getCookies();
-      Optional<Cookie> authorizationCookie = Arrays.stream(request.getCookies())
-          .filter(cookie->"jwtoken".equals(cookie.getName())).findAny();
-		          String token = authorizationCookie.get().getValue();
-          Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-          JWTVerifier verifier = JWT.require(algorithm).build();
-          DecodedJWT decodedJWT = verifier.verify(token);
-          String username = decodedJWT.getSubject();
-		 */
-		return appUserRepository.findByUsername(userName);
+	public AppUser getUserFromRequest (HttpServletRequest request) {
+		Optional<Cookie> optionalAuthorizationCookie = Arrays.stream(request.getCookies())
+				.filter(cookie -> "jwtoken".equals(cookie.getName())).findAny();
+
+		String token = optionalAuthorizationCookie.get().getValue();
+
+		Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+		JWTVerifier verifier = JWT.require(algorithm).build();
+		DecodedJWT decodedJWT = verifier.verify(token);
+		String username = decodedJWT.getSubject();
+
+		return appUserRepository.findByUsername(username);
 	}
 
 	@Override
