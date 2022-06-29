@@ -38,9 +38,8 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
 	// STORE
 	@Override
-	public Map<String, String> registerAppUser (
-			AppUser appUser,
-			String confirmpassword) throws MessagingException {
+	public Map<String, String> registerAppUser (AppUser appUser,
+	                                            String confirmpassword) throws MessagingException {
 
 		Map<String, String> errors = new HashMap<>();
 
@@ -131,7 +130,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
 	@Override
 	public AppUser findUserByUsername (String userName) {
-		return appUserRepository.findAppUserByUsername(userName);
+		return appUserRepository.findByUsername(userName);
 	}
 
 	@Override
