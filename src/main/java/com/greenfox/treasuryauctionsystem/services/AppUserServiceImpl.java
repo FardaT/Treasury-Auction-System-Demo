@@ -130,6 +130,16 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
 	@Override
 	public AppUser findUserByUsername (String userName) {
+		/*
+		      Cookie[] cookies = request.getCookies();
+      Optional<Cookie> authorizationCookie = Arrays.stream(request.getCookies())
+          .filter(cookie->"jwtoken".equals(cookie.getName())).findAny();
+		          String token = authorizationCookie.get().getValue();
+          Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+          JWTVerifier verifier = JWT.require(algorithm).build();
+          DecodedJWT decodedJWT = verifier.verify(token);
+          String username = decodedJWT.getSubject();
+		 */
 		return appUserRepository.findByUsername(userName);
 	}
 
