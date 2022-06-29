@@ -131,7 +131,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
 	@Override
 	public AppUser findUserByUsername (String userName) {
-		return appUserRepository.findAppUserByUserName(userName);
+		return appUserRepository.findAppUserByUsername(userName);
 	}
 
 	@Override

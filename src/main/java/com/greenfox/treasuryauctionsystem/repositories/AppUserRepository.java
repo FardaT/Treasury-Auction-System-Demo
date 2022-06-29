@@ -20,5 +20,5 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
 	AppUser findAppUserByReactivationToken (String token);
 
-	AppUser findAppUserByUserName (String userName);
+	AppUser findAppUserByUsername (String userName);
 }
