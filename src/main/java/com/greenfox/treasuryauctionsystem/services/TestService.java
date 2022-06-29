@@ -80,8 +80,8 @@ public class TestService {
         appUser2.setActivationTokenExpiration(Utility.setExpiration(ApplicationDetails.expiration));
         appUser2.setAdmin(true);
         appUser2.setActivated(true);
-        appUser2.setApproved(true);
-        appUser2.setDisabled(false);
+        appUser2.setApproved(false);
+        appUser2.setDisabled(true);
         // appUser2.setReactivationToken("a_reactivationtoken");
         // appUser2.setReactivationTokenExpiration(LocalDateTime.now());
 

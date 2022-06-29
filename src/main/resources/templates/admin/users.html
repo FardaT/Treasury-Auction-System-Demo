@@ -25,6 +25,8 @@
             <th>ID</th>
             <th>Username</th>
             <th>Email</th>
+            <th>Approved?</th>
+            <th>Enable/Disable</th>
         </tr>
         </thead>
         <tbody>
@@ -32,6 +34,25 @@
             <td th:text="${appUser.id}"></td>
             <td th:text="${appUser.username}"></td>
             <td th:text="${appUser.email}"></td>
+            <td>
+                <form th:action="@{/admin/users/approve}" th:if="${!appUser.isApproved}" method="post">
+                    <input type="hidden" name="appUserId" th:value="${appUser.id}">
+                    <input type="submit" class="btn btn-success" value="Approve">
+                </form>
+                <div th:if="${appUser.isApproved}">
+                    &check;
+                </div>
+            </td>
+            <td>
+                <form th:action="@{/admin/users/enable}" th:if="${appUser.isDisabled}" method="post">
+                    <input type="hidden" name="appUserId" th:value="${appUser.id}">
+                    <input type="submit" class="btn btn-success" value="Enable">
+                </form>
+                <form th:action="@{/admin/users/disable}" th:if="${!appUser.isDisabled}" method="post">
+                    <input type="hidden" name="appUserId" th:value="${appUser.id}">
+                    <input type="submit" class="btn btn-danger" value="Disable">
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

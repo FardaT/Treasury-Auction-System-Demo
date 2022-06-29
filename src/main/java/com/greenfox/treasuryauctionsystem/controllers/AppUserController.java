@@ -187,7 +187,7 @@ public class AppUserController {
      *
      * **********/
 
-    // READ
+    // READ - all users
     @GetMapping("admin/users")
     public String read(Model model) {
 
@@ -197,5 +197,26 @@ public class AppUserController {
         model.addAttribute("appUsers", appUsers);
 
         return "admin/users";
+    }
+
+    // UPDATE - approve user reg (isApproved set to TRUE)
+    @PostMapping("admin/users/approve")
+    public String approve(@RequestParam Long appUserId) {
+        appUserService.approveAppUser(appUserId);
+        return "redirect:/admin/users";
+    }
+
+    // UPDATE - enable user (isDisabled set to FALSE)
+    @PostMapping("admin/users/enable")
+    public String enable(@RequestParam Long appUserId) {
+        appUserService.enableAppUser(appUserId);
+        return "redirect:/admin/users";
+    }
+
+    // UPDATE - disable user (isDisabled set to TRUE)
+    @PostMapping("admin/users/disable")
+    public String disable(@RequestParam Long appUserId) {
+        appUserService.disableAppUser(appUserId);
+        return "redirect:/admin/users";
     }
 }

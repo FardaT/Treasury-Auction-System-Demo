@@ -6,18 +6,13 @@ import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
 
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.stereotype.Service;
+
 import javax.mail.MessagingException;
 
 @Service
 public interface AppUserService {
-
-    /**********
-     *
-     *
-     * HOME SECTION
-     *
-     * **********/
 
     // STORE
     Map<String, String> registerAppUser(AppUser appUser, String confirmpassword) throws MessagingException;
@@ -33,12 +28,15 @@ public interface AppUserService {
 
     Map<String, String> saveNewPassword(PasswordReset passwordReset);
 
-    /**********
-     *
-     *
-     * ADMIN SECTION
-     *
-     * **********/
-
+    // READ - all users
     List<AppUser> getAllAppUsers();
+
+    // UPDATE - approve user reg (isApproved set to TRUE)
+    void approveAppUser(Long appUserId);
+
+    // UPDATE - enable user (isDisabled set to FALSE)
+    void enableAppUser(Long appUserId);
+
+    // UPDATE - disable user (isDisabled set to TRUE)
+    void disableAppUser(Long appUserId);
 }

@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.services;
 
+import com.greenfox.treasuryauctionsystem.exceptions.AppUserNotFoundException;
 import com.greenfox.treasuryauctionsystem.exceptions.IllegalArgumentException;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInput;
@@ -36,13 +37,6 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
         this.appUserRepository = appUserRepository;
         this.emailService = emailService;
     }
-
-    /**********
-     *
-     *
-     * HOME SECTION
-     *
-     * **********/
 
     // STORE
     @Override
@@ -194,16 +188,34 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
         return errors;
     }
 
-    /**********
-     *
-     *
-     * ADMIN SECTION
-     *
-     * **********/
-
+    // READ - all users
     @Override
     public List<AppUser> getAllAppUsers() {
         return appUserRepository.findAll();
+    }
+
+    // UPDATE - approve user reg (isApproved set to TRUE)
+    @Override
+    public void approveAppUser(Long appUserId) {
+        AppUser appUser = appUserRepository.findById(appUserId).orElseThrow(() -> new AppUserNotFoundException("User not found"));
+        appUser.setApproved(true);
+        appUserRepository.save(appUser);
+    }
+
+    // UPDATE - enable user (isDisabled set to FALSE)
+    @Override
+    public void enableAppUser(Long appUserId) {
+        AppUser appUser = appUserRepository.findById(appUserId).orElseThrow(() -> new AppUserNotFoundException("User not found"));
+        appUser.setDisabled(false);
+        appUserRepository.save(appUser);
+    }
+
+    // UPDATE - disable user (isDisabled set to TRUE)
+    @Override
+    public void disableAppUser(Long appUserId) {
+        AppUser appUser = appUserRepository.findById(appUserId).orElseThrow(() -> new AppUserNotFoundException("User not found"));
+        appUser.setDisabled(true);
+        appUserRepository.save(appUser);
     }
 
     //Authentication details based on username or email
