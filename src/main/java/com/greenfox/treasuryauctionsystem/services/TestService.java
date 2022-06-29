@@ -90,7 +90,7 @@ public class TestService {
     appUserRepository.save(appUser1);
 
     treasurySecurity1.addBid(bid1);
-    appUser1.adBid(bid1);
+    appUser1.addBid(bid1);
 
     bidRepository.save(bid1);
 
