@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class TreasuryAuctionSystemApplication implements CommandLineRunner {
@@ -21,6 +24,13 @@ public class TreasuryAuctionSystemApplication implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication.run(TreasuryAuctionSystemApplication.class, args);
     }
+
+    // Hashing password
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Override
     public void run(String... args) throws Exception {
         //emailService.sendSimpleMessage("szecsi.istvan@gmail.com", "Hi, from the Mighty Rooster Team", "This is a test email template for your treasury application");
