@@ -8,6 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+
 @Controller
 public class GetProfile {
 
@@ -19,7 +22,8 @@ public class GetProfile {
 	}
 
 	@GetMapping("/profile")
-	public String getProfile (@RequestParam(defaultValue = "a_user") String userName, Model model){
+	public String getProfile (@RequestParam(defaultValue = "a_user") String userName, Model model, HttpServletRequest request){
+		System.out.println(Arrays.toString(request.getCookies()));
 		AppUser user = appUserService.findUserByUsername(userName);
 		model.addAttribute("user", user);
 		return "profile";
