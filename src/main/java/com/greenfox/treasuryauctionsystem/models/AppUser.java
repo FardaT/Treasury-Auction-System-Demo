@@ -26,13 +26,13 @@ import javax.persistence.Table;
 @Setter
 public class AppUser {
 
-    // FIELDS
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String username;
-    private String email;
-    private String password;
+  // FIELDS
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
+  private String username;
+  private String email;
+  private String password;
   @OneToMany(
       mappedBy = "user",
       cascade = CascadeType.MERGE,
@@ -49,14 +49,14 @@ public class AppUser {
   private boolean isApproved = false;
   private boolean isDisabled = false;
 
-    // CUSTOM
-    public void addBid(Bid bid) {
-        bids.add(bid);
-        bid.setUser(this);
-    }
+  // CUSTOM
+  public void addBid(Bid bid) {
+    bids.add(bid);
+    bid.setUser(this);
+  }
 
-    public void removeBid(Bid bid) {
-        bids.remove(bid);
-        bid.setUser(null);
-    }
+  public void removeBid(Bid bid) {
+    bids.remove(bid);
+    bid.setUser(null);
+  }
 }
