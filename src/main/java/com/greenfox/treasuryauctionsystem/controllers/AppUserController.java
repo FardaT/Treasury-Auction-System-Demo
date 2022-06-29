@@ -201,22 +201,25 @@ public class AppUserController {
 
     // UPDATE - approve user reg (isApproved set to TRUE)
     @PostMapping("admin/users/approve")
-    public String approve(@RequestParam Long appUserId) {
-        appUserService.approveAppUser(appUserId);
+    public String approve(@RequestParam Long appUserId, RedirectAttributes redirectAttributes) {
+        AppUser appUser = appUserService.approveAppUser(appUserId);
+        redirectAttributes.addFlashAttribute("flashMessage", "The user with username " + appUser.getUsername() + " got approved!");
         return "redirect:/admin/users";
     }
 
     // UPDATE - enable user (isDisabled set to FALSE)
     @PostMapping("admin/users/enable")
-    public String enable(@RequestParam Long appUserId) {
-        appUserService.enableAppUser(appUserId);
+    public String enable(@RequestParam Long appUserId, RedirectAttributes redirectAttributes) {
+        AppUser appUser = appUserService.enableAppUser(appUserId);
+        redirectAttributes.addFlashAttribute("flashMessage", "The user with username " + appUser.getUsername() + " got enabled!");
         return "redirect:/admin/users";
     }
 
     // UPDATE - disable user (isDisabled set to TRUE)
     @PostMapping("admin/users/disable")
-    public String disable(@RequestParam Long appUserId) {
-        appUserService.disableAppUser(appUserId);
+    public String disable(@RequestParam Long appUserId, RedirectAttributes redirectAttributes) {
+        AppUser appUser = appUserService.disableAppUser(appUserId);
+        redirectAttributes.addFlashAttribute("flashMessage", "The user with username " + appUser.getUsername() + " got disabled!");
         return "redirect:/admin/users";
     }
 }

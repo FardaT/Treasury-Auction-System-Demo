@@ -19,6 +19,10 @@
     <p>As an Admin user, I need an interface where I can manage Users/Bidders.</p>
     <p>Only accessible for admins.</p>
 
+    <div th:if="${flashMessage != null}" class="alert alert-success">
+        <strong>Success!</strong> <span th:text="${flashMessage}"></span>
+    </div>
+
     <table class="table">
         <thead>
         <tr>

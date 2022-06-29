@@ -32,11 +32,11 @@ public interface AppUserService {
     List<AppUser> getAllAppUsers();
 
     // UPDATE - approve user reg (isApproved set to TRUE)
-    void approveAppUser(Long appUserId);
+    AppUser approveAppUser(Long appUserId);
 
     // UPDATE - enable user (isDisabled set to FALSE)
-    void enableAppUser(Long appUserId);
+    AppUser enableAppUser(Long appUserId);
 
     // UPDATE - disable user (isDisabled set to TRUE)
-    void disableAppUser(Long appUserId);
+    AppUser disableAppUser(Long appUserId);
 }

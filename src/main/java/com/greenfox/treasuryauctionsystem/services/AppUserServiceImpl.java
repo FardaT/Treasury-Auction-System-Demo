@@ -196,26 +196,26 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     // UPDATE - approve user reg (isApproved set to TRUE)
     @Override
-    public void approveAppUser(Long appUserId) {
+    public AppUser approveAppUser(Long appUserId) {
         AppUser appUser = appUserRepository.findById(appUserId).orElseThrow(() -> new AppUserNotFoundException("User not found"));
         appUser.setApproved(true);
-        appUserRepository.save(appUser);
+        return appUserRepository.save(appUser);
     }
 
     // UPDATE - enable user (isDisabled set to FALSE)
     @Override
-    public void enableAppUser(Long appUserId) {
+    public AppUser enableAppUser(Long appUserId) {
         AppUser appUser = appUserRepository.findById(appUserId).orElseThrow(() -> new AppUserNotFoundException("User not found"));
         appUser.setDisabled(false);
-        appUserRepository.save(appUser);
+        return appUserRepository.save(appUser);
     }
 
     // UPDATE - disable user (isDisabled set to TRUE)
     @Override
-    public void disableAppUser(Long appUserId) {
+    public AppUser disableAppUser(Long appUserId) {
         AppUser appUser = appUserRepository.findById(appUserId).orElseThrow(() -> new AppUserNotFoundException("User not found"));
         appUser.setDisabled(true);
-        appUserRepository.save(appUser);
+        return appUserRepository.save(appUser);
     }
 
     //Authentication details based on username or email
