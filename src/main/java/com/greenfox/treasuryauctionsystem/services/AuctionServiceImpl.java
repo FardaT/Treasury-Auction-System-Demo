@@ -1,6 +1,7 @@
 package com.greenfox.treasuryauctionsystem.services;
 
 import com.greenfox.treasuryauctionsystem.models.Auction;
+import com.greenfox.treasuryauctionsystem.models.dtos.AuctionResponseDTO;
 import com.greenfox.treasuryauctionsystem.repositories.AuctionRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,12 +23,13 @@ public class AuctionServiceImpl implements AuctionService {
     this.auctionRepository = auctionRepository;
   }
 
-  public Map<String, List<Auction>> getAllAuctionsByStatus() throws NullPointerException {
+  @Override
+  public Map<String, List<AuctionResponseDTO>> getAllAuctionsByStatus() throws NullPointerException {
 
-    Map<String, List<Auction>> auctionsMap = new HashMap<>();
-    auctionsMap.put("finished", new ArrayList<>());
-    auctionsMap.put("upcoming", new ArrayList<>());
-    auctionsMap.put("ongoing", new ArrayList<>());
+    Map<String, List<AuctionResponseDTO>> auctionsMap = new HashMap<>();
+    auctionsMap.put("finished", null);
+    auctionsMap.put("upcoming", null);
+    auctionsMap.put("ongoing", null);
 
     List<Auction> allAuctions = auctionRepository.findAll();
 
@@ -36,16 +38,25 @@ public class AuctionServiceImpl implements AuctionService {
     }
     for (Auction auction : allAuctions) {
       if (auction.getAuctionEndDate().isBefore(LocalDateTime.now())) {
-        List<Auction> finishedList = auctionsMap.get("finished");
-        finishedList.add(auction);
+        if(auctionsMap.get("finished") == null) {
+          auctionsMap.put("finished", new ArrayList<>());
+        }
+        List<AuctionResponseDTO> finishedList = auctionsMap.get("finished");
+        finishedList.add(new AuctionResponseDTO(auction));
         auctionsMap.put("finished", finishedList);
       } else if (auction.getAuctionStartDate().isAfter(LocalDateTime.now())) {
-        List<Auction> upcomingList = auctionsMap.get("upcoming");
-        upcomingList.add(auction);
+        if(auctionsMap.get("upcoming") == null) {
+          auctionsMap.put("upcoming", new ArrayList<>());
+        }
+        List<AuctionResponseDTO> upcomingList = auctionsMap.get("upcoming");
+        upcomingList.add(new AuctionResponseDTO(auction));
         auctionsMap.put("upcoming", upcomingList);
       } else {
-        List<Auction> ongoingList = auctionsMap.get("ongoing");
-        ongoingList.add(auction);
+        if(auctionsMap.get("ongoing") == null) {
+          auctionsMap.put("ongoing", new ArrayList<>());
+        }
+        List<AuctionResponseDTO> ongoingList = auctionsMap.get("ongoing");
+        ongoingList.add(new AuctionResponseDTO(auction));
         auctionsMap.put("ongoing", ongoingList);
       }
     }

@@ -77,20 +77,36 @@ public class TestService {
 //    appUser2.setReactivationTokenExpiration(null);
 //    appUser2.addBid(null);
 
+    //finished
     Auction auction1 = new Auction();
     auction1.setAuctionStartDate(LocalDateTime.now());
     auction1.setAuctionEndDate(LocalDateTime.now());
     auction1.setProcessed(true);
     auction1.addTreasurySecurity(treasurySecurity1);
 
+    //ongoing
+    Auction auction2 = new Auction();
+    auction2.setAuctionStartDate(LocalDateTime.now());
+    auction2.setAuctionEndDate(LocalDateTime.now().plusDays(1));
+    auction2.setProcessed(false);
+
+    //upcoming
+    Auction auction3 = new Auction();
+    auction3.setAuctionStartDate(LocalDateTime.now().plusDays(1));
+    auction3.setAuctionEndDate(LocalDateTime.now().plusDays(2));
+    auction3.setProcessed(true);
+    auction3.addTreasurySecurity(treasurySecurity1);
+
     appUserRepository.save(appUser1);
     appUserRepository.save(appUser2);
     auctionRepository.save(auction1);
+    auctionRepository.save(auction2);
+    auctionRepository.save(auction3);
     treasurySecurityRepository.save(treasurySecurity1);
     appUserRepository.save(appUser1);
 
     treasurySecurity1.addBid(bid1);
-    appUser1.adBid(bid1);
+    appUser1.addBid(bid1);
 
     bidRepository.save(bid1);
 

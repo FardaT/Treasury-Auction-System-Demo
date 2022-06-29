@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Treasury Auction System - Auctions list</title>
+    <link rel="stylesheet" th:href="@{/style.css}"/>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<table>
+    <thead>
+    <h2>Ongoing auctions</h2>
+    <tr>
+        <th>id</th>
+        <th>start date</th>
+        <th>start time</th>
+        <th>end date</th>
+        <th>end time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="auction : ${auctions.ongoing}" th:object="${auction}">
+        <td th:text="*{id}"></td>
+        <td th:text="*{startDate}"></td>
+        <td th:text="*{startTime}"></td>
+        <td th:text="*{startDate}"></td>
+        <td th:text="*{endTime}"></td>
+    </tr>
+    </tbody>
+</table>
+<table>
+    <thead>
+    <h2>Upcoming auctions</h2>
+    <tr>
+        <th>id</th>
+        <th>start date</th>
+        <th>start time</th>
+        <th>end date</th>
+        <th>end time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="auction : ${auctions.upcoming}" th:object="${auction}">
+        <td th:text="*{id}"></td>
+        <td th:text="*{startDate}"></td>
+        <td th:text="*{startTime}"></td>
+        <td th:text="*{startDate}"></td>
+        <td th:text="*{endTime}"></td>
+        <td>
+            <a th:href="@{'/auctions/delete/'  + *{id}}">
+                <button>delete auction</button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table>
+    <thead>
+    <h2>Finished auctions</h2>
+    <tr>
+        <th>id</th>
+        <th>start date</th>
+        <th>end date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="auction : ${auctions.finished}" th:object="${auction}">
+        <td th:text="*{id}"></td>
+        <td th:text="*{startDate}"></td>
+        <td th:text="*{startDate}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/auctions/create}">
+    <button>Create new auction</button>
+</a>
+
+
+</body>
+</html>
