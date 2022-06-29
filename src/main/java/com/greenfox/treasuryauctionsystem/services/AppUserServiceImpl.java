@@ -238,7 +238,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
             throw new AppUserStatusException("User account has been disabled");
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(appUser.isAdmin() ? "ADMIN" : "USER"));
+        authorities.add(new SimpleGrantedAuthority(appUser.isAdmin() ? "ROLE_ADMIN" : "ROLE_USER"));
         return new User(appUser.getUsername(), appUser.getPassword(), authorities);
     }
 }
