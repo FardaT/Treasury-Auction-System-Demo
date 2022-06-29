@@ -83,12 +83,15 @@ public class TestService {
     auction1.setAuctionEndDate(LocalDateTime.now());
     auction1.setProcessed(true);
     auction1.addTreasurySecurity(treasurySecurity1);
+    appUser1.setDisabled(true);
 
     //ongoing
     Auction auction2 = new Auction();
     auction2.setAuctionStartDate(LocalDateTime.now());
     auction2.setAuctionEndDate(LocalDateTime.now().plusDays(1));
     auction2.setProcessed(false);
+    auction2.setDisabled(false);
+
 
     //upcoming
     Auction auction3 = new Auction();
@@ -96,6 +99,7 @@ public class TestService {
     auction3.setAuctionEndDate(LocalDateTime.now().plusDays(2));
     auction3.setProcessed(true);
     auction3.addTreasurySecurity(treasurySecurity1);
+    auction3.setDisabled(false);
 
     appUserRepository.save(appUser1);
     appUserRepository.save(appUser2);

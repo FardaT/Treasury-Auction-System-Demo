@@ -6,74 +6,103 @@
     <meta charset="utf-8"/>
 </head>
 <body>
-<table>
-    <thead>
-    <h2>Ongoing auctions</h2>
-    <tr>
-        <th>id</th>
-        <th>start date</th>
-        <th>start time</th>
-        <th>end date</th>
-        <th>end time</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="auction : ${auctions.ongoing}" th:object="${auction}">
-        <td th:text="*{id}"></td>
-        <td th:text="*{startDate}"></td>
-        <td th:text="*{startTime}"></td>
-        <td th:text="*{startDate}"></td>
-        <td th:text="*{endTime}"></td>
-    </tr>
-    </tbody>
-</table>
-<table>
-    <thead>
-    <h2>Upcoming auctions</h2>
-    <tr>
-        <th>id</th>
-        <th>start date</th>
-        <th>start time</th>
-        <th>end date</th>
-        <th>end time</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="auction : ${auctions.upcoming}" th:object="${auction}">
-        <td th:text="*{id}"></td>
-        <td th:text="*{startDate}"></td>
-        <td th:text="*{startTime}"></td>
-        <td th:text="*{startDate}"></td>
-        <td th:text="*{endTime}"></td>
-        <td>
-            <a th:href="@{'/auctions/delete/'  + *{id}}">
-                <button>delete auction</button>
-            </a>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<table>
-    <thead>
-    <h2>Finished auctions</h2>
-    <tr>
-        <th>id</th>
-        <th>start date</th>
-        <th>end date</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="auction : ${auctions.finished}" th:object="${auction}">
-        <td th:text="*{id}"></td>
-        <td th:text="*{startDate}"></td>
-        <td th:text="*{startDate}"></td>
-    </tr>
-    </tbody>
-</table>
+<!--todo check role to show delete(upcoming) and add new buttons-->
+<!--todo https://betterprogramming.pub/spring-security-user-roles-and-thymeleaf-extras-c10113d4ad75-->
+<h1>All auctions</h1>
+<div th:if="${auctions.ongoing == null}">
+    <h3>No ongoing auctions</h3>
+</div>
+<div th:unless="${auctions.ongoing == null}">
+    <table>
+        <thead>
+        <h3>Ongoing auctions</h3>
+        <tr>
+            <th>id</th>
+            <th>start date</th>
+            <th>start time</th>
+            <th>end date</th>
+            <th>end time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="auction : ${auctions.ongoing}" th:object="${auction}">
+            <td th:text="*{id}"></td>
+            <td th:text="*{startDate}"></td>
+            <td th:text="*{startTime}"></td>
+            <td th:text="*{startDate}"></td>
+            <td th:text="*{endTime}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:if="${auctions.upcoming == null}">
+    <h3>No ongoing auctions</h3>
+</div>
+<div th:unless="${auctions.upcoming == null}">
+    <table>
+        <thead>
+        <h3>Upcoming auctions</h3>
+        <tr>
+            <th>id</th>
+            <th>start date</th>
+            <th>start time</th>
+            <th>end date</th>
+            <th>end time</th>
+            <th>delete</th>
+            <!--        <th sec:authorize="hasRole('ADMIN')">delete</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="auction : ${auctions.upcoming}" th:object="${auction}">
+            <td th:text="*{id}"></td>
+            <td th:text="*{startDate}"></td>
+            <td th:text="*{startTime}"></td>
+            <td th:text="*{startDate}"></td>
+            <td th:text="*{endTime}"></td>
+            <td>
+                <a th:href="@{'/auctions/delete/'  + *{id}}">
+                    <button>delete auction</button>
+                </a>
+            </td>
+            <!--        <td sec:authorize="hasRole('ADMIN')">-->
+            <!--            <a th:href="@{'/auctions/delete/'  + *{id}}">-->
+            <!--                <button>delete auction</button>-->
+            <!--            </a>-->
+            <!--        </td>-->
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:if="${auctions.finished == null}">
+    <h3>No ongoing auctions</h3>
+</div>
+<div th:unless="${auctions.finished == null}">
+    <table>
+        <thead>
+        <h3>Finished auctions</h3>
+        <tr>
+            <th>id</th>
+            <th>start date</th>
+            <th>end date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="auction : ${auctions.finished}" th:object="${auction}">
+            <td th:text="*{id}"></td>
+            <td th:text="*{startDate}"></td>
+            <td th:text="*{startDate}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 <a th:href="@{/auctions/create}">
     <button>Create new auction</button>
 </a>
+<!--<a th:href="@{/auctions/create}"  sec:authorize="hasRole('ADMIN')">-->
+<!--    <button>Create new auction</button>-->
+<!--</a>-->
 
 
 </body>

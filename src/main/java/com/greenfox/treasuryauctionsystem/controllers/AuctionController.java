@@ -24,9 +24,7 @@ public class AuctionController {
   public String showAllAuctions(Model model) {
     Map<String, List<AuctionResponseDTO>> auctions = auctionService.getAllAuctionsByStatus();
     model.addAttribute("auctions", auctions);
-    // TODO: 2022. 06. 29. add template
 
-    System.out.println(auctions.get("ongoing").get(0).getId());
     return "auctionslist";
   }
 }
