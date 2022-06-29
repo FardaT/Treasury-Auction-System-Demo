@@ -3,8 +3,12 @@ package com.greenfox.treasuryauctionsystem.services;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInput;
 import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
+
+import java.util.List;
 import java.util.Map;
+
 import org.springframework.stereotype.Service;
+
 import javax.mail.MessagingException;
 
 @Service
@@ -23,4 +27,16 @@ public interface AppUserService {
     AppUser validateToken(String token);
 
     Map<String, String> saveNewPassword(PasswordReset passwordReset);
+
+    // READ - all users
+    List<AppUser> getAllAppUsers();
+
+    // UPDATE - approve user reg (isApproved set to TRUE)
+    AppUser approveAppUser(Long appUserId);
+
+    // UPDATE - enable user (isDisabled set to FALSE)
+    AppUser enableAppUser(Long appUserId);
+
+    // UPDATE - disable user (isDisabled set to TRUE)
+    AppUser disableAppUser(Long appUserId);
 }
