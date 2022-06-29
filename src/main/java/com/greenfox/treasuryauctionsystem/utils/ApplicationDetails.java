@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationDetails {
 
+    // https://stackoverflow.com/questions/25764459/spring-boot-application-properties-value-not-populating
+
     public static int expiration;
 
     @Value("${expiration}")
