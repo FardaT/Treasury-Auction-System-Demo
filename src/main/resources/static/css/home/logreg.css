@@ -1,0 +1,106 @@
+#login .container #login-row #login-column #login-box {
+    margin-top: 80px;
+    max-width: 100%;
+    height: 100%;
+    border: 1px solid #9C9C9C;
+    background-color: #EAEAEA;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px;
+}
+
+#login .container #login-row #login-column #login-box #login-form {
+    padding: 20px;
+}
+
+#login .container #login-row #login-column #login-box #login-form #register-link {
+    margin-top: -85px;
+}
+
+#login .container #login-row #login-column #login-box .text-center .text-info {
+    color: white;
+}
+
+#login .container #login-row #login-column #login-box #login-form h3 {
+    color: white;
+}
+
+#login .container #login-row #login-column #login-box #login-form #form-group {
+    color: white;
+}
+
+#register .container #row #column #box {
+    margin-top: 80px;
+    max-width: 100%;
+    height: 100%;
+    border: 1px solid #9C9C9C;
+    background-color: #EAEAEA;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px;
+}
+
+#register .container #row #column #box #form #form-group {
+    padding: 20px;
+}
+
+#register .container #row #column #box #form #form-group #register-link {
+    margin-top: -85px;
+}
+
+#register .container {
+    color: #d5cfcf;
+}
+
+#register .container .show {
+    color: white;
+}
+
+#reset-form .resetf-container #reset-row #reset-column #reset-box {
+    margin-top: 100px;
+    max-width: 100%;
+    height: 100%;
+    border: 1px solid #9C9C9C;
+    background-color: #EAEAEA;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    size: landscape;
+}
+
+#reset-form .resetf-container #reset-row #reset-column #reset-box #reset-form2 {
+    padding: 20px;
+}
+
+#reset-form .resetf-container #reset-row #reset-column #reset-box #reset-form2 #reset-link {
+    margin-top: -85px;
+}
+
+#reset-form .resetf-container #reset-row #reset-column #reset-box #reset-form2 h3 {
+    color: white;
+
+}
+
+#reset-password .reset-container #reset-row #reset-column #reset-box {
+    margin-top: 100px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #9C9C9C;
+    background-color: #EAEAEA;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 40px;
+}
+
+#reset-password .reset-container #reset-row #reset-column #reset-box #enter-password2 {
+    padding: 20px;
+}
+
+#reset-password .reset-container #reset-row #reset-column #reset-box #enter-password #enter-password2 {
+    margin-top: -85px;
+}
+
+#reset-password .reset-container #reset-row #reset-column #reset-box #reset-form h3 {
+    color: white;
+
+}
