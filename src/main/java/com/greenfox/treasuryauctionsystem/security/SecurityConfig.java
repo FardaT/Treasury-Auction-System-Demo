@@ -32,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-/*    http.csrf().disable();
     http.sessionManagement().sessionCreationPolicy(STATELESS);
     http.authorizeRequests()
         .antMatchers("/admin/**").hasRole("ADMIN")
@@ -45,12 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .logoutSuccessUrl("/login").and()
         .authorizeRequests().anyRequest().authenticated().and()
         .addFilter(new CustomAuthenticationFilter(authenticationManagerBean()))
-        .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);*/
+        .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
     // To bypass authentication & authorization for development, comment out the code above and use the one below
-    http.csrf().disable();
+/*    http.csrf().disable();
     http.sessionManagement().sessionCreationPolicy(STATELESS);
-    http.authorizeRequests().anyRequest().permitAll();
+    http.authorizeRequests().anyRequest().permitAll();*/
 
   }
     @Override
