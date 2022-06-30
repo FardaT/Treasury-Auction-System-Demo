@@ -13,4 +13,6 @@ public interface AuctionService {
   Map<String, List<AuctionResponseDTO>> getAllAuctionsByStatus() throws NullPointerException;
 
   void disable(Long id);
+
+  void process(Long id);
 }

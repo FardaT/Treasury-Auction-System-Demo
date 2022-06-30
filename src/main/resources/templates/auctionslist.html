@@ -1,9 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Treasury Auction System - Auctions list</title>
     <link rel="stylesheet" th:href="@{/style.css}"/>
     <meta charset="utf-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SWEETALERT CDN -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <!--todo check role to show delete(upcoming) and add new buttons-->
@@ -31,13 +40,34 @@
             <td th:text="*{startTime}"></td>
             <td th:text="*{startDate}"></td>
             <td th:text="*{endTime}"></td>
+            <td>
+                <table>
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                    <tr th:each="security : *{treasurySecurityList}" th:object="${security}">
+                        <td th:text="*{securityName}"></td>
+                        <td th:text="*{securityType}"></td>
+                        <td th:text="*{securityTerm}"></td>
+                        <td th:text="*{totalAmount}"></td>
+                        <td th:text="*{issueDate}"></td>
+                        <td th:text="*{maturityDate}"></td>
+                        <td th:text="*{highRate}"></td>
+                    </tr>
+
+                    </tbody>
+
+
+                </table>
+            </td>
         </tr>
         </tbody>
     </table>
 </div>
 
 <div th:if="${auctions.upcoming == null}">
-    <h3>No ongoing auctions</h3>
+    <h3>No upcoming auctions</h3>
 </div>
 <div th:unless="${auctions.upcoming == null}">
     <table>
@@ -60,10 +90,16 @@
             <td th:text="*{startTime}"></td>
             <td th:text="*{startDate}"></td>
             <td th:text="*{endTime}"></td>
+            <!--            <td>-->
+            <!--                <a th:href="@{'/auctions/disable/'  + *{id}}">-->
+            <!--                    <button type="submit">delete auction</button>-->
+            <!--                </a>-->
+            <!--            </td>-->
             <td>
-                <a th:href="@{'/auctions/disable/'  + *{id}}">
-                    <button type="submit">delete auction</button>
-                </a>
+                <form th:action="@{/auctions/disable}" method="post">
+                    <input type="hidden" name="id" th:value="*{id}">
+                    <input type="submit" class="btn btn-success sa_click" value="Delete">
+                </form>
             </td>
             <!--        <td sec:authorize="hasRole('ADMIN')">-->
             <!--            <a th:href="@{'/auctions/delete/'  + *{id}}">-->
@@ -75,7 +111,7 @@
     </table>
 </div>
 <div th:if="${auctions.finished == null}">
-    <h3>No ongoing auctions</h3>
+    <h3>No finished auctions</h3>
 </div>
 <div th:unless="${auctions.finished == null}">
     <table>
@@ -85,6 +121,7 @@
             <th>id</th>
             <th>start date</th>
             <th>end date</th>
+            <th>process</th>
         </tr>
         </thead>
         <tbody>
@@ -92,6 +129,43 @@
             <td th:text="*{id}"></td>
             <td th:text="*{startDate}"></td>
             <td th:text="*{startDate}"></td>
+            <td th:if="*{!isProcessed}">
+                <form th:action="@{/auctions/process}" method="post">
+                    <input type="hidden" name="id" th:value="*{id}">
+                    <input type="submit" class="btn btn-success sa_click" value="Process">
+                </form>
+            </td>
+            <td>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Total Amount</th>
+                        <th>Term</th>
+                        <th>Issue Date</th>
+                        <th>Maturity Date</th>
+                        <th>High Rate</th>
+
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    <tr th:each="security : *{treasurySecurityList}" th:object="${security}">
+                        <td th:text="*{id}"></td>
+                        <td th:text="*{securityName}"></td>
+                        <td th:text="*{securityType}"></td>
+                        <td th:text="*{totalAmount}"></td>
+                        <td th:text="*{securityTerm}"></td>
+                        <td th:text="*{issueDate}"></td>
+                        <td th:text="*{maturityDate}"></td>
+                        <td th:text="*{highRate}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td th:unless="*{!isProcessed}" th:text="processed"></td>
         </tr>
         </tbody>
     </table>
@@ -104,6 +178,7 @@
 <!--    <button>Create new auction</button>-->
 <!--</a>-->
 
+<script src="../js/SA_dialog-two-buttons.js"></script>
 
 </body>
 </html>

@@ -8,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/auctions")
@@ -26,13 +28,27 @@ public class AuctionController {
     Map<String, List<AuctionResponseDTO>> auctions = auctionService.getAllAuctionsByStatus();
     model.addAttribute("auctions", auctions);
 
+    System.out.println("***********************************************************************");
+    System.out.println(auctions.get("finished").get(0).getTreasurySecurityList().get(0));
+
     return "auctionslist";
   }
 
-  //disable auction by id
-  @GetMapping("/disable/{id}")
-  public String deleteAuction(@PathVariable Long id){
+  @PostMapping("/disable")
+  public String deleteAuctionPost(@RequestParam Long id){
     auctionService.disable(id);
+    return "redirect:/auctions";
+  }
+
+  @GetMapping("/process/{id}")
+  public String processFinishedAuction(@PathVariable Long id){
+    auctionService.process(id);
+    return "redirect:/auctions";
+  }
+
+  @PostMapping("/process")
+  public String processFinishedAuctionPost(@RequestParam Long id){
+    auctionService.process(id);
     return "redirect:/auctions";
   }
 }

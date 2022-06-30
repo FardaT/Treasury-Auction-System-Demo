@@ -70,9 +70,20 @@ public class AuctionServiceImpl implements AuctionService {
   @Override
   public void disable(Long id) {
     Optional<Auction> auction = auctionRepository.findById(id);
-    if(auction.isPresent()) {
+    if (auction.isPresent()) {
       Auction currentAuction = auction.get();
       currentAuction.setDisabled(true);
+      auctionRepository.save(currentAuction);
+    }
+  }
+
+  @Override
+  public void process(Long id) {
+    // TODO: 2022. 06. 30. function must be coded
+    Optional<Auction> auction = auctionRepository.findById(id);
+    if (auction.isPresent() && auction.get().getAuctionEndDate().isBefore(LocalDateTime.now())) {
+      Auction currentAuction = auction.get();
+      currentAuction.setProcessed(true);
       auctionRepository.save(currentAuction);
     }
   }
