@@ -2,7 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">>
 <head>
     <title>Treasury Auction System - Auctions list</title>
-    <link rel="stylesheet" th:href="@{/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/auctionlist.css}"/>
+
+
     <meta charset="utf-8"/>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +24,7 @@
 <div th:if="${auctions.ongoing == null}">
     <h3>No ongoing auctions</h3>
 </div>
-<div th:unless="${auctions.ongoing == null}">
+<div th:unless="${auctions.ongoing == null}" class="table-container">
     <table>
         <thead>
         <h3>Ongoing auctions</h3>
@@ -70,7 +72,7 @@
 <div th:if="${auctions.upcoming == null}">
     <h3>No upcoming auctions</h3>
 </div>
-<div th:unless="${auctions.upcoming == null}">
+<div th:unless="${auctions.upcoming == null}" class="table-container">
     <table>
         <thead>
         <h3>Upcoming auctions</h3>
@@ -105,7 +107,7 @@
 <div th:if="${auctions.finished == null}">
     <h3>No finished auctions</h3>
 </div>
-<div th:unless="${auctions.finished == null}">
+<div th:unless="${auctions.finished == null}" class="table-container">
     <table>
         <thead>
         <h3>Finished auctions</h3>

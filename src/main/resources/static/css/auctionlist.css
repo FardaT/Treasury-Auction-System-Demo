@@ -1,0 +1,29 @@
+
+html{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ div {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+ }
+
+
+th{
+    padding: 2px 16px;
+}
+th, td, h1 {
+    text-align: center;
+}
+
+.table-container {
+    margin-top: 25px;
+}
+
+table {
+    outline: 2px solid black;
+}
+
