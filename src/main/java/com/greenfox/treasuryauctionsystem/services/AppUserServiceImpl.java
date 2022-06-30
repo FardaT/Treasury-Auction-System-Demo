@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.services;
 
+import com.greenfox.treasuryauctionsystem.exceptions.AppUserStatusException;
 import com.greenfox.treasuryauctionsystem.exceptions.AppUserNotFoundException;
 import com.greenfox.treasuryauctionsystem.exceptions.IllegalArgumentException;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
@@ -9,9 +10,7 @@ import com.greenfox.treasuryauctionsystem.repositories.AppUserRepository;
 import com.greenfox.treasuryauctionsystem.utils.EmailService;
 import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
 import com.greenfox.treasuryauctionsystem.utils.Utility;
-
 import java.util.*;
-
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -232,11 +231,16 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
         }
         AppUser appUser = appUserRepository.findByUsernameOrEmail(loginDetail, loginDetail);
         if (appUser == null) {
-            throw new UsernameNotFoundException(
-                    "No username or email can be found in the database");
+            throw new UsernameNotFoundException("No username or email can be found in the database");
+        }
+        if (!appUser.isApproved()){
+            throw new AppUserStatusException("User account has not been approved by Admin");
+        }
+        if (appUser.isDisabled()){
+            throw new AppUserStatusException("User account has been disabled");
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(appUser.isAdmin() ? "ADMIN" : "USER"));
+        authorities.add(new SimpleGrantedAuthority(appUser.isAdmin() ? "ROLE_ADMIN" : "ROLE_USER"));
         return new User(appUser.getUsername(), appUser.getPassword(), authorities);
     }
 }
