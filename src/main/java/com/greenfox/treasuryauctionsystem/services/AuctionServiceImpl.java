@@ -1,6 +1,9 @@
 package com.greenfox.treasuryauctionsystem.services;
 
+import com.greenfox.treasuryauctionsystem.exceptions.InvalidAuctionException;
 import com.greenfox.treasuryauctionsystem.models.Auction;
+import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
+import com.greenfox.treasuryauctionsystem.models.dtos.AuctionDateDTO;
 import com.greenfox.treasuryauctionsystem.models.dtos.AuctionResponseDTO;
 import com.greenfox.treasuryauctionsystem.repositories.AuctionRepository;
 import java.time.LocalDateTime;
@@ -86,5 +89,41 @@ public class AuctionServiceImpl implements AuctionService {
       currentAuction.setProcessed(true);
       auctionRepository.save(currentAuction);
     }
+  }
+  @Override
+  public void create(Auction auction) {
+    if (auction.getTreasurySecurityList().isEmpty()){
+      throw new InvalidAuctionException("Auction must contain security");
+    }
+    auctionRepository.save(auction);
+  }
+
+  @Override
+  public Auction addSecurityToAuction(Auction auction, TreasurySecurity treasurySecurity) {
+    //TODO set further validations for securities
+    List<TreasurySecurity> securityList = auction.getTreasurySecurityList();
+    for (TreasurySecurity ts : securityList) {
+      if (ts.getSecurityName().equals(treasurySecurity.getSecurityName())){
+        throw new InvalidAuctionException("One Auction cannot contain identical types of securities");
+      }
+    }
+    securityList.add(treasurySecurity);
+    auction.setTreasurySecurityList(securityList);
+    return auction;
+  }
+  @Override
+  public Auction setDateToAuction(Auction auction, AuctionDateDTO auctionDateDTO) {
+    if(auctionDateDTO.getAuctionStartDate().isBefore(LocalDateTime.now())){
+      throw new InvalidAuctionException("Auction start date out of bound");
+    }
+    if(auctionDateDTO.getAuctionEndDate().isBefore(LocalDateTime.now())){
+      throw new InvalidAuctionException("Auction end date out of bound");
+    }
+    if(auctionDateDTO.getAuctionEndDate().isBefore(auctionDateDTO.getAuctionStartDate())){
+      throw new InvalidAuctionException("Invalid auction dates");
+    }
+    auction.setAuctionStartDate(auctionDateDTO.getAuctionStartDate());
+    auction.setAuctionEndDate(auctionDateDTO.getAuctionEndDate());
+    return auction;
   }
 }
