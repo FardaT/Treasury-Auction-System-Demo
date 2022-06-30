@@ -7,42 +7,35 @@
 </head>
 <body>
 <h1>user profile</h1>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>Email</th>
-        <th>password</th>
-        <th>bids</th>
-        <th>institution</th>
-        <th>activationToken</th>
-        <th>activationTokenExpiration</th>
-        <th>reactivationToken</th>
-        <th>reactivationTokenExpiration</th>
-        <th>isAdmin</th>
-        <th>isActivated</th>
-        <th>isApproved</th>
-        <th>isDisabled</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:object="${user}">
-        <td th:text="${user.getId()}"></td>
-        <td th:text="${user.getUsername()}"></td>
-        <td th:text="${user.getEmail()}"></td>
-        <td th:text="${user.getPassword()}"></td>
-        <td th:text="${user.getBids()}"></td>
-        <td th:text="${user.getInstitution()}"></td>
-        <td th:text="${user.getActivationToken()}"></td>
-        <td th:text="${user.getActivationTokenExpiration()}"></td>
-        <td th:text="${user.getReactivationToken()}"></td>
-        <td th:text="${user.getReactivationTokenExpiration()}"></td>
-        <td th:text="${user.isAdmin()}"></td>
-        <td th:text="${user.isActivated()}"></td>
-        <td th:text="${user.isApproved()}"></td>
-        <td th:text="${user.isDisabled()}"></td>
-    </tr>
-</table>
+<ul th:object="${user}">
+    <li th:text="'ID: ' + ${user.getId()}"></li>
+    <li th:text="'Username: ' + ${user.getUsername()}"></li>
+    <li th:text="'Email: ' + ${user.getEmail()}"></li>
+    <li th:text="'Password: ' + ${user.getPassword()}"></li>
+    <li th:text="'Bids: ' "></li>
+    <ul th:each="bid :${bids}" >
+        <li th:text="'ID: ' + ${bid.getId()}"></li>
+        <li th:text="'Treasury Security: ' + ${bid.getTreasurySecurity()}"></li>
+        <li th:text="'User: ' + ${bid.getUser()}"></li>
+        <li th:text="'Competitive: ' + ${bid.isCompetitive()}"></li>
+        <li th:text="'Amount: ' + ${bid.getAmount()}"></li>
+        <li th:text="'Rate: ' + ${bid.getRate()}"></li>
+        <li th:text="'Accepted: ' + ${bid.isAccepted()}"></li>
+        <li th:text="'Archived: ' + ${bid.isArchived()}"></li>
+        <li></li>
+    </ul>
+    <li th:text="'Institution: ' + ${user.getInstitution()}"></li>
+    <li th:text="'Activation Token: ' + ${user.getActivationToken()}"></li>
+    <li th:text="'Activation Token Expiration: ' + ${user.getActivationTokenExpiration()}"></li>
+    <li th:text="'Reactivation Token: ' + ${user.getReactivationToken()}"></li>
+    <li th:text="'Reactivation Token Expiration: ' + ${user.getReactivationTokenExpiration()}"></li>
+    <li th:text="'Admin: ' + ${user.isAdmin()}"></li>
+    <li th:text="'Activated: ' + ${user.isActivated()}"></li>
+    <li th:text="'Approved: ' + ${user.isApproved()}"></li>
+    <li th:text="'Disabled: ' + ${user.isDisabled()}"></li>
+
+
+</ul>
+
 </body>
 </html>
