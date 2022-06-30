@@ -28,9 +28,6 @@ public class AuctionController {
     Map<String, List<AuctionResponseDTO>> auctions = auctionService.getAllAuctionsByStatus();
     model.addAttribute("auctions", auctions);
 
-    System.out.println("***********************************************************************");
-    System.out.println(auctions.get("finished").get(0).getTreasurySecurityList().get(0));
-
     return "auctionslist";
   }
 

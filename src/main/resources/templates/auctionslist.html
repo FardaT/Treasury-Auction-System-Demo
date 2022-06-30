@@ -41,7 +41,7 @@
             <td th:text="*{id}"></td>
             <td th:text="*{startDate}"></td>
             <td th:text="*{startTime}"></td>
-            <td th:text="*{startDate}"></td>
+            <td th:text="*{endDate}"></td>
             <td th:text="*{endTime}"></td>
             <td>
                 <table>
@@ -91,7 +91,7 @@
             <td th:text="*{id}"></td>
             <td th:text="*{startDate}"></td>
             <td th:text="*{startTime}"></td>
-            <td th:text="*{startDate}"></td>
+            <td th:text="*{endDate}"></td>
             <td th:text="*{endTime}"></td>
             <td  sec:authorize="hasRole('ADMIN')">
                 <form th:action="@{/auctions/disable}" method="post">
@@ -122,7 +122,7 @@
         <tr th:each="auction : ${auctions.finished}" th:object="${auction}">
             <td th:text="*{id}"></td>
             <td th:text="*{startDate}"></td>
-            <td th:text="*{startDate}"></td>
+            <td th:text="*{endDate}"></td>
             <td th:if="*{!isProcessed}"  sec:authorize="hasRole('ADMIN')">
                 <form th:action="@{/auctions/process}" method="post">
                     <input type="hidden" name="id" th:value="*{id}">

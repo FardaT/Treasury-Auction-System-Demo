@@ -120,7 +120,7 @@ public class TestService {
     //ongoing
     Auction auction2 = new Auction();
     auction2.setAuctionStartDate(LocalDateTime.now());
-    auction2.setAuctionEndDate(LocalDateTime.now().plusDays(1));
+    auction2.setAuctionEndDate(LocalDateTime.now().plusDays(10));
     auction2.setProcessed(false);
     auction2.setDisabled(false);
 
