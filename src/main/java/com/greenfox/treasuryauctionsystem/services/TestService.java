@@ -102,8 +102,8 @@ public class TestService {
     appUser2.setActivationTokenExpiration(Utility.setExpiration(ApplicationDetails.expiration));
     appUser2.setAdmin(false);
     appUser2.setActivated(true);
-    appUser2.setApproved(false);
-    appUser2.setDisabled(true);
+    appUser2.setApproved(true);
+    appUser2.setDisabled(false);
     // appUser2.setReactivationToken("a_reactivationtoken");
     // appUser2.setReactivationTokenExpiration(LocalDateTime.now());
 
@@ -115,7 +115,7 @@ public class TestService {
     auction1.addTreasurySecurity(treasurySecurity1);
     auction1.addTreasurySecurity(treasurySecurity2);
     auction1.addTreasurySecurity(treasurySecurity3);
-    appUser1.setDisabled(true);
+    appUser1.setDisabled(false);
 
     //ongoing
     Auction auction2 = new Auction();

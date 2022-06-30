@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">>
 <head>
     <title>Treasury Auction System - Auctions list</title>
     <link rel="stylesheet" th:href="@{/style.css}"/>
@@ -18,6 +18,7 @@
 <!--todo check role to show delete(upcoming) and add new buttons-->
 <!--todo https://betterprogramming.pub/spring-security-user-roles-and-thymeleaf-extras-c10113d4ad75-->
 <h1>All auctions</h1>
+
 <div th:if="${auctions.ongoing == null}">
     <h3>No ongoing auctions</h3>
 </div>
@@ -79,7 +80,7 @@
             <th>start time</th>
             <th>end date</th>
             <th>end time</th>
-            <th>delete</th>
+            <th sec:authorize="hasRole('ADMIN')">delete</th>
             <!--        <th sec:authorize="hasRole('ADMIN')">delete</th>-->
         </tr>
         </thead>
@@ -90,22 +91,13 @@
             <td th:text="*{startTime}"></td>
             <td th:text="*{startDate}"></td>
             <td th:text="*{endTime}"></td>
-            <!--            <td>-->
-            <!--                <a th:href="@{'/auctions/disable/'  + *{id}}">-->
-            <!--                    <button type="submit">delete auction</button>-->
-            <!--                </a>-->
-            <!--            </td>-->
-            <td>
+            <td  sec:authorize="hasRole('ADMIN')">
                 <form th:action="@{/auctions/disable}" method="post">
                     <input type="hidden" name="id" th:value="*{id}">
                     <input type="submit" class="btn btn-success sa_click" value="Delete">
                 </form>
             </td>
-            <!--        <td sec:authorize="hasRole('ADMIN')">-->
-            <!--            <a th:href="@{'/auctions/delete/'  + *{id}}">-->
-            <!--                <button>delete auction</button>-->
-            <!--            </a>-->
-            <!--        </td>-->
+
         </tr>
         </tbody>
     </table>
@@ -121,7 +113,7 @@
             <th>id</th>
             <th>start date</th>
             <th>end date</th>
-            <th>process</th>
+            <th sec:authorize="hasRole('ADMIN')">process</th>
         </tr>
         </thead>
         <tbody>
@@ -129,7 +121,7 @@
             <td th:text="*{id}"></td>
             <td th:text="*{startDate}"></td>
             <td th:text="*{startDate}"></td>
-            <td th:if="*{!isProcessed}">
+            <td th:if="*{!isProcessed}"  sec:authorize="hasRole('ADMIN')">
                 <form th:action="@{/auctions/process}" method="post">
                     <input type="hidden" name="id" th:value="*{id}">
                     <input type="submit" class="btn btn-success sa_click" value="Process">
@@ -174,9 +166,6 @@
 <a th:href="@{/auctions/create}">
     <button>Create new auction</button>
 </a>
-<!--<a th:href="@{/auctions/create}"  sec:authorize="hasRole('ADMIN')">-->
-<!--    <button>Create new auction</button>-->
-<!--</a>-->
 
 <script src="../js/SA_dialog-two-buttons.js"></script>
 
