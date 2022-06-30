@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -27,4 +28,16 @@ public interface AppUserService {
 	AppUser validateToken (String token);
 
 	Map<String, String> saveNewPassword (PasswordReset passwordReset);
+
+	// READ - all users
+	List<AppUser> getAllAppUsers ();
+
+	// UPDATE - approve user reg (isApproved set to TRUE)
+	AppUser approveAppUser (Long appUserId);
+
+	// UPDATE - enable user (isDisabled set to FALSE)
+	AppUser enableAppUser (Long appUserId);
+
+	// UPDATE - disable user (isDisabled set to TRUE)
+	AppUser disableAppUser (Long appUserId);
 }

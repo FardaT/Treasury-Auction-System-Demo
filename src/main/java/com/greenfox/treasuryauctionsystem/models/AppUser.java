@@ -7,16 +7,21 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class AppUser {
@@ -50,9 +55,8 @@ public class AppUser {
 		bid.setUser(this);
 	}
 
-	public void removeBid (Bid bid) {
-		bids.remove(bid);
-		bid.setTreasurySecurity(null);
-	}
-
+  public void removeBid(Bid bid) {
+    bids.remove(bid);
+    bid.setUser(null);
+  }
 }

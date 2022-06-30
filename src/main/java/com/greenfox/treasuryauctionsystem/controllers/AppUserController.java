@@ -5,6 +5,7 @@ import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInpu
 import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
 import com.greenfox.treasuryauctionsystem.services.AppUserService;
 
+import java.util.List;
 import java.util.Map;
 import javax.mail.MessagingException;
 
@@ -27,6 +28,13 @@ public class AppUserController {
     public AppUserController(AppUserService appUserService) {
         this.appUserService = appUserService;
     }
+
+    /**********
+     *
+     *
+     * HOME SECTION
+     *
+     * **********/
 
     // SHOW REGISTER FORM
     @GetMapping("register")
@@ -170,5 +178,48 @@ public class AppUserController {
             return "redirect:/resetpassword/reset?token=" + passwordReset.getToken();
         }
         return "redirect:/";
+    }
+
+    /**********
+     *
+     *
+     * ADMIN SECTION
+     *
+     * **********/
+
+    // READ - all users
+    @GetMapping("admin/users")
+    public String read(Model model) {
+
+        // get all users from db
+        List<AppUser> appUsers = appUserService.getAllAppUsers();
+
+        model.addAttribute("appUsers", appUsers);
+
+        return "admin/users";
+    }
+
+    // UPDATE - approve user reg (isApproved set to TRUE)
+    @PostMapping("admin/users/approve")
+    public String approve(@RequestParam Long appUserId, RedirectAttributes redirectAttributes) {
+        AppUser appUser = appUserService.approveAppUser(appUserId);
+        redirectAttributes.addFlashAttribute("flashMessage", "The user with username " + appUser.getUsername() + " got approved!");
+        return "redirect:/admin/users";
+    }
+
+    // UPDATE - enable user (isDisabled set to FALSE)
+    @PostMapping("admin/users/enable")
+    public String enable(@RequestParam Long appUserId, RedirectAttributes redirectAttributes) {
+        AppUser appUser = appUserService.enableAppUser(appUserId);
+        redirectAttributes.addFlashAttribute("flashMessage", "The user with username " + appUser.getUsername() + " got enabled!");
+        return "redirect:/admin/users";
+    }
+
+    // UPDATE - disable user (isDisabled set to TRUE)
+    @PostMapping("admin/users/disable")
+    public String disable(@RequestParam Long appUserId, RedirectAttributes redirectAttributes) {
+        AppUser appUser = appUserService.disableAppUser(appUserId);
+        redirectAttributes.addFlashAttribute("flashMessage", "The user with username " + appUser.getUsername() + " got disabled!");
+        return "redirect:/admin/users";
     }
 }

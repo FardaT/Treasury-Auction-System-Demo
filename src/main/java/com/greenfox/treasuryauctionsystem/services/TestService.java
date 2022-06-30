@@ -9,8 +9,14 @@ import com.greenfox.treasuryauctionsystem.repositories.AppUserRepository;
 import com.greenfox.treasuryauctionsystem.repositories.AuctionRepository;
 import com.greenfox.treasuryauctionsystem.repositories.BidRepository;
 import com.greenfox.treasuryauctionsystem.repositories.TreasurySecurityRepository;
+import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
+import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
+import com.greenfox.treasuryauctionsystem.utils.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,30 +66,33 @@ public class TestService {
 		treasurySecurity1.setHighRate(9.9f);
 
 		AppUser appUser1 = new AppUser();
-		appUser1.setUsername("a_user");
-		appUser1.setPassword("a_password");
-		appUser1.setEmail("a@a.a");
+		appUser1.setUsername("ablak_aladar");
+		appUser1.setEmail("ablak.aladar@gmail.com");
+		appUser1.setPassword("123");
+		appUser1.setInstitution("Morgan Stanley");
+		appUser1.setActivationToken(PasswordResetTokenGenerator.generatePasswordResetToken());
+		appUser1.setActivationTokenExpiration(Utility.setExpiration(ApplicationDetails.expiration));
 		appUser1.setAdmin(true);
-		appUser1.setInstitution("A");
-		appUser1.setActivationToken("a_token");
-		// appUser1.setActivationTokenExpiration(LocalDateTime.now());
-		appUser1.setActivated(false);
-		appUser1.setReactivationToken("a_reactivationtoken");
-		appUser1.setReactivationTokenExpiration(LocalDateTime.now());
+		appUser1.setActivated(true);
+		appUser1.setApproved(true);
+		appUser1.setDisabled(false);
+		// appUser1.setReactivationToken("a_reactivationtoken");
+		// appUser1.setReactivationTokenExpiration(LocalDateTime.now());
 
 
 		AppUser appUser2 = new AppUser();
-		appUser2.setUsername("szecsiistvan");
-		appUser2.setPassword("password");
-		appUser2.setEmail("szecsi.istvan@gmail.com");
+		appUser2.setUsername("bejarat_bela");
+		appUser2.setEmail("bejarat.aladar@gmail.com");
+		appUser2.setPassword("123");
+		appUser2.setInstitution("Morgan Stanley");
+		appUser2.setActivationToken(PasswordResetTokenGenerator.generatePasswordResetToken());
+		appUser2.setActivationTokenExpiration(Utility.setExpiration(ApplicationDetails.expiration));
 		appUser2.setAdmin(true);
-		appUser2.setInstitution("Mighty Rooster Team");
-//    appUser2.setActivationToken(null);
-//    appUser2.setActivationTokenExpiration(null);
 		appUser2.setActivated(true);
-//    appUser2.setReactivationToken(null);
-//    appUser2.setReactivationTokenExpiration(null);
-//    appUser2.addBid(null);
+		appUser2.setApproved(false);
+		appUser2.setDisabled(true);
+		// appUser2.setReactivationToken("a_reactivationtoken");
+		// appUser2.setReactivationTokenExpiration(LocalDateTime.now());
 
 		Auction auction1 = new Auction();
 		auction1.setAuctionStartDate(LocalDateTime.now());
@@ -91,21 +100,24 @@ public class TestService {
 		auction1.setProcessed(true);
 		auction1.addTreasurySecurity(treasurySecurity1);
 
+		// save user 1 & 2
 		appUserRepository.save(appUser1);
 		appUserRepository.save(appUser2);
+
+		// save auction and security
 		auctionRepository.save(auction1);
 		treasurySecurityRepository.save(treasurySecurity1);
-		appUserRepository.save(appUser1);
 
+		// add bid to security (sec has many bids)
 		treasurySecurity1.addBid(bid1);
-		appUser1.adBid(bid1);
 		treasurySecurity1.addBid(bid2);
+
+		// add bid to user (user has many bids)
+		appUser1.adBid(bid1);
 		appUser1.adBid(bid2);
 
+		// save bid
 		bidRepository.save(bid1);
 		bidRepository.save(bid2);
-
-		treasurySecurityRepository.save(treasurySecurity1);
-		appUserRepository.save(appUser1);
 	}
 }

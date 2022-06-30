@@ -1,0 +1,56 @@
+
+*{
+    margin:0;
+    padding:0;
+}
+.pre-header{
+    background-color: rgba(9, 16, 45, 0.62);
+    height: 60px;
+    color: #ffffff;
+    padding-top: 15px;
+    text-transform: uppercase;
+}
+.pre-header .main-menu{
+    list-style:none;
+}
+
+.pre-header .main-menu li{
+    display: inline-block;
+    margin-left: 50px;
+}
+
+.pre-header .main-menu li a{
+    color: #cbd9fa;
+    text-transform: uppercase;
+}
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #255f69;
+    height: 100vh;
+    background-image:url("https://i2.wp.com/files.123freevectors.com/wp-content/original/113370-turquoise-blurred-background-vector.jpg?w=800&q=95");
+    background-size: cover;
+}
+#login .container #login-row #login-column #login-box {
+    margin-top: 120px;
+    max-width: 600px;
+    height: 350px;
+    border: 1px solid #9C9C9C;
+    background-color: #EAEAEA;
+    background-color: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 20px;
+}
+#login .container #login-row #login-column #login-box #login-form {
+    padding: 20px;
+}
+#login .container #login-row #login-column #login-box #login-form #register-link {
+    margin-top: -85px;
+}
+#login .container #login-row #login-column #login-box .text-center .text-info{
+    color: white;
+}
+#login .container #login-row #login-column #login-box #login-form h3{
+    color: white;
+
+}
