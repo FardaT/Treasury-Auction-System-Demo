@@ -24,6 +24,7 @@ public class GetProfile {
 		//System.out.println(Arrays.toString(request.getCookies()));
 		AppUser user = appUserService.getUserFromRequest(request);
 		model.addAttribute("user", user);
+		model.addAttribute("bids", user.getBids());
 		return "profile";
 	}
 
