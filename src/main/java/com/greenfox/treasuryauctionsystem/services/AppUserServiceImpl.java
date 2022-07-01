@@ -189,6 +189,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
         user.setReactivationToken(null);
         user.setReactivationTokenExpiration(null);
+        user.setActivated(true);
         appUserRepository.save(user);
         return errors;
     }
