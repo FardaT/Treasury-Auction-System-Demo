@@ -56,31 +56,6 @@
     color: white;
 }
 
-#reset-form .resetf-container #reset-row #reset-column #reset-box {
-    margin-top: 100px;
-    max-width: 100%;
-    height: 100%;
-    border: 1px solid #9C9C9C;
-    background-color: #EAEAEA;
-    background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 20px;
-    size: landscape;
-}
-
-#reset-form .resetf-container #reset-row #reset-column #reset-box #reset-form2 {
-    padding: 20px;
-}
-
-#reset-form .resetf-container #reset-row #reset-column #reset-box #reset-form2 #reset-link {
-    margin-top: -85px;
-}
-
-#reset-form .resetf-container #reset-row #reset-column #reset-box #reset-form2 h3 {
-    color: white;
-
-}
-
 #reset-password .reset-container #reset-row #reset-column #reset-box {
     margin-top: 100px;
     width: 100%;

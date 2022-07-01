@@ -11,7 +11,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- CUSTOM CSS -->
-    <link rel="stylesheet" href="css/home/style.css"/>
-    <link rel="stylesheet" href="css/home/logreg.css"/>
-    <link rel="stylesheet" href="css/home/message.css"/>
+    <!-- https://stackoverflow.com/questions/53795477/css-not-loading-in-spring-boot-application -->
+    <link rel="stylesheet" th:href="@{/css/home/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/home/logreg.css}"/>
+    <link rel="stylesheet" th:href="@{/css/home/message.css}"/>
 </head>
