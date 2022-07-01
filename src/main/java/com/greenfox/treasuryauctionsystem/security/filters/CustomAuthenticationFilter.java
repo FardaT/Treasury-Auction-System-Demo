@@ -54,7 +54,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     cookie.setSecure(true);
     cookie.setHttpOnly(true);
     response.addCookie(cookie);
-    response.sendRedirect("/hello");
+    response.sendRedirect("/auctions");
   }
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request,
