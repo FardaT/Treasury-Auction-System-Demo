@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller("/admin")
+@Controller
+@RequestMapping("/admin")
 public class CreateAuctionController {
   private final AuctionService auctionService;
   private Auction TempAuction = new Auction();
@@ -29,7 +31,7 @@ public class CreateAuctionController {
   @GetMapping("/auctions/create")
   public String renderAuctionCreationPage(Model model){
     model.addAttribute("newAuction", TempAuction);
-    return "create-auction";
+    return "admin/create-auction";
   }
 
   @PostMapping("/auctions/set-time")
@@ -44,14 +46,10 @@ public class CreateAuctionController {
   }
 
   @PostMapping("/auctions/add-security")
-  public String addSecurityToTempAuction(@ModelAttribute TempSecurityDTO tempSecurityDTO, RedirectAttributes redirectAttributes){
-    TreasurySecurity treasurySecurity = new TreasurySecurity(tempSecurityDTO);
+  public String addSecurityToTempAuction(@ModelAttribute(name = "newSecurity") TempSecurityDTO tempSecurityDTO, RedirectAttributes redirectAttributes){
     Map<String, String> addSecurityResultMessage = auctionService.validateSecurityForAuction(
-        TempAuction,treasurySecurity);
+        TempAuction,tempSecurityDTO);
     if(!addSecurityResultMessage.isEmpty()){
-      if(addSecurityResultMessage.containsKey("DUPLICATE_SECURITY")){
-        redirectAttributes.addFlashAttribute("DUPLICATE_SECURITY",addSecurityResultMessage.get("DUPLICATE_SECURITY"));
-      }
       if(addSecurityResultMessage.containsKey("ISSUE_DATE_ERROR")){
         redirectAttributes.addFlashAttribute("ISSUE_DATE_ERROR",addSecurityResultMessage.get("ISSUE_DATE_ERROR"));
       }
@@ -66,6 +64,7 @@ public class CreateAuctionController {
       }
       return "redirect:/admin/auctions/create";
     } else {
+      TreasurySecurity treasurySecurity = new TreasurySecurity(tempSecurityDTO);
       List<TreasurySecurity> securityList = TempAuction.getTreasurySecurityList();
       securityList.add(treasurySecurity);
       TempAuction.setTreasurySecurityList(securityList);
@@ -87,7 +86,7 @@ public class CreateAuctionController {
   @PostMapping("/auctions/delete-security/{securityName}")
   public String deleteSecurityfromTempAuction(@PathVariable("securityName")String securityName){
     for (TreasurySecurity sec: TempAuction.getTreasurySecurityList()) {
-      if(sec.getSecurityName().equals(securityName)){
+      if(sec.getSecurityName().replace(' ','_').equals(securityName)){
         var updatedList = TempAuction.getTreasurySecurityList();
         updatedList.remove(sec);
         TempAuction.setTreasurySecurityList(updatedList);

@@ -10,6 +10,53 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-
+<h2>Create auction</h2>
+    <div>
+        <form action="/admin/auctions/set-time" method="post" id="date-setting">
+            <label for="auctionStart">Start: </label>
+            <input type="datetime-local" id="auctionStart" name="auctionStartDate" required>
+            <label for="auctionEnd">End: </label>
+            <input type="datetime-local" id="auctionEnd" name="auctionEndDate" required>
+            <button type="submit" class="btn btn-primary">Set time</button>
+        </form>
+        <div th:if="${INVALID_AUCTION != null}">
+            <p th:text="${INVALID_AUCTION}" style="color: red;"></p>
+        </div>
+    </div>
+        <table>
+            <tr>
+                <th>Security type</th>
+                <th>Security term</th>
+                <th>Total amount</th>
+                <th>Issue Date</th>
+                <th>Maturity Date</th>
+            </tr>
+            <tr th:each="security : *{treasurySecurityList}" th:object="${newAuction}">
+                <td th:text="*{securityType}"></td>
+                <td th:text="*{securityTerm}"></td>
+                <td th:text="*{totalAmount}"></td>
+                <td th:text="*{issueDate}"></td>
+                <td th:text="*{maturityDate}"></td>
+                <td><span th:if="*{securityType != null}"><a th:href="'/admin/auctions/delete-security/' + *{securityTerm} + '_' + *{securityType}" class="btn btn-primary">Delete</a></span></td>
+            </tr>
+        </table>
+    <div>
+        <form action="/admin/auctions/add-security" method="post" id="addSecurityForm"></form>
+        <table>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><input type="number" form="addSecurityForm"></td>
+                <td><input type="datetime-local" form="addSecurityForm"></td>
+                <td><button type="submit" form="addSecurityForm" class="btn btn-primary">Save</button></td>
+            </tr>
+            <tr>
+                <td><span th:if="${INVALID_SECURITY_ERROR != null}" th:text="${INVALID_SECURITY_ERROR}" style="color: red;"></span></td>
+                <td><span th:if="${SECURITY_TERM_ERROR != null}" th:text="${SECURITY_TERM_ERROR}" style="color: red;"></span></td>
+                <td><span th:if="${TOTALAMOUNT_ERROR != null}" th:text="${TOTALAMOUNT_ERROR}" style="color: red;"></span></td>
+                <td><span th:if="${ISSUE_DATE_ERROR != null}" th:text="${ISSUE_DATE_ERROR}" style="color: red;"></span></td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

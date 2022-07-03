@@ -1,9 +1,12 @@
 package com.greenfox.treasuryauctionsystem.models.dtos;
 
 import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class AuctionDateDTO {
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private LocalDateTime auctionStartDate;
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private LocalDateTime auctionEndDate;
 
   public AuctionDateDTO(LocalDateTime auctionStartDate, LocalDateTime auctionEndDate) {
