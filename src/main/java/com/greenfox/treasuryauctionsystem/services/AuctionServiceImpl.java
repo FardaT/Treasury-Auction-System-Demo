@@ -95,6 +95,7 @@ public class AuctionServiceImpl implements AuctionService {
   }
   @Override
   public void create(Auction auction) {
+    Map<String, String> errors = new HashMap<>();
     if (auction.getTreasurySecurityList().isEmpty()){
       throw new InvalidAuctionException("Auction must contain security");
     }
@@ -113,6 +114,7 @@ public class AuctionServiceImpl implements AuctionService {
     }
     if(treasurySecurity.getIssueDate() == null){
       errors.put("ISSUE_DATE_ERROR","Issue date cannot be null");
+      return errors;
     }
     if(treasurySecurity.getIssueDate().isBefore(ChronoLocalDate.from(auction.getAuctionEndDate().plusDays(1)))){
       errors.put("ISSUE_DATE_ERROR","Issue date must take place after the auction");
@@ -122,12 +124,18 @@ public class AuctionServiceImpl implements AuctionService {
     }
     if(treasurySecurity.getSecurityType() == null){
       errors.put("INVALID_SECURITY_ERROR","Security type cannot be null");
+      return errors;
+    }
+    if(treasurySecurity.getMaturityDate() == null){
+      errors.put("INVALID_SECURITY_ERROR","Maturity date cannot be null");
+      return errors;
     }
     if(TreasurySecurityTermConstraint.validSecurities.contains(treasurySecurity.getSecurityType())){
       errors.put("INVALID_SECURITY_ERROR","Invalid treasury security");
     }
     if(treasurySecurity.getSecurityTerm() == null){
       errors.put("SECURITY_TERM_ERROR","Security term cannot be null");
+      return errors;
     }
     if(treasurySecurity.getSecurityType().equals("T-Bill")){
       TreasurySecurityTermConstraint.validBillTerm.contains(treasurySecurity.getSecurityTerm());

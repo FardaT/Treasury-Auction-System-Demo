@@ -34,13 +34,18 @@ public class TempSecurityDTO {
   }
 
   private LocalDate calculateMaturity(String securityType, String securityTerm, LocalDate issueDate) {
-    if (securityType.equals("T-Bill")) {
-      int weeks = Integer.parseInt(securityTerm.replaceAll("[\\D]", ""));
-      maturityDate = issueDate.plusWeeks(weeks);
-    } else {
-      int years = Integer.parseInt(securityTerm.replaceAll("[\\D]", ""));
-      maturityDate = issueDate.plusYears(years);
+    try{
+      if (securityType.equals("T-Bill")) {
+        int weeks = Integer.parseInt(securityTerm.replaceAll("[\\D]", ""));
+        maturityDate = issueDate.plusWeeks(weeks);
+      } else {
+        int years = Integer.parseInt(securityTerm.replaceAll("[\\D]", ""));
+        maturityDate = issueDate.plusYears(years);
+      }
+      return maturityDate;
+    } catch (NullPointerException ex){
+      // Controller handles null value
+      return null;
     }
-    return maturityDate;
   }
 }

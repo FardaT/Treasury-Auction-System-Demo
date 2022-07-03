@@ -12,12 +12,12 @@
 <body>
 <h2>Create auction</h2>
     <div>
-        <form action="/admin/auctions/set-time" method="post" id="date-setting">
+        <form action="/admin/auctions/set-time" method="post" id="create-auction">
             <label for="auctionStart">Start: </label>
             <input type="datetime-local" id="auctionStart" name="auctionStartDate" required>
             <label for="auctionEnd">End: </label>
             <input type="datetime-local" id="auctionEnd" name="auctionEndDate" required>
-            <button type="submit" class="btn btn-primary">Set time</button>
+
         </form>
         <div th:if="${INVALID_AUCTION != null}">
             <p th:text="${INVALID_AUCTION}" style="color: red;"></p>
@@ -46,8 +46,8 @@
             <tr>
                 <td></td>
                 <td></td>
-                <td><input type="number" form="addSecurityForm"></td>
-                <td><input type="datetime-local" form="addSecurityForm"></td>
+                <td><input type="number" name="totalAmount" form="addSecurityForm"></td>
+                <td><input type="datetime-local" name="issueDate" form="addSecurityForm"></td>
                 <td><button type="submit" form="addSecurityForm" class="btn btn-primary">Save</button></td>
             </tr>
             <tr>
@@ -57,6 +57,7 @@
                 <td><span th:if="${ISSUE_DATE_ERROR != null}" th:text="${ISSUE_DATE_ERROR}" style="color: red;"></span></td>
             </tr>
         </table>
+        <button type="submit" form="create-auction" class="btn btn-primary">Create auction</button>
     </div>
 </body>
 </html>

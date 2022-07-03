@@ -34,17 +34,6 @@ public class CreateAuctionController {
     return "admin/create-auction";
   }
 
-  @PostMapping("/auctions/set-time")
-  public String setTempAuctionDate(@ModelAttribute(name="auctionTime")AuctionDateDTO auctionDateDTO, RedirectAttributes redirectAttributes){
-    try {
-      TempAuction = auctionService.setDateToAuction(TempAuction,auctionDateDTO);
-    } catch (InvalidAuctionException ex){
-      redirectAttributes.addFlashAttribute("INVALID_AUCTION", ex.getMessage());
-      return "redirect:/admin/auctions/create";
-    }
-    return "redirect:/admin/auctions/create";
-  }
-
   @PostMapping("/auctions/add-security")
   public String addSecurityToTempAuction(@ModelAttribute(name = "newSecurity") TempSecurityDTO tempSecurityDTO, RedirectAttributes redirectAttributes){
     Map<String, String> addSecurityResultMessage = auctionService.validateSecurityForAuction(
@@ -73,8 +62,9 @@ public class CreateAuctionController {
   }
 
   @PostMapping("/auctions/create")
-  public String createAuction(RedirectAttributes redirectAttributes){
+  public String createAuction(@ModelAttribute(name="auctionTime")AuctionDateDTO auctionDateDTO, RedirectAttributes redirectAttributes){
     try{
+      TempAuction = auctionService.setDateToAuction(TempAuction,auctionDateDTO);
       auctionService.create(TempAuction);
     }catch (InvalidAuctionException ex){
       redirectAttributes.addFlashAttribute("INVALID_AUCTION",ex.getMessage());
