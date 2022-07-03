@@ -26,34 +26,34 @@ import javax.persistence.Table;
 @Setter
 public class AppUser {
 
-  // FIELDS
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
-  private String username;
-  private String email;
-  private String password;
-  @OneToMany(
-      mappedBy = "user",
-      cascade = CascadeType.MERGE,
-      orphanRemoval = true
-  )
-  private List<Bid> bids = new ArrayList<>();
-  private String institution;
-  private String activationToken = PasswordResetTokenGenerator.generatePasswordResetToken();
-  private LocalDateTime activationTokenExpiration = Utility.setExpiration(ApplicationDetails.expiration);
-  private String reactivationToken;
-  private LocalDateTime reactivationTokenExpiration;
-  private boolean isAdmin = false;
-  private boolean isActivated = false;
-  private boolean isApproved = false;
-  private boolean isDisabled = false;
+	// FIELDS
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	private String username;
+	private String email;
+	private String password;
+	@OneToMany(
+			mappedBy = "user",
+			cascade = CascadeType.MERGE,
+			orphanRemoval = true
+	)
+	private List<Bid> bids = new ArrayList<>();
+	private String institution;
+	private String activationToken = PasswordResetTokenGenerator.generatePasswordResetToken();
+	private LocalDateTime activationTokenExpiration = Utility.setExpiration(ApplicationDetails.expiration);
+	private String reactivationToken;
+	private LocalDateTime reactivationTokenExpiration;
+	private boolean isAdmin = false;
+	private boolean isActivated = false;
+	private boolean isApproved = false;
+	private boolean isDisabled = false;
 
-  // CUSTOM
-  public void addBid(Bid bid) {
-    bids.add(bid);
-    bid.setUser(this);
-  }
+	// CUSTOM
+	public void adBid (Bid bid) {
+		bids.add(bid);
+		bid.setUser(this);
+	}
 
   public void removeBid(Bid bid) {
     bids.remove(bid);

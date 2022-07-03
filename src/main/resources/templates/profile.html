@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" href="../css/profile.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">TREASURY AUCTION SYSTEM</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/profile">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://communityauctions.com/online-auction-terms-conditions/">TERMS &
+                    CONDITIONS</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="mailto:mightyroosterteam@gmail.com">CONTACT US</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<h1 th:text="'Wellcome to  Treasury Auction System ' + ${user.getUsername()} + '!'"></h1>
+
+<ul th:object="${user}">
+    <li th:text="'Username: ' + ${user.getUsername()}"></li>
+    <li th:text="'Email: ' + ${user.getEmail()}"></li>
+    <li th:text="'Institution: ' + ${user.getInstitution()}"></li>
+</ul>
+<table>
+    <thead>
+    <tr>
+        <td colspan="4" th:text="${user.getUsername()} + '\'s bids: '"></td>
+    </tr>
+    <tr>
+        <th>ID</th>
+        <th>Amount</th>
+        <th>Rate</th>
+        <th>Treasuries:</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="bid : ${bids}">
+        <td th:text="${bid.getId()}"></td>
+        <td th:text="${bid.getAmount()}"></td>
+        <td th:text="${bid.getRate()}"></td>
+        <td>
+            <table>
+                <thead>
+                <tr>
+                    <th>Security Name</th>
+                    <th>Security Type</th>
+                    <th>Security Term</th>
+                    <th>Amount</th>
+                    <th>Issue Date</th>
+                    <th>Maturity Date</th>
+                    <th>Rate</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="treasury : ${treasuries}">
+                    <td th:text="${treasury.getSecurityName()}"></td>
+                    <td th:text="${treasury.getSecurityType()}"></td>
+                    <td th:text="${treasury.getSecurityTerm()}"></td>
+                    <td th:text="${treasury.getTotalAmount()}"></td>
+                    <td th:text="${treasury.getIssueDate()}"></td>
+                    <td th:text="${treasury.getMaturityDate()}"></td>
+                    <td th:text="${treasury.getHighRate()}"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<!--<table>
+    <thead>
+    <tr>
+        <th class="custom_th">Bids</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:object="${user}">
+        <td>
+            <ul th:each="bid :${bids}">
+                <li th:text="'ID: ' + ${bid.getId()}"></li>
+                <li th:text="'Amount: ' + ${bid.getAmount()}"></li>
+                <li th:text="'Rate: ' + ${bid.getRate()}"></li>
+                <table>
+                    <thead>
+                    <tr>
+                        <td colspan="7" th:text="'Treasury Security: '"></td>
+                    </tr>
+                    <tr>
+                        <th>Security Name</th>
+                        <th>Security Type</th>
+                        <th>Security Term</th>
+                        <th>totalAmount</th>
+                        <th>issueDate</th>
+                        <th>maturityDate</th>
+                        <th>High Rate</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="treasury : ${treasuries}">
+                        <td th:text="${treasury.getSecurityName()}"></td>
+                        <td th:text="${treasury.getSecurityType()}"></td>
+                        <td th:text="${treasury.getSecurityTerm()}"></td>
+                        <td th:text="${treasury.getTotalAmount()}"></td>
+                        <td th:text="${treasury.getIssueDate()}"></td>
+                        <td th:text="${treasury.getMaturityDate()}"></td>
+                        <td th:text="${treasury.getHighRate()}"></td>
+                    </tr>
+                </table>
+                <ul th:each="treasury : ${treasuries}">
+                    <li th:text="'Security Name: ' + ${treasury.getSecurityName()}"></li>
+                    <li th:text="'Security Type: ' + ${treasury.getSecurityType()}"></li>
+                    <li th:text="'Security Term: ' + ${treasury.getSecurityTerm()}"></li>
+                    <li th:text="'totalAmount: ' + ${treasury.getTotalAmount()}"></li>
+                    <li th:text="'issueDate: ' + ${treasury.getIssueDate()}"></li>
+                    <li th:text="'maturityDate: ' + ${treasury.getMaturityDate()}"></li>
+                    <li th:text="'High Rate: ' + ${treasury.getHighRate()}"></li>
+                </ul>
+                <li class="custom_li"></li>
+            </ul>
+        </td>
+    </tr>
+</table>-->
+<!--<table>
+    <thead>
+    <tr>
+        <td colspan="7" th:text="'Treasury Security: '"></td>
+    </tr>
+    <tr>
+        <th>Security Name</th>
+        <th>Security Type</th>
+        <th>Security Term</th>
+        <th>totalAmount</th>
+        <th>issueDate</th>
+        <th>maturityDate</th>
+        <th>High Rate</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="treasury : ${treasuries}">
+        <td th:text="${treasury.getSecurityName()}"></td>
+        <td th:text="${treasury.getSecurityType()}"></td>
+        <td th:text="${treasury.getSecurityTerm()}"></td>
+        <td th:text="${treasury.getTotalAmount()}"></td>
+        <td th:text="${treasury.getIssueDate()}"></td>
+        <td th:text="${treasury.getMaturityDate()}"></td>
+        <td th:text="${treasury.getHighRate()}"></td>
+    </tr>
+</table>
+<!--<ul th:object="${user}">
+    <li th:text="'ID: ' + ${user.getId()}"></li>
+    <li th:text="'Username: ' + ${user.getUsername()}"></li>
+    <li th:text="'Email: ' + ${user.getEmail()}"></li>
+    <li th:text="'Password: ' + ${user.getPassword()}"></li>
+    <li th:text="'Bids: ' "></li>
+    <ul th:each="bid :${bids}" >
+        <li th:text="'ID: ' + ${bid.getId()}"></li>
+        <li th:text="'Treasury Security: ' + ${bid.getTreasurySecurity()}"></li>
+        <li th:text="'User: ' + ${bid.getUser()}"></li>
+        <li th:text="'Competitive: ' + ${bid.isCompetitive()}"></li>
+        <li th:text="'Amount: ' + ${bid.getAmount()}"></li>
+        <li th:text="'Rate: ' + ${bid.getRate()}"></li>
+        <li th:text="'Accepted: ' + ${bid.isAccepted()}"></li>
+        <li th:text="'Archived: ' + ${bid.isArchived()}"></li>
+        <li></li>
+    </ul>
+    <li th:text="'Institution: ' + ${user.getInstitution()}"></li>
+    <li th:text="'Activation Token: ' + ${user.getActivationToken()}"></li>
+    <li th:text="'Activation Token Expiration: ' + ${user.getActivationTokenExpiration()}"></li>
+    <li th:text="'Reactivation Token: ' + ${user.getReactivationToken()}"></li>
+    <li th:text="'Reactivation Token Expiration: ' + ${user.getReactivationTokenExpiration()}"></li>
+    <li th:text="'Admin: ' + ${user.isAdmin()}"></li>
+    <li th:text="'Activated: ' + ${user.isActivated()}"></li>
+    <li th:text="'Approved: ' + ${user.isApproved()}"></li>
+    <li th:text="'Disabled: ' + ${user.isDisabled()}"></li>
+
+
+</ul>-->
+
+</body>
+</html>

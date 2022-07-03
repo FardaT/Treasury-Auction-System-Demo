@@ -3,40 +3,41 @@ package com.greenfox.treasuryauctionsystem.services;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInput;
 import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
-
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public interface AppUserService {
 
-    // STORE
-    Map<String, String> registerAppUser(AppUser appUser, String confirmpassword) throws MessagingException;
+	// STORE
+	Map<String, String> registerAppUser (AppUser appUser, String confirmpassword) throws MessagingException;
 
-    // ACTIVATE ACCOUNT BY TOKEN
-    Map<String, String> activateAccount(String activationToken);
+	// ACTIVATE ACCOUNT BY TOKEN
+	Map<String, String> activateAccount (String activationToken);
 
-    AppUser findUserByEmail(ForgottenPasswordEmailInput emailInput);
+	AppUser getUserFromRequest (HttpServletRequest request);
 
-    String saveToken(AppUser appUser);
+	AppUser findUserByEmail (ForgottenPasswordEmailInput emailInput);
 
-    AppUser validateToken(String token);
+	String saveToken (AppUser appUser);
 
-    Map<String, String> saveNewPassword(PasswordReset passwordReset);
+	AppUser validateToken (String token);
 
-    // READ - all users
-    List<AppUser> getAllAppUsers();
+	Map<String, String> saveNewPassword (PasswordReset passwordReset);
 
-    // UPDATE - approve user reg (isApproved set to TRUE)
-    AppUser approveAppUser(Long appUserId);
+	// READ - all users
+	List<AppUser> getAllAppUsers ();
 
-    // UPDATE - enable user (isDisabled set to FALSE)
-    AppUser enableAppUser(Long appUserId);
+	// UPDATE - approve user reg (isApproved set to TRUE)
+	AppUser approveAppUser (Long appUserId);
 
-    // UPDATE - disable user (isDisabled set to TRUE)
-    AppUser disableAppUser(Long appUserId);
+	// UPDATE - enable user (isDisabled set to FALSE)
+	AppUser enableAppUser (Long appUserId);
+
+	// UPDATE - disable user (isDisabled set to TRUE)
+	AppUser disableAppUser (Long appUserId);
 }
