@@ -21,7 +21,7 @@ public interface AuctionService {
 
   void create(Auction auction);
 
-  Auction addSecurityToAuction(Auction auction, TreasurySecurity treasurySecurity);
+  Map<String, String> validateSecurityForAuction(Auction auction, TreasurySecurity treasurySecurity);
 
   Auction setDateToAuction(Auction auction, AuctionDateDTO auctionDateDTO);
 }
