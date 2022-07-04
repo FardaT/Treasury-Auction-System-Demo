@@ -33,9 +33,19 @@ public class CreateAuctionController {
     model.addAttribute("newAuction", TempAuction);
     return "admin/create-auction";
   }
+  @PostMapping("/auctions/set-time")
+  public String setTempAuctionDate(@ModelAttribute(name="auctionTime")AuctionDateDTO auctionDateDTO, RedirectAttributes redirectAttributes){
+    try {
+      TempAuction = auctionService.setDateToAuction(TempAuction,auctionDateDTO);
+    } catch (InvalidAuctionException ex){
+      redirectAttributes.addFlashAttribute("INVALID_AUCTION", ex.getMessage());
+      return "redirect:/admin/auctions/create";
+    }
+    return "redirect:/admin/auctions/create";
+  }
 
   @PostMapping("/auctions/add-security")
-  public String addSecurityToTempAuction(@ModelAttribute(name = "newSecurity") TempSecurityDTO tempSecurityDTO, RedirectAttributes redirectAttributes){
+  public String addSecurityToTempAuction(@ModelAttribute TempSecurityDTO tempSecurityDTO, RedirectAttributes redirectAttributes){
     Map<String, String> addSecurityResultMessage = auctionService.validateSecurityForAuction(
         TempAuction,tempSecurityDTO);
     if(!addSecurityResultMessage.isEmpty()){
@@ -51,6 +61,7 @@ public class CreateAuctionController {
       if(addSecurityResultMessage.containsKey("SECURITY_TERM_ERROR")){
         redirectAttributes.addFlashAttribute("SECURITY_TERM_ERROR",addSecurityResultMessage.get("SECURITY_TERM_ERROR"));
       }
+      redirectAttributes.addFlashAttribute("errorSecurityValue", tempSecurityDTO);
       return "redirect:/admin/auctions/create";
     } else {
       TreasurySecurity treasurySecurity = new TreasurySecurity(tempSecurityDTO);
@@ -62,10 +73,10 @@ public class CreateAuctionController {
   }
 
   @PostMapping("/auctions/create")
-  public String createAuction(@ModelAttribute(name="auctionTime")AuctionDateDTO auctionDateDTO, RedirectAttributes redirectAttributes){
+  public String createAuction(RedirectAttributes redirectAttributes){
     try{
-      TempAuction = auctionService.setDateToAuction(TempAuction,auctionDateDTO);
       auctionService.create(TempAuction);
+      TempAuction = null;
     }catch (InvalidAuctionException ex){
       redirectAttributes.addFlashAttribute("INVALID_AUCTION",ex.getMessage());
       return "redirect:/admin/auctions/create";
@@ -80,6 +91,7 @@ public class CreateAuctionController {
         var updatedList = TempAuction.getTreasurySecurityList();
         updatedList.remove(sec);
         TempAuction.setTreasurySecurityList(updatedList);
+        return "redirect:/admin/auctions/create";
       }
     }
     return "redirect:/admin/auctions/create";

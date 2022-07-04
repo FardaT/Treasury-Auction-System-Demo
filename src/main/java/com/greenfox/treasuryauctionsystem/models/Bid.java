@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.models;
 
+import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;

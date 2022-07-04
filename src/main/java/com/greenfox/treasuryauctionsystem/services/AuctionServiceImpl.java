@@ -104,7 +104,6 @@ public class AuctionServiceImpl implements AuctionService {
 
   @Override
   public Map<String, String> validateSecurityForAuction(Auction auction, TempSecurityDTO treasurySecurity) {
-    //TODO set further validations for securities
     Map<String, String> errors = new HashMap<>();
     List<TreasurySecurity> securityList = auction.getTreasurySecurityList();
     for (TreasurySecurity ts : securityList) {
@@ -119,8 +118,11 @@ public class AuctionServiceImpl implements AuctionService {
     if(treasurySecurity.getIssueDate().isBefore(ChronoLocalDate.from(auction.getAuctionEndDate().plusDays(1)))){
       errors.put("ISSUE_DATE_ERROR","Issue date must take place after the auction");
     }
-    if(treasurySecurity.getTotalAmount() > 1000000 || treasurySecurity.getTotalAmount() < 100000){
-      errors.put("TOTALAMOUNT_ERROR","Total amount must be between 1000000 and 100000");
+    if(treasurySecurity.getTotalAmount() < 1000000){
+      errors.put("TOTALAMOUNT_ERROR","Total amount must be at least 10.000");
+    }
+    if(treasurySecurity.getTotalAmount() > 100000000){
+      errors.put("TOTALAMOUNT_ERROR","Total amount must not exceed 1.000.000");
     }
     if(treasurySecurity.getSecurityType() == null){
       errors.put("INVALID_SECURITY_ERROR","Security type cannot be null");
@@ -130,7 +132,7 @@ public class AuctionServiceImpl implements AuctionService {
       errors.put("INVALID_SECURITY_ERROR","Maturity date cannot be null");
       return errors;
     }
-    if(TreasurySecurityTermConstraint.validSecurities.contains(treasurySecurity.getSecurityType())){
+    if(!TreasurySecurityTermConstraint.validSecurities.contains(treasurySecurity.getSecurityType())){
       errors.put("INVALID_SECURITY_ERROR","Invalid treasury security");
     }
     if(treasurySecurity.getSecurityTerm() == null){
@@ -138,22 +140,24 @@ public class AuctionServiceImpl implements AuctionService {
       return errors;
     }
     if(treasurySecurity.getSecurityType().equals("T-Bill")){
-      TreasurySecurityTermConstraint.validBillTerm.contains(treasurySecurity.getSecurityTerm());
-      errors.put("SECURITY_TERM_ERROR","Bill term out of bound");
+      if (!TreasurySecurityTermConstraint.validBillTerm.contains(treasurySecurity.getSecurityTerm())){
+        errors.put("SECURITY_TERM_ERROR","Bill term out of bound");
+      }
     }
     if(treasurySecurity.getSecurityType().equals("T-Note")){
-      TreasurySecurityTermConstraint.validNoteTerm.contains(treasurySecurity.getSecurityTerm());
-      errors.put("SECURITY_TERM_ERROR","Note term out of bound");
+      if(!TreasurySecurityTermConstraint.validNoteTerm.contains(treasurySecurity.getSecurityTerm())){
+        errors.put("SECURITY_TERM_ERROR","Note term out of bound");
+      }
     }
     if(treasurySecurity.getSecurityType().equals("T-Bond")){
-      TreasurySecurityTermConstraint.validBondTerm.contains(treasurySecurity.getSecurityTerm());
-      errors.put("SECURITY_TERM_ERROR","Bond term out of bound");
+      if (!TreasurySecurityTermConstraint.validBondTerm.contains(treasurySecurity.getSecurityTerm())){
+        errors.put("SECURITY_TERM_ERROR","Bond term out of bound");
+      }
     }
     return errors;
   }
   @Override
   public Auction setDateToAuction(Auction auction, AuctionDateDTO auctionDateDTO) {
-    Map<String, String> errors = new HashMap<>();
     if(auctionDateDTO.getAuctionStartDate() == null){
       throw new InvalidAuctionException("Auction start time cannot be null");
     }
@@ -167,7 +171,7 @@ public class AuctionServiceImpl implements AuctionService {
       throw new InvalidAuctionException("Auction end date out of bound");
     }
     if(auctionDateDTO.getAuctionEndDate().isBefore(auctionDateDTO.getAuctionStartDate())){
-      throw new InvalidAuctionException("Invalid auction dates");
+      throw new InvalidAuctionException("Invalid auction end time");
     }
     auction.setAuctionStartDate(auctionDateDTO.getAuctionStartDate());
     auction.setAuctionEndDate(auctionDateDTO.getAuctionEndDate());
