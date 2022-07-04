@@ -1,4 +1,5 @@
-.message-container .row .form {
+/* container */
+.message-container .message-row .message-box {
     margin-top: 150px;
     width: 100%;
     horiz-align: center;
@@ -10,74 +11,17 @@
     padding: 20px;
 }
 
-.message-container .row .form h3 {
+/* titles */
+.message-container .message-row .message-box h3 {
     color: white;
     text-align: center;
 }
 
-.message-container .row .form h6 {
+.message-container .message-row .message-box h6 {
     color: #c7bfbf;
 }
 
-#reset-error .container #reset-row #reset-column #reset-box {
-    margin-top: 150px;
-    vertical-align: middle;
-    horiz-align: center;
+/* check-mark picture */
+.message-container .message-row .message-box .pic {
     text-align: center;
-    border: 1px solid #9C9C9C;
-    background-color: #EAEAEA;
-    background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 20px;
-}
-
-#reset-error .container #reset-row #reset-column #reset-box h1 {
-    color: white;
-}
-
-.success-container .success-row .success-box {
-    margin-top: 150px;
-    vertical-align: middle;
-    horiz-align: center;
-    text-align: center;
-    border: 1px solid #9C9C9C;
-    background-color: #EAEAEA;
-    background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 40px;
-}
-
-.success-container .success-row .success-box h3 {
-    color: white;
-    text-align: center;
-}
-
-.success-container .success-row .success-box h6 {
-    color: #c7bfbf;
-}
-
-.success-container .success-row .success-box .pic {
-    text-align: center;
-}
-
-.verification-container .verification-row .verification-box {
-    margin-top: 150px;
-    vertical-align: middle;
-    horiz-align: center;
-    text-align: center;
-    border: 1px solid #9C9C9C;
-    background-color: #EAEAEA;
-    background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 20px;
-}
-
-.verification-container .verification-row .verification-box .pic, h3 {
-    color: #f5f3f3;
-    text-align: center;
-}
-
-.verification-container .verification-row .verification-box h6 {
-    color: #c2c1c1;
-    padding-top: 10px;
 }

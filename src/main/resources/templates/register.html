@@ -10,14 +10,14 @@
 <nav th:replace="fragments/home/topnav :: topnav"></nav>
 
 <!-- CONTENT -->
-<div id="register">
+<div id="auth">
     <div class="container">
-        <div id="row" class="row justify-content-center align-items-center">
-            <div id="column" class="col-md-10">
-                <div id="box" class="col-md-12">
-                    <form id="form" class="form" th:action="@{/store}" method="post">
+        <div id="auth-row" class="row justify-content-center align-items-center">
+            <div id="auth-column" class="col-md-10">
+                <div id="auth-box" class="col-md-12">
+                    <form id="auth-form" class="form" th:action="@{/store}" method="post">
 
-                        <h3 class="txt">Register</h3>
+                        <h3 class="text-info1">Register</h3>
 
                         <div class="form-group">
                             <label for="username" class="text-info1">Username:</label><br>
@@ -84,11 +84,11 @@
                             <input type="submit" name="submit" class="btn btn-info btn-md" value="Submit">
                         </div>
 
-                        <div id="register-links" class="text-right">
+                        <div class="text-right">
                             <a th:href="@{/login}" class="text-info">Login here</a>
                         </div>
 
-                        <div id="reset-link" class="text-right">
+                        <div class="text-right">
                             <a th:href="@{/resetpassword}" class="text-info">Reset Password</a>
                         </div>
                     </form>
