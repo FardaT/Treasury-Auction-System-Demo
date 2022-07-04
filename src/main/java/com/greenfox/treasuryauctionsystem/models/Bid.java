@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.models;
 
+import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "bids")
-public class Bid {
+public class Bid implements Comparable<Bid> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,23 +25,29 @@ public class Bid {
 
   private boolean isCompetitive;
   private long amount;
-  private float rate;
+
+  private Timestamp bidTime;
+  private Float rate;
   private boolean isAccepted;
+  private long acceptedValue;
   private boolean isArchived;
 
   public Bid() {
   }
 
-  public Bid(Long id, TreasurySecurity treasurySecurity, AppUser user, boolean isCompetitive, long amount, float rate,
-             boolean isAccepted, boolean isArchived) {
+  public Bid(Long id, TreasurySecurity treasurySecurity, AppUser user, boolean isCompetitive,
+             long amount, float rate,
+             boolean isAccepted, boolean isArchived, long acceptedValue) {
     this.id = id;
     this.user = user;
     this.treasurySecurity = treasurySecurity;
     this.isCompetitive = isCompetitive;
     this.amount = amount;
+    this.bidTime = new Timestamp(System.currentTimeMillis());
     this.rate = rate;
     this.isAccepted = isAccepted;
     this.isArchived = isArchived;
+    this.acceptedValue = acceptedValue;
   }
 
   public Long getId() {
@@ -84,8 +91,20 @@ public class Bid {
     this.amount = amount;
   }
 
+  public Timestamp getBidTime() {
+    return bidTime;
+  }
+
+  public void setBidTime(Timestamp bidTime) {
+    this.bidTime = bidTime;
+  }
+
   public float getRate() {
     return rate;
+  }
+
+  public void setRate(Float rate) {
+    this.rate = rate;
   }
 
   public void setRate(float rate) {
@@ -106,5 +125,23 @@ public class Bid {
 
   public void setArchived(boolean archived) {
     isArchived = archived;
+  }
+
+  public long getAcceptedValue() {
+    return acceptedValue;
+  }
+
+  public void setAcceptedValue(long acceptedValue) {
+    this.acceptedValue = acceptedValue;
+  }
+
+  @Override
+  public int compareTo(Bid other) {
+    int i = rate.compareTo(other.getRate());
+    if (i != 0) {
+      return i;
+    }
+    return Integer.compare(Integer.parseInt(bidTime.toString()),
+        Integer.parseInt(other.bidTime.toString()));
   }
 }

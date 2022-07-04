@@ -14,5 +14,5 @@ public interface AuctionService {
 
   void disable(Long id);
 
-  void process(Long id);
+  void process(Long id) throws Exception;
 }

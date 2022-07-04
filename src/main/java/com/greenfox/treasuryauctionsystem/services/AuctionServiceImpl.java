@@ -1,10 +1,15 @@
 package com.greenfox.treasuryauctionsystem.services;
 
 import com.greenfox.treasuryauctionsystem.models.Auction;
+import com.greenfox.treasuryauctionsystem.models.Bid;
+import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 import com.greenfox.treasuryauctionsystem.models.dtos.AuctionResponseDTO;
 import com.greenfox.treasuryauctionsystem.repositories.AuctionRepository;
+import com.greenfox.treasuryauctionsystem.repositories.BidRepository;
+import com.greenfox.treasuryauctionsystem.repositories.TreasurySecurityRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,11 +22,17 @@ import org.springframework.stereotype.Service;
 public class AuctionServiceImpl implements AuctionService {
 
 
-  private AuctionRepository auctionRepository;
+  private final AuctionRepository auctionRepository;
+  private final TreasurySecurityRepository treasurySecurityRepository;
+
+  private final BidRepository bidRepository;
 
   @Autowired
-  public AuctionServiceImpl(AuctionRepository auctionRepository) {
+  public AuctionServiceImpl(AuctionRepository auctionRepository,
+                            TreasurySecurityRepository treasurySecurityRepository, BidRepository bidRepository) {
     this.auctionRepository = auctionRepository;
+    this.treasurySecurityRepository = treasurySecurityRepository;
+    this.bidRepository = bidRepository;
   }
 
   @Override
@@ -78,13 +89,146 @@ public class AuctionServiceImpl implements AuctionService {
   }
 
   @Override
-  public void process(Long id) {
-    // TODO: 2022. 06. 30. function must be coded
-    Optional<Auction> auction = auctionRepository.findById(id);
-    if (auction.isPresent() && auction.get().getAuctionEndDate().isBefore(LocalDateTime.now())) {
-      Auction currentAuction = auction.get();
-      currentAuction.setProcessed(true);
-      auctionRepository.save(currentAuction);
+//  public void process(Long id) throws Exception {
+  public void process(Long id) throws Exception {
+
+    //todo: what if too many non-competitive bids arrive?
+    //todo: what if no competitive bid arrives?
+
+    //todo: -------------------collect all securities for the auction
+    //todo: -------------------collect all bids of the auction
+    //todo: -------------------split the bids by security types
+    //todo: -------------------split the bids by non-competitive and competitive types
+    //todo: -------------------count non-competitive amount
+    //todo: -------------------sort the competitive bids by rate and by timestamp
+    //todo: -------------------calculate high rate by securities
+    //todo: -------------------set isAccepted flag of bid and high rate of the securities
+    //todo: -------------------set auction isProcessed
+
+    //get auction by id
+    Optional<Auction> auctionOptional = auctionRepository.findById(id);
+    Auction currentAuction;
+    if (auctionOptional.isEmpty()) {
+      // TODO: 2022. 07. 04. throw proper exception
+      throw new Exception();
+    } else {
+      currentAuction = auctionOptional.get();
     }
+
+    //get securities of the auction
+    List<TreasurySecurity> treasurySecurityList = currentAuction.getTreasurySecurityList();
+
+    //get total amount of the securities
+    Map<Long, Long> totalAmountsBySecurities = new HashMap<>();
+    for (TreasurySecurity treasurySecurity : treasurySecurityList) {
+      totalAmountsBySecurities.put(treasurySecurity.getId(), treasurySecurity.getTotalAmount());
+    }
+
+
+    //map bids to treasurySecurity ids
+    Map<Long, List<Bid>> bidListMap = new HashMap<>();
+    for (TreasurySecurity treasurySecurity : treasurySecurityList) {
+      List<Bid> bidList = treasurySecurity.getBidList();
+      bidListMap.put(treasurySecurity.getId(), bidList);
+    }
+
+    // split to competitive and non-competitive maps
+    Map<Long, List<Bid>> competitiveBidListMap = new HashMap<>();
+    Map<Long, List<Bid>> nonCompetitiveBidListMap = new HashMap<>();
+
+    for (Map.Entry<Long, List<Bid>> entry : bidListMap.entrySet()) {
+      for (Bid bid : entry.getValue()) {
+        if (bid.isCompetitive()) {
+          competitiveBidListMap.get(entry.getKey()).add(bid);
+        } else {
+          nonCompetitiveBidListMap.get(entry.getKey()).add(bid);
+        }
+      }
+    }
+
+    //counts non-competitive offer amounts
+    Map<Long, Long> totalCompetitiveBidAmount = new HashMap<>();
+    Map<Long, Long> totalNonCompetitiveBidAmount = new HashMap<>();
+
+    for (Map.Entry<Long, List<Bid>> entry : competitiveBidListMap.entrySet()) {
+      for (Bid bid : entry.getValue()) {
+        Long currentAmount = bid.getAmount();
+        totalCompetitiveBidAmount.put(entry.getKey(),
+            totalCompetitiveBidAmount.get(entry.getKey()) + currentAmount);
+      }
+    }
+
+    for (Map.Entry<Long, List<Bid>> entry : nonCompetitiveBidListMap.entrySet()) {
+      for (Bid bid : entry.getValue()) {
+        Long currentAmount = bid.getAmount();
+        totalNonCompetitiveBidAmount.put(entry.getKey(),
+            totalNonCompetitiveBidAmount.get(entry.getKey()) + currentAmount);
+      }
+    }
+
+    //sorts the lists of the competitiveBidListMap
+    for (Map.Entry<Long, List<Bid>> entry : competitiveBidListMap.entrySet()) {
+      List<Bid> currentBidList = entry.getValue();
+      Collections.sort(currentBidList);
+    }
+
+    //calculates security's high rate, sets bid's isAccepted & acceptedValue
+    Map<Long, Float> highRateMap = new HashMap<>();
+
+    for (Map.Entry<Long, List<Bid>> entry : competitiveBidListMap.entrySet()) {
+
+      long totalAmountOfCurrentSecurity = totalAmountsBySecurities.get(entry.getKey());
+      long remainingTotalAmountAfterNonCompetitiveBidsDeducted =
+          totalAmountOfCurrentSecurity - totalNonCompetitiveBidAmount.get(entry.getKey());
+
+      boolean isExceeded = false;
+
+      for (Bid bid : entry.getValue()) {
+        if (remainingTotalAmountAfterNonCompetitiveBidsDeducted - bid.getAmount() > 0) {
+          remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
+          bid.setAccepted(true);
+          bid.setAcceptedValue(bid.getAmount());
+        } else if (remainingTotalAmountAfterNonCompetitiveBidsDeducted - bid.getAmount() == 0) {
+          remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
+          bid.setAccepted(true);
+          bid.setAcceptedValue(bid.getAmount());
+          highRateMap.put(entry.getKey(), bid.getRate());
+          isExceeded = true;
+        } else {
+          remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
+          if(!isExceeded) {
+            bid.setAccepted(true);
+            highRateMap.put(entry.getKey(), bid.getRate());
+            long currentAcceptedValue = bid.getAmount() + remainingTotalAmountAfterNonCompetitiveBidsDeducted;
+            bid.setAcceptedValue(currentAcceptedValue);
+            isExceeded = true;
+          } else {
+            bid.setAccepted(false);
+            bid.setAcceptedValue(0);
+          }
+        }
+        bidRepository.save(bid);
+      }
+    }
+
+    //sets all noncompetitive auctions setAcceptedValue and setAcceptedFlag
+    for(Map.Entry<Long, List<Bid>> entry : nonCompetitiveBidListMap.entrySet()) {
+      for(Bid bid : entry.getValue()) {
+        bid.setAcceptedValue(bid.getAmount());
+        bid.setAccepted(true);
+        bidRepository.save(bid);
+      }
+    }
+
+    //sets highRate of all treasurySecurities
+    for(TreasurySecurity treasurySecurity : treasurySecurityList) {
+      float finalHighRate = highRateMap.get(treasurySecurity.getId());
+      treasurySecurity.setHighRate(finalHighRate);
+      treasurySecurityRepository.save(treasurySecurity);
+    }
+
+    //sets auction's isProcessed flag
+    currentAuction.setProcessed(true);
+    auctionRepository.save(currentAuction);
   }
 }
