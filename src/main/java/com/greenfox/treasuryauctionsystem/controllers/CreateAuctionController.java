@@ -76,7 +76,7 @@ public class CreateAuctionController {
   public String createAuction(RedirectAttributes redirectAttributes){
     try{
       auctionService.create(TempAuction);
-      TempAuction = null;
+      TempAuction = new Auction();
     }catch (InvalidAuctionException ex){
       redirectAttributes.addFlashAttribute("INVALID_AUCTION",ex.getMessage());
       return "redirect:/admin/auctions/create";

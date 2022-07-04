@@ -135,9 +135,9 @@ public class TestService {
 		auctionRepository.save(auction1);
 		auctionRepository.save(auction2);
 		auctionRepository.save(auction3);
-		treasurySecurityRepository.save(treasurySecurity1);
+/*		treasurySecurityRepository.save(treasurySecurity1);
 		treasurySecurityRepository.save(treasurySecurity2);
-		treasurySecurityRepository.save(treasurySecurity3);
+		treasurySecurityRepository.save(treasurySecurity3);*/
 
 		// save user 1 & 2
 		appUserRepository.save(appUser1);
@@ -145,9 +145,9 @@ public class TestService {
 
 		// save auction and security
 		auctionRepository.save(auction1);
-		treasurySecurityRepository.save(treasurySecurity1);
+/*		treasurySecurityRepository.save(treasurySecurity1);
 		treasurySecurityRepository.save(treasurySecurity2);
-		treasurySecurityRepository.save(treasurySecurity3);
+		treasurySecurityRepository.save(treasurySecurity3);*/
 
 		// add bid to security (sec has many bids)
 		treasurySecurity1.addBid(bid1);

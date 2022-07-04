@@ -35,7 +35,7 @@ public class Auction {
 
   @OneToMany(
       mappedBy = "auction",
-      cascade = CascadeType.MERGE,
+      cascade = CascadeType.ALL,
       orphanRemoval = true
   )
   private List<TreasurySecurity> treasurySecurityList = new ArrayList<>();

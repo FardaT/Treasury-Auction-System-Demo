@@ -20,7 +20,7 @@ public class TreasurySecurity {
 
   @OneToMany(
       mappedBy = "treasurySecurity",
-      cascade = CascadeType.MERGE,
+      cascade = CascadeType.ALL,
       orphanRemoval = true
   )
   private final List<Bid> bidList = new ArrayList<>();
