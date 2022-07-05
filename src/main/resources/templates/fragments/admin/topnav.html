@@ -6,7 +6,7 @@
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="mailto:mightyroosterteam@gmail.com">user123</a>
+                <a class="nav-link" th:href="@{/profile}" th:text="${user.getUsername()}"></a>
             </li>
         </ul>
     </div>
