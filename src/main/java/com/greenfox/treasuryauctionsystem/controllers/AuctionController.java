@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.controllers;
 
+import com.greenfox.treasuryauctionsystem.exceptions.NoSuchAuctionException;
 import com.greenfox.treasuryauctionsystem.models.dtos.AuctionResponseDTO;
 import com.greenfox.treasuryauctionsystem.services.AuctionService;
 import java.util.List;
@@ -37,14 +38,8 @@ public class AuctionController {
     return "redirect:/auctions";
   }
 
-//  @GetMapping("/process/{id}")
-//  public String processFinishedAuction(@PathVariable Long id) throws Exception {
-//    auctionService.process(id);
-//    return "redirect:/auctions";
-//  }
-
   @PostMapping("/process")
-  public String processFinishedAuctionPost(@RequestParam Long id) throws Exception {
+  public String processFinishedAuctionPost(@RequestParam Long id) throws NoSuchAuctionException {
     auctionService.process(id);
     return "redirect:/auctions";
   }

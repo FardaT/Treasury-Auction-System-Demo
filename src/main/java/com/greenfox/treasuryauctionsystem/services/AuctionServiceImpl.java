@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.services;
 
+import com.greenfox.treasuryauctionsystem.exceptions.NoSuchAuctionException;
 import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.Bid;
 import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
@@ -90,7 +91,7 @@ public class AuctionServiceImpl implements AuctionService {
 
   @Override
 //  public void process(Long id) throws Exception {
-  public void process(Long id) throws Exception {
+  public void process(Long id) throws NoSuchAuctionException {
 
     //todo: what if too many non-competitive bids arrive?
     //todo: what if no competitive bid arrives?
@@ -110,7 +111,7 @@ public class AuctionServiceImpl implements AuctionService {
     Auction currentAuction;
     if (auctionOptional.isEmpty()) {
       // TODO: 2022. 07. 04. throw proper exception
-      throw new Exception();
+      throw new NoSuchAuctionException("No auction found with the provided Id.");
     } else {
       currentAuction = auctionOptional.get();
     }
@@ -201,6 +202,7 @@ public class AuctionServiceImpl implements AuctionService {
 
       boolean isExceeded = false;
 
+      //check high rate & save bids & treasurySecurity & auction
       for (Bid bid : entry.getValue()) {
         if (remainingTotalAmountAfterNonCompetitiveBidsDeducted - bid.getAmount() > 0) {
           remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
@@ -230,7 +232,7 @@ public class AuctionServiceImpl implements AuctionService {
       }
     }
 
-    //sets all noncompetitive auctions setAcceptedValue and setAcceptedFlag
+    //set all noncompetitive auctions setAcceptedValue and setAcceptedFlag
     for(Map.Entry<Long, List<Bid>> entry : nonCompetitiveBidListMap.entrySet()) {
       for(Bid bid : entry.getValue()) {
         bid.setAcceptedValue(bid.getAmount());
@@ -239,14 +241,13 @@ public class AuctionServiceImpl implements AuctionService {
       }
     }
 
-    //sets highRate of all treasurySecurities
+    //set highRate of all treasurySecurities
     for(TreasurySecurity treasurySecurity : treasurySecurityList) {
       if(highRateMap.containsKey(treasurySecurity.getId())){
         float finalHighRate = highRateMap.get(treasurySecurity.getId());
         treasurySecurity.setHighRate(finalHighRate);
         treasurySecurityRepository.save(treasurySecurity);
       }
-
     }
 
     //sets auction's isProcessed flag
