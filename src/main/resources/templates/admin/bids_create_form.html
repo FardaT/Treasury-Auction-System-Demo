@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- HEADER -->
+<head th:replace="fragments/admin/header :: header"></head>
+
+<body>
+
+<!-- TOPNAV -->
+<nav th:replace="fragments/admin/topnav :: topnav"></nav>
+
+<!-- CONTENT -->
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- SIDENAV -->
+        <div class="col-md-2">
+            <ul th:replace="fragments/admin/sidenav :: sidenav"></ul>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="col-md-10">
+
+            <form th:action="@{/admin/bids/store}" method="post">
+
+                <h3>Auction details</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>start_date</th>
+                        <th>end_date</th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td th:text="${auction.id}"></td>
+                        <td th:text="${auction.auctionStartDate}"></td>
+                        <td th:text="${auction.auctionEndDate}"></td>
+                    </tr>
+                </table>
+
+                <div class="form-group">
+                    <label for="treasurySecurity">Select security:</label>
+                    <select class="form-control" id="treasurySecurity" name="treasurySecurity">
+                        <option th:each="treasurySecurity: ${securityList}"
+                                th:value="${treasurySecurity.id}"
+                                th:text="${treasurySecurity.securityName} + ' --- ' + ${treasurySecurity.securityTerm}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="isCompetitive">Select type:</label>
+                    <select class="form-control" id="isCompetitive" name="isCompetitive">
+                        <option th:value="0" th:text="Noncompetitive"></option>
+                        <option th:value="1" th:text="Competitive"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Amount:</label>
+                    <input type="number" class="form-control" id="amount" name="amount">
+                </div>
+
+                <div class="form-group">
+                    <label for="rate">Rate:</label>
+                    <input type="number" step="0.1" class="form-control" id="rate" name="rate">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer th:replace="fragments/admin/footer :: footer"></footer>
+
+</body>
+</html>

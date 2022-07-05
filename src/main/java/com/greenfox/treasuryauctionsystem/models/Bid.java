@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.models;
 
+import com.greenfox.treasuryauctionsystem.models.dtos.BidDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,7 +36,19 @@ public class Bid {
     private boolean isCompetitive;
     private long amount;
     private float rate;
-    private boolean isAccepted;
-    private boolean isArchived;
-    private boolean isDisabled; // for soft delete/cancel
+    private boolean isAccepted = false;
+    private boolean isArchived = false;
+    private boolean isDisabled = false; // for soft delete/cancel
+
+    public Bid(BidDTO bidDTO) {
+        this.id = bidDTO.getId();
+        this.treasurySecurity = bidDTO.getTreasurySecurity();
+        this.user = bidDTO.getUser();
+        this.isCompetitive = bidDTO.getIsCompetitive().equals("1");
+        this.amount = bidDTO.getAmount();
+        this.rate = bidDTO.getRate();
+        this.isAccepted = bidDTO.isAccepted();
+        this.isArchived = bidDTO.isArchived();
+        this.isDisabled = bidDTO.isDisabled();
+    }
 }

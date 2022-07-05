@@ -87,4 +87,10 @@ public class AuctionServiceImpl implements AuctionService {
       auctionRepository.save(currentAuction);
     }
   }
+
+  // find auction by id
+  @Override
+  public Auction findById(Long auction_id) {
+    return auctionRepository.findById(auction_id).orElse(null);
+  }
 }

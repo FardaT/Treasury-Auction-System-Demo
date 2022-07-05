@@ -1,175 +1,195 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">>
-<head>
-    <title>Treasury Auction System - Auctions list</title>
-    <link rel="stylesheet" th:href="@{/css/auctionlist.css}"/>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
+<!-- HEADER -->
+<head th:replace="fragments/admin/header :: header"></head>
 
-    <meta charset="utf-8"/>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- SWEETALERT CDN -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
 <body>
-<!--todo check role to show delete(upcoming) and add new buttons-->
-<!--todo https://betterprogramming.pub/spring-security-user-roles-and-thymeleaf-extras-c10113d4ad75-->
-<h1>All auctions</h1>
 
-<div th:if="${auctions.ongoing == null}">
-    <h3>No ongoing auctions</h3>
-</div>
-<div th:unless="${auctions.ongoing == null}" class="table-container">
-    <table>
-        <thead>
-        <h3>Ongoing auctions</h3>
-        <tr>
-            <th>id</th>
-            <th>start date</th>
-            <th>start time</th>
-            <th>end date</th>
-            <th>end time</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="auction : ${auctions.ongoing}" th:object="${auction}">
-            <td th:text="*{id}"></td>
-            <td th:text="*{startDate}"></td>
-            <td th:text="*{startTime}"></td>
-            <td th:text="*{endDate}"></td>
-            <td th:text="*{endTime}"></td>
-            <td>
-                <table>
-                    <thead>
+<!-- TOPNAV -->
+<nav th:replace="fragments/admin/topnav :: topnav"></nav>
 
-                    </thead>
-                    <tbody>
-                    <tr th:each="security : *{treasurySecurityList}" th:object="${security}">
-                        <td th:text="*{securityName}"></td>
-                        <td th:text="*{securityType}"></td>
-                        <td th:text="*{securityTerm}"></td>
-                        <td th:text="*{totalAmount}"></td>
-                        <td th:text="*{issueDate}"></td>
-                        <td th:text="*{maturityDate}"></td>
-                        <td th:text="*{highRate}"></td>
-                    </tr>
+<!-- CONTENT -->
+<div class="container-fluid">
+    <div class="row">
 
-                    </tbody>
+        <!-- SIDENAV -->
+        <div class="col-md-2">
+            <ul th:replace="fragments/admin/sidenav :: sidenav"></ul>
+        </div>
 
+        <!-- CONTENT -->
+        <div class="col-md-10">
 
-                </table>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+            <!--todo check role to show delete(upcoming) and add new buttons-->
+            <!--todo https://betterprogramming.pub/spring-security-user-roles-and-thymeleaf-extras-c10113d4ad75-->
+            <h1>All auctions</h1>
 
-<div th:if="${auctions.upcoming == null}">
-    <h3>No upcoming auctions</h3>
-</div>
-<div th:unless="${auctions.upcoming == null}" class="table-container">
-    <table>
-        <thead>
-        <h3>Upcoming auctions</h3>
-        <tr>
-            <th>id</th>
-            <th>start date</th>
-            <th>start time</th>
-            <th>end date</th>
-            <th>end time</th>
-            <th sec:authorize="hasRole('ADMIN')">delete</th>
-            <!--        <th sec:authorize="hasRole('ADMIN')">delete</th>-->
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="auction : ${auctions.upcoming}" th:object="${auction}">
-            <td th:text="*{id}"></td>
-            <td th:text="*{startDate}"></td>
-            <td th:text="*{startTime}"></td>
-            <td th:text="*{endDate}"></td>
-            <td th:text="*{endTime}"></td>
-            <td  sec:authorize="hasRole('ADMIN')">
-                <form th:action="@{/auctions/disable}" method="post">
-                    <input type="hidden" name="id" th:value="*{id}">
-                    <input type="submit" class="btn btn-success sa_click" value="Delete">
-                </form>
-            </td>
+            <a th:href="@{admin/auctions/create}">
+                <button class="btn btn-primary">Create new auction</button>
+            </a>
 
-        </tr>
-        </tbody>
-    </table>
-</div>
-<div th:if="${auctions.finished == null}">
-    <h3>No finished auctions</h3>
-</div>
-<div th:unless="${auctions.finished == null}" class="table-container">
-    <table>
-        <thead>
-        <h3>Finished auctions</h3>
-        <tr>
-            <th>id</th>
-            <th>start date</th>
-            <th>end date</th>
-            <th sec:authorize="hasRole('ADMIN')">process</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="auction : ${auctions.finished}" th:object="${auction}">
-            <td th:text="*{id}"></td>
-            <td th:text="*{startDate}"></td>
-            <td th:text="*{endDate}"></td>
-            <td th:if="*{!isProcessed}"  sec:authorize="hasRole('ADMIN')">
-                <form th:action="@{/auctions/process}" method="post">
-                    <input type="hidden" name="id" th:value="*{id}">
-                    <input type="submit" class="btn btn-success sa_click" value="Process">
-                </form>
-            </td>
-            <td>
-                <table>
+            <div th:if="${auctions.ongoing == null}">
+                <h3>No ongoing auctions</h3>
+            </div>
+            <div th:unless="${auctions.ongoing == null}" class="table-container">
+
+                <h3>Ongoing auctions</h3>
+
+                <table class="table">
                     <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Total Amount</th>
-                        <th>Term</th>
-                        <th>Issue Date</th>
-                        <th>Maturity Date</th>
-                        <th>High Rate</th>
-
+                        <th>id</th>
+                        <th>start date</th>
+                        <th>start time</th>
+                        <th>end date</th>
+                        <th>end time</th>
+                        <th>BID</th>
                     </tr>
-
                     </thead>
                     <tbody>
-                    <tr th:each="security : *{treasurySecurityList}" th:object="${security}">
+                    <tr th:each="auction : ${auctions.ongoing}" th:object="${auction}">
                         <td th:text="*{id}"></td>
-                        <td th:text="*{securityName}"></td>
-                        <td th:text="*{securityType}"></td>
-                        <td th:text="*{totalAmount}"></td>
-                        <td th:text="*{securityTerm}"></td>
-                        <td th:text="*{issueDate}"></td>
-                        <td th:text="*{maturityDate}"></td>
-                        <td th:text="*{highRate}"></td>
+                        <td th:text="*{startDate}"></td>
+                        <td th:text="*{startTime}"></td>
+                        <td th:text="*{endDate}"></td>
+                        <td th:text="*{endTime}"></td>
+                        <td>
+                            <a th:href="@{/admin/bids/create(auction_id=${auction.id})}" class="btn btn-primary"
+                               role="button">Place BID</a>
+                        </td>
+                        <td>
+                            <table>
+                                <thead>
+
+                                </thead>
+                                <tbody>
+                                <tr th:each="security : *{treasurySecurityList}" th:object="${security}">
+                                    <td th:text="*{securityName}"></td>
+                                    <td th:text="*{securityType}"></td>
+                                    <td th:text="*{securityTerm}"></td>
+                                    <td th:text="*{totalAmount}"></td>
+                                    <td th:text="*{issueDate}"></td>
+                                    <td th:text="*{maturityDate}"></td>
+                                    <td th:text="*{highRate}"></td>
+                                </tr>
+
+                                </tbody>
+
+
+                            </table>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
-            </td>
-            <td th:unless="*{!isProcessed}" th:text="processed"></td>
-        </tr>
-        </tbody>
-    </table>
+            </div>
+
+            <div th:if="${auctions.upcoming == null}">
+                <h3>No upcoming auctions</h3>
+            </div>
+            <div th:unless="${auctions.upcoming == null}" class="table-container">
+
+                <h3>Upcoming auctions</h3>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>start date</th>
+                        <th>start time</th>
+                        <th>end date</th>
+                        <th>end time</th>
+                        <th sec:authorize="hasRole('ADMIN')">delete</th>
+                        <!-- <th sec:authorize="hasRole('ADMIN')">delete</th> -->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="auction : ${auctions.upcoming}" th:object="${auction}">
+                        <td th:text="*{id}"></td>
+                        <td th:text="*{startDate}"></td>
+                        <td th:text="*{startTime}"></td>
+                        <td th:text="*{endDate}"></td>
+                        <td th:text="*{endTime}"></td>
+                        <td sec:authorize="hasRole('ADMIN')">
+                            <form th:action="@{/auctions/disable}" method="post">
+                                <input type="hidden" name="id" th:value="*{id}">
+                                <input type="submit" class="btn btn-danger sa_click" value="Delete">
+                            </form>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${auctions.finished == null}">
+                <h3>No finished auctions</h3>
+            </div>
+            <div th:unless="${auctions.finished == null}" class="table-container">
+
+                <h3>Finished auctions</h3>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>start date</th>
+                        <th>end date</th>
+                        <th sec:authorize="hasRole('ADMIN')">process</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="auction : ${auctions.finished}" th:object="${auction}">
+                        <td th:text="*{id}"></td>
+                        <td th:text="*{startDate}"></td>
+                        <td th:text="*{endDate}"></td>
+                        <td th:if="*{!isProcessed}" sec:authorize="hasRole('ADMIN')">
+                            <form th:action="@{/auctions/process}" method="post">
+                                <input type="hidden" name="id" th:value="*{id}">
+                                <input type="submit" class="btn btn-success sa_click" value="Process">
+                            </form>
+                        </td>
+                        <td>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Total Amount</th>
+                                    <th>Term</th>
+                                    <th>Issue Date</th>
+                                    <th>Maturity Date</th>
+                                    <th>High Rate</th>
+
+                                </tr>
+
+                                </thead>
+                                <tbody>
+                                <tr th:each="security : *{treasurySecurityList}" th:object="${security}">
+                                    <td th:text="*{id}"></td>
+                                    <td th:text="*{securityName}"></td>
+                                    <td th:text="*{securityType}"></td>
+                                    <td th:text="*{totalAmount}"></td>
+                                    <td th:text="*{securityTerm}"></td>
+                                    <td th:text="*{issueDate}"></td>
+                                    <td th:text="*{maturityDate}"></td>
+                                    <td th:text="*{highRate}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td th:unless="*{!isProcessed}" th:text="processed"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
 </div>
 
-<a th:href="@{admin/auctions/create}">
-    <button>Create new auction</button>
-</a>
-
-<script src="../js/SA_dialog-two-buttons.js"></script>
+<!-- FOOTER -->
+<footer th:replace="fragments/admin/footer :: footer"></footer>
 
 </body>
 </html>
