@@ -30,7 +30,8 @@ public class AuctionServiceImpl implements AuctionService {
 
   @Autowired
   public AuctionServiceImpl(AuctionRepository auctionRepository,
-                            TreasurySecurityRepository treasurySecurityRepository, BidRepository bidRepository) {
+                            TreasurySecurityRepository treasurySecurityRepository,
+                            BidRepository bidRepository) {
     this.auctionRepository = auctionRepository;
     this.treasurySecurityRepository = treasurySecurityRepository;
     this.bidRepository = bidRepository;
@@ -93,24 +94,10 @@ public class AuctionServiceImpl implements AuctionService {
 //  public void process(Long id) throws Exception {
   public void process(Long id) throws NoSuchAuctionException {
 
-    //todo: what if too many non-competitive bids arrive?
-    //todo: what if no competitive bid arrives?
-
-    //todo: -------------------collect all securities for the auction
-    //todo: -------------------collect all bids of the auction
-    //todo: -------------------split the bids by security types
-    //todo: -------------------split the bids by non-competitive and competitive types
-    //todo: -------------------count non-competitive amount
-    //todo: -------------------sort the competitive bids by rate and by id
-    //todo: -------------------calculate high rate by securities
-    //todo: -------------------set isAccepted flag of bid and high rate of the securities
-    //todo: -------------------set auction isProcessed
-
     //get auction by id
     Optional<Auction> auctionOptional = auctionRepository.findById(id);
     Auction currentAuction;
     if (auctionOptional.isEmpty()) {
-      // TODO: 2022. 07. 04. throw proper exception
       throw new NoSuchAuctionException("No auction found with the provided Id.");
     } else {
       currentAuction = auctionOptional.get();
@@ -124,7 +111,6 @@ public class AuctionServiceImpl implements AuctionService {
     for (TreasurySecurity treasurySecurity : treasurySecurityList) {
       totalAmountsBySecurities.put(treasurySecurity.getId(), treasurySecurity.getTotalAmount());
     }
-
 
     //map bids to treasurySecurity ids
     Map<Long, List<Bid>> bidListMap = new HashMap<>();
@@ -140,12 +126,12 @@ public class AuctionServiceImpl implements AuctionService {
     for (Map.Entry<Long, List<Bid>> entry : bidListMap.entrySet()) {
       for (Bid bid : entry.getValue()) {
         if (bid.isCompetitive()) {
-          if(!competitiveBidListMap.containsKey(bid.getTreasurySecurity().getId())) {
+          if (!competitiveBidListMap.containsKey(bid.getTreasurySecurity().getId())) {
             competitiveBidListMap.put(bid.getTreasurySecurity().getId(), new ArrayList<>());
           }
           competitiveBidListMap.get(entry.getKey()).add(bid);
         } else {
-          if(!nonCompetitiveBidListMap.containsKey(bid.getTreasurySecurity().getId())) {
+          if (!nonCompetitiveBidListMap.containsKey(bid.getTreasurySecurity().getId())) {
             nonCompetitiveBidListMap.put(bid.getTreasurySecurity().getId(), new ArrayList<>());
           }
           nonCompetitiveBidListMap.get(entry.getKey()).add(bid);
@@ -154,23 +140,11 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     //counts non-competitive offer amounts
-    Map<Long, Long> totalCompetitiveBidAmount = new HashMap<>();
     Map<Long, Long> totalNonCompetitiveBidAmount = new HashMap<>();
-
-    for (Map.Entry<Long, List<Bid>> entry : competitiveBidListMap.entrySet()) {
-      for (Bid bid : entry.getValue()) {
-        if(!totalCompetitiveBidAmount.containsKey(bid.getTreasurySecurity().getId())){
-          totalCompetitiveBidAmount.put(bid.getTreasurySecurity().getId(), 0L);
-        }
-        Long currentAmount = bid.getAmount();
-        totalCompetitiveBidAmount.put(entry.getKey(),
-            totalCompetitiveBidAmount.get(entry.getKey()) + currentAmount);
-      }
-    }
 
     for (Map.Entry<Long, List<Bid>> entry : nonCompetitiveBidListMap.entrySet()) {
       for (Bid bid : entry.getValue()) {
-        if(!totalNonCompetitiveBidAmount.containsKey(bid.getTreasurySecurity().getId())){
+        if (!totalNonCompetitiveBidAmount.containsKey(bid.getTreasurySecurity().getId())) {
           totalNonCompetitiveBidAmount.put(bid.getTreasurySecurity().getId(), 0L);
         }
         Long currentAmount = bid.getAmount();
@@ -186,6 +160,36 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     //calculate security's high rate, set bid's isAccepted & acceptedValue
+    Map<Long, Float> highRateMap =
+        getHighRateMap(totalAmountsBySecurities, competitiveBidListMap,
+            totalNonCompetitiveBidAmount);
+
+    //set all noncompetitive auctions setAcceptedValue and setAcceptedFlag
+    for (Map.Entry<Long, List<Bid>> entry : nonCompetitiveBidListMap.entrySet()) {
+      for (Bid bid : entry.getValue()) {
+        bid.setAcceptedValue(bid.getAmount());
+        bid.setAccepted(true);
+        bidRepository.save(bid);
+      }
+    }
+
+    //set highRate of all treasurySecurities
+    for (TreasurySecurity treasurySecurity : treasurySecurityList) {
+      if (highRateMap.containsKey(treasurySecurity.getId())) {
+        float finalHighRate = highRateMap.get(treasurySecurity.getId());
+        treasurySecurity.setHighRate(finalHighRate);
+        treasurySecurityRepository.save(treasurySecurity);
+      }
+    }
+
+    //sets auction's isProcessed flag
+    currentAuction.setProcessed(true);
+    auctionRepository.save(currentAuction);
+  }
+
+  private Map<Long, Float> getHighRateMap(Map<Long, Long> totalAmountsBySecurities,
+                                           Map<Long, List<Bid>> competitiveBidListMap,
+                                           Map<Long, Long> totalNonCompetitiveBidAmount) {
     Map<Long, Float> highRateMap = new HashMap<>();
 
     for (Map.Entry<Long, List<Bid>> entry : competitiveBidListMap.entrySet()) {
@@ -195,7 +199,7 @@ public class AuctionServiceImpl implements AuctionService {
 
       //get remaining total amount after non-competitive bids deducted
       long remainingTotalAmountAfterNonCompetitiveBidsDeducted = totalAmountOfCurrentSecurity;
-      if(totalNonCompetitiveBidAmount.containsKey(entry.getKey())) {
+      if (totalNonCompetitiveBidAmount.containsKey(entry.getKey())) {
         remainingTotalAmountAfterNonCompetitiveBidsDeducted =
             totalAmountOfCurrentSecurity - totalNonCompetitiveBidAmount.get(entry.getKey());
       }
@@ -217,10 +221,11 @@ public class AuctionServiceImpl implements AuctionService {
           isExceeded = true;
         } else {
           remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
-          if(!isExceeded) {
+          if (!isExceeded) {
             bid.setAccepted(true);
             highRateMap.put(entry.getKey(), bid.getRate());
-            long currentAcceptedValue = bid.getAmount() + remainingTotalAmountAfterNonCompetitiveBidsDeducted;
+            long currentAcceptedValue =
+                bid.getAmount() + remainingTotalAmountAfterNonCompetitiveBidsDeducted;
             bid.setAcceptedValue(currentAcceptedValue);
             isExceeded = true;
           } else {
@@ -231,27 +236,6 @@ public class AuctionServiceImpl implements AuctionService {
         bidRepository.save(bid);
       }
     }
-
-    //set all noncompetitive auctions setAcceptedValue and setAcceptedFlag
-    for(Map.Entry<Long, List<Bid>> entry : nonCompetitiveBidListMap.entrySet()) {
-      for(Bid bid : entry.getValue()) {
-        bid.setAcceptedValue(bid.getAmount());
-        bid.setAccepted(true);
-        bidRepository.save(bid);
-      }
-    }
-
-    //set highRate of all treasurySecurities
-    for(TreasurySecurity treasurySecurity : treasurySecurityList) {
-      if(highRateMap.containsKey(treasurySecurity.getId())){
-        float finalHighRate = highRateMap.get(treasurySecurity.getId());
-        treasurySecurity.setHighRate(finalHighRate);
-        treasurySecurityRepository.save(treasurySecurity);
-      }
-    }
-
-    //sets auction's isProcessed flag
-    currentAuction.setProcessed(true);
-    auctionRepository.save(currentAuction);
+    return highRateMap;
   }
 }
