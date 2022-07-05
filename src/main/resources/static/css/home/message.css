@@ -1,0 +1,27 @@
+/* container */
+.message-container .message-row .message-box {
+    margin-top: 150px;
+    width: 100%;
+    horiz-align: center;
+    text-align: center;
+    border: 1px solid #9C9C9C;
+    background-color: #EAEAEA;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px;
+}
+
+/* titles */
+.message-container .message-row .message-box h3 {
+    color: white;
+    text-align: center;
+}
+
+.message-container .message-row .message-box h6 {
+    color: #c7bfbf;
+}
+
+/* check-mark picture */
+.message-container .message-row .message-box .pic {
+    text-align: center;
+}
