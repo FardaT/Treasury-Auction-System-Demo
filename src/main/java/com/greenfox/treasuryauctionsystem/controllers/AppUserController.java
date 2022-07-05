@@ -39,13 +39,13 @@ public class AppUserController {
     // SHOW REGISTER FORM
     @GetMapping("register")
     public String register() {
-        return "register.html";
+        return "home/register.html";
     }
 
     // TELL THE USER TO CHECK HIS EMAIL
     @GetMapping("confirm")
     public String confirm() {
-        return "confirm.html";
+        return "home/confirm.html";
     }
 
     // ACTIVATE ACCOUNT BY TOKEN
@@ -61,9 +61,9 @@ public class AppUserController {
             if (saveResultMessage.containsKey("TOKEN_EXPIRED")) {
                 model.addAttribute("TOKEN_EXPIRED", saveResultMessage.get("TOKEN_EXPIRED"));
             }
-            return "confirm_token";
+            return "home/confirm_token";
         } else {
-            return "confirm_token";
+            return "home/confirm_token";
         }
     }
 
@@ -124,7 +124,7 @@ public class AppUserController {
 
     @GetMapping("/resetpassword")
     public String showResetPasswordForm() {
-        return "resetpasswordform";
+        return "home/resetpasswordform";
     }
 
     @PostMapping("/resetpassword")
@@ -138,7 +138,7 @@ public class AppUserController {
         } else {
             appUserService.saveToken(user);
             model.addAttribute("message", "Email was sent to you.");
-            return "resetmessagepage";
+            return "home/resetmessagepage";
         }
     }
 
@@ -148,10 +148,10 @@ public class AppUserController {
 
         if (user == null) {
             model.addAttribute("message", "Invalid reset token");
-            return "resetmessagepage";
+            return "home/resetmessagepage";
         } else {
             model.addAttribute("token", token);
-            return "emailformforpasswordreset";
+            return "home/emailformforpasswordreset";
         }
     }
 
@@ -162,11 +162,11 @@ public class AppUserController {
         Map<String, String> saveResultMessage = appUserService.saveNewPassword(passwordReset);
         if (saveResultMessage.containsKey("INVALID_TOKEN")) {
             model.addAttribute("message", saveResultMessage.get("INVALID_TOKEN"));
-            return "resetmessagepage";
+            return "home/resetmessagepage";
         }
         if (saveResultMessage.containsKey("TOKEN_EXPIRED")) {
             model.addAttribute("message", saveResultMessage.get("TOKEN_EXPIRED"));
-            return "resetmessagepage";
+            return "home/resetmessagepage";
         }
         if (saveResultMessage.containsKey("PASSWORDS_DONT_MATCH")) {
             redirAttrs.addFlashAttribute("error", saveResultMessage.get("PASSWORDS_DONT_MATCH"));
