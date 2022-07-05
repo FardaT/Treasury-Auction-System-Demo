@@ -6,7 +6,6 @@ import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 import com.greenfox.treasuryauctionsystem.models.dtos.AuctionDateDTO;
 import com.greenfox.treasuryauctionsystem.models.dtos.TempSecurityDTO;
 import com.greenfox.treasuryauctionsystem.services.AuctionService;
-import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/admin")
 public class CreateAuctionController {
   private final AuctionService auctionService;
-  private Auction TempAuction = new Auction();
+  private Auction tempAuction = new Auction();
   @Autowired
   public CreateAuctionController(AuctionService auctionService) {
     this.auctionService = auctionService;
@@ -30,13 +29,13 @@ public class CreateAuctionController {
 
   @GetMapping("/auctions/create")
   public String renderAuctionCreationPage(Model model){
-    model.addAttribute("newAuction", TempAuction);
+    model.addAttribute("newAuction", tempAuction);
     return "admin/create-auction";
   }
   @PostMapping("/auctions/set-time")
   public String setTempAuctionDate(@ModelAttribute(name="auctionTime")AuctionDateDTO auctionDateDTO, RedirectAttributes redirectAttributes){
     try {
-      TempAuction = auctionService.setDateToAuction(TempAuction,auctionDateDTO);
+      tempAuction = auctionService.setDateToAuction(tempAuction,auctionDateDTO);
     } catch (InvalidAuctionException ex){
       redirectAttributes.addFlashAttribute("INVALID_AUCTION", ex.getMessage());
       return "redirect:/admin/auctions/create";
@@ -47,7 +46,7 @@ public class CreateAuctionController {
   @PostMapping("/auctions/add-security")
   public String addSecurityToTempAuction(@ModelAttribute TempSecurityDTO tempSecurityDTO, RedirectAttributes redirectAttributes){
     Map<String, String> addSecurityResultMessage = auctionService.validateSecurityForAuction(
-        TempAuction,tempSecurityDTO);
+        tempAuction,tempSecurityDTO);
     if(!addSecurityResultMessage.isEmpty()){
       if(addSecurityResultMessage.containsKey("ISSUE_DATE_ERROR")){
         redirectAttributes.addFlashAttribute("ISSUE_DATE_ERROR",addSecurityResultMessage.get("ISSUE_DATE_ERROR"));
@@ -65,9 +64,7 @@ public class CreateAuctionController {
       return "redirect:/admin/auctions/create";
     } else {
       TreasurySecurity treasurySecurity = new TreasurySecurity(tempSecurityDTO);
-      List<TreasurySecurity> securityList = TempAuction.getTreasurySecurityList();
-      securityList.add(treasurySecurity);
-      TempAuction.setTreasurySecurityList(securityList);
+      tempAuction.addTreasurySecurity(treasurySecurity);
       return "redirect:/admin/auctions/create";
     }
   }
@@ -75,8 +72,8 @@ public class CreateAuctionController {
   @PostMapping("/auctions/create")
   public String createAuction(RedirectAttributes redirectAttributes){
     try{
-      auctionService.create(TempAuction);
-      TempAuction = new Auction();
+      auctionService.create(tempAuction);
+      tempAuction = new Auction();
     }catch (InvalidAuctionException ex){
       redirectAttributes.addFlashAttribute("INVALID_AUCTION",ex.getMessage());
       return "redirect:/admin/auctions/create";
@@ -84,13 +81,11 @@ public class CreateAuctionController {
     return "redirect:/auctions";
   }
 
-  @PostMapping("/auctions/delete-security/{securityName}")
+  @PostMapping("/auctions/remove-security/{securityName}")
   public String deleteSecurityfromTempAuction(@PathVariable("securityName")String securityName){
-    for (TreasurySecurity sec: TempAuction.getTreasurySecurityList()) {
+    for (TreasurySecurity sec: tempAuction.getTreasurySecurityList()) {
       if(sec.getSecurityName().replace(' ','_').equals(securityName)){
-        var updatedList = TempAuction.getTreasurySecurityList();
-        updatedList.remove(sec);
-        TempAuction.setTreasurySecurityList(updatedList);
+        tempAuction.removeTreasurySecurity(sec);
         return "redirect:/admin/auctions/create";
       }
     }

@@ -58,7 +58,7 @@
                 <td th:text="*{totalAmount}"></td>
                 <td th:text="*{issueDate}"></td>
                 <td th:text="*{maturityDate}"></td>
-                <td><form th:action="'/admin/auctions/delete-security/' + *{securityTerm} + '_' + *{securityType}" method="post"><button type="submit" class="btn btn-primary">Delete</button></form></td>
+                <td><form th:action="'/admin/auctions/remove-security/' + *{securityTerm} + '_' + *{securityType}" method="post"><button type="submit" class="btn btn-primary">Remove</button></form></td>
             </tr>
         </table>
         <div>

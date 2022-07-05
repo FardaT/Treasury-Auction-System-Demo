@@ -45,6 +45,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 new UsernamePasswordAuthenticationToken(username, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
+            switch (request.getServletPath()) {
+              case "/register", "/login", "/resetpassword" -> response.sendRedirect("/auctions");
+            }
+
             filterChain.doFilter(request, response);
 
           } catch (Exception exception){

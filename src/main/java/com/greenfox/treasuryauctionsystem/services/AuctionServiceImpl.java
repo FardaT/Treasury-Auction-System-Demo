@@ -95,7 +95,6 @@ public class AuctionServiceImpl implements AuctionService {
   }
   @Override
   public void create(Auction auction) {
-    Map<String, String> errors = new HashMap<>();
     if (auction.getTreasurySecurityList().isEmpty()){
       throw new InvalidAuctionException("Auction must contain security");
     }
@@ -111,6 +110,9 @@ public class AuctionServiceImpl implements AuctionService {
         errors.put("INVALID_SECURITY_ERROR", "Auction cannot contain duplicate securities");
       }
     }
+    if(auction.getTreasurySecurityList().size() > 10){
+      errors.put("INVALID_SECURITY_ERROR", "Auction cannot contain more than 10 securities");
+    }
     if(treasurySecurity.getIssueDate() == null){
       errors.put("ISSUE_DATE_ERROR","Issue date cannot be null");
       return errors;
@@ -119,10 +121,10 @@ public class AuctionServiceImpl implements AuctionService {
       errors.put("ISSUE_DATE_ERROR","Issue date must take place after the auction");
     }
     if(treasurySecurity.getTotalAmount() < 1000000){
-      errors.put("TOTALAMOUNT_ERROR","Total amount must be at least 10.000");
+      errors.put("TOTALAMOUNT_ERROR","Total amount must be at least 1.000.000");
     }
     if(treasurySecurity.getTotalAmount() > 100000000){
-      errors.put("TOTALAMOUNT_ERROR","Total amount must not exceed 1.000.000");
+      errors.put("TOTALAMOUNT_ERROR","Total amount must not exceed 100.000.000");
     }
     if(treasurySecurity.getSecurityType() == null){
       errors.put("INVALID_SECURITY_ERROR","Security type cannot be null");
