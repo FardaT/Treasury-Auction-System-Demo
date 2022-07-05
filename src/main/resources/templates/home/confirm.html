@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<!-- HEADER -->
+<head th:replace="fragments/home/header :: header"></head>
+
+<body>
+
+<!-- TOPNAV -->
+<nav th:replace="fragments/home/topnav :: topnav"></nav>
+
+<!-- CONTENT -->
+<div class="container">
+    <div class="message-container">
+        <div class="message-row">
+            <div class="message-box">
+
+                <h3>Successful registration</h3>
+                <div class="pic">
+                    <img src="https://i.ibb.co/cXW9d1g/rsz-kisspng-check-mark-computer-icons-desktop-wallpaper-clip-a-accept-tick-icon-5ab0e2113c88a5842125.png"
+                         width="60" height="60">
+                </div>
+
+                <h6>We've sent account verification link to your email address. Please click on the link
+                    given
+                    in email to verify your account.
+                    If you have not received the email after a few minutes, check your spam folder or please <a
+                            href="mailto:mightyroosterteam@gmail.com">contact</a> us for further assistance.</h6>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer th:replace="fragments/home/footer :: footer"></footer>
+
+</body>
+</html>

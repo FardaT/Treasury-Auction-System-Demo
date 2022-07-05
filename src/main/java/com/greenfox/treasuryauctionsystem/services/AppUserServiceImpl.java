@@ -100,7 +100,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 			// send confirm email with token
 			emailService.sendHtmlMessage(
 					appUser.getEmail(),
-					"Successfull registration",
+					"Successful registration",
 					Utility.setConfirmationEmailText(appUser.getUsername(),
 							appUser.getActivationToken()));
 

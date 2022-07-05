@@ -28,7 +28,7 @@ public class AuctionController {
     Map<String, List<AuctionResponseDTO>> auctions = auctionService.getAllAuctionsByStatus();
     model.addAttribute("auctions", auctions);
 
-    return "auctionslist";
+    return "/admin/auctionslist";
   }
 
   @PostMapping("/disable")
