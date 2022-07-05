@@ -22,9 +22,9 @@ public class GetProfile {
 	//@GetMapping("/admin/profile")
 	@GetMapping("/profile")
 	public String getProfile (HttpServletRequest request, Model model) {
-		AppUser user = appUserService.getUserFromRequest(request);
-		model.addAttribute("user", user);
-		model.addAttribute("bids", user.getBids());
+		AppUser currentUser = appUserService.getUserFromRequest(request);
+		model.addAttribute("user", currentUser);
+		model.addAttribute("bids", currentUser.getBids());
 
 		return "/admin/profile";
 	}
