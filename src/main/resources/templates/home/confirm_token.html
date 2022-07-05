@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<!-- HEADER -->
+<head th:replace="fragments/home/header :: header"></head>
+
+<body>
+
+<!-- TOPNAV -->
+<nav th:replace="fragments/home/topnav :: topnav"></nav>
+
+<!-- CONTENT -->
+<div class="container">
+    <div class="message-container">
+        <div class="message-row">
+            <div class="message-box">
+                <div th:if="${INVALID_TOKEN == null && TOKEN_EXPIRED == null}">
+
+                    <h3>Verification Success</h3>
+
+                    <div class="pic">
+                        <img src="https://i.ibb.co/cXW9d1g/rsz-kisspng-check-mark-computer-icons-desktop-wallpaper-clip-a-accept-tick-icon-5ab0e2113c88a5842125.png"
+                             width="60" height="60">
+                    </div>
+
+                    <h6>Thank you for registering to Treasury Auction System. Your account was successfully
+                        verified. You can now proceed to your <a href="dashboard.html">dashboard</a>.</h6>
+                </div>
+
+                <div th:if="${INVALID_TOKEN != null}">
+                    <p th:text="${INVALID_TOKEN}" style="color: red;"></p>
+                </div>
+
+                <div th:if="${TOKEN_EXPIRED != null}">
+                    <p th:text="${TOKEN_EXPIRED}" style="color: red;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer th:replace="fragments/home/footer :: footer"></footer>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<!-- HEADER -->
+<head th:replace="fragments/home/header :: header"></head>
+
+<body>
+
+<!-- TOPNAV -->
+<nav th:replace="fragments/home/topnav :: topnav"></nav>
+
+<!-- CONTENT -->
+<div id="auth">
+    <div class="container">
+        <div id="auth-row" class="row justify-content-center align-items-center">
+            <div id="auth-column" class="col-md-10">
+                <div id="auth-box" class="col-md-12">
+                    <form id="auth-form" class="form" th:action="@{/store}" method="post">
+
+                        <h3 class="text-info1">Register</h3>
+
+                        <div class="form-group">
+                            <label for="username" class="text-info1">Username:</label><br>
+                            <input type="text" name="username" id="username" class="form-control">
+
+                            <div th:if="${REQUIRED_USERNAME != null}">
+                                <p th:text="${REQUIRED_USERNAME}" style="color: red;"></p>
+                            </div>
+                            <div th:if="${UNIQUE_USERNAME != null}">
+                                <p th:text="${UNIQUE_USERNAME}" style="color: red;"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="text-info1">E-mail: </label><br>
+                            <input type="text" name="email" id="email" class="form-control">
+
+                            <div th:if="${REQUIRED_EMAIL != null}">
+                                <p th:text="${REQUIRED_EMAIL}" style="color: red;"></p>
+                            </div>
+                            <div th:if="${UNIQUE_EMAIL != null}">
+                                <p th:text="${UNIQUE_EMAIL}" style="color: red;"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="institution" class="text-info1">Institution: </label><br>
+                            <input type="text" name="institution" id="institution" class="form-control">
+
+                            <div th:if="${REQUIRED_INSTITUTION != null}">
+                                <p th:text="${REQUIRED_INSTITUTION}" style="color: red;"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="text-info1">Password:</label><br>
+                            <input type="password" name="password" id="password" class="form-control">
+
+                            <div th:if="${REQUIRED_PASSWORD != null}">
+                                <p th:text="${REQUIRED_PASSWORD}" style="color: red;"></p>
+                            </div>
+                            <div th:if="${REGEX_PASSWORD != null}">
+                                <p th:text="${REGEX_PASSWORD}" style="color: red;"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmpassword" class="text-info1">Confirm Password:</label><br>
+                            <input type="password" name="confirmpassword" id="confirmpassword" class="form-control">
+
+                            <div th:if="${REQUIRED_PASSWORD_CONFIRM != null}">
+                                <p th:text="${REQUIRED_PASSWORD_CONFIRM}" style="color: red;"></p>
+                            </div>
+                            <div th:if="${PASSWORDS_DONT_MATCH != null}">
+                                <p th:text="${PASSWORDS_DONT_MATCH}" style="color: red;"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="remember-me" class="text-info1"><span>Remember me: </span><span><input
+                                    id="remember-me"
+                                    name="remember-me"
+                                    type="checkbox"></span></label><br>
+                            <input type="submit" name="submit" class="btn btn-info btn-md" value="Submit">
+                        </div>
+
+                        <div class="text-right">
+                            <a th:href="@{/login}" class="text-info">Login here</a>
+                        </div>
+
+                        <div class="text-right">
+                            <a th:href="@{/resetpassword}" class="text-info">Reset Password</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer th:replace="fragments/home/footer :: footer"></footer>
+
+</body>
+</html>

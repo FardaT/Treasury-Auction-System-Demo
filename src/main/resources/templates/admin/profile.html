@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- HEADER -->
+<head th:replace="fragments/admin/header :: header"></head>
+
+<body>
+
+<!-- TOPNAV -->
+<nav th:replace="fragments/admin/topnav :: topnav"></nav>
+
+<!-- CONTENT -->
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- SIDENAV -->
+        <div class="col-md-2">
+            <ul th:replace="fragments/admin/sidenav :: sidenav"></ul>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="col-md-10">
+            <h1 th:text="'Wellcome to  Treasury Auction System ' + ${user.getUsername()} + '!'"></h1>
+
+            <ul th:object="${user}">
+                <li th:text="'Username: ' + ${user.getUsername()}"></li>
+                <li th:text="'Email: ' + ${user.getEmail()}"></li>
+                <li th:text="'Institution: ' + ${user.getInstitution()}"></li>
+            </ul>
+            <h3 th:text="${user.getUsername()} + '\'s bids: '"></h3>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <td class="text-center" colspan="3" th:text="'Auction'"></td>
+                    <td class="text-center" colspan="7" th:text="'Security'"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">ID</th>
+                    <th class="bg-light">Amount</th>
+                    <th class="bg-light">Rate</th>
+                    <th class="bg-secondary">Security Name</th>
+                    <th class="bg-secondary">Security Type</th>
+                    <th class="bg-secondary">Security Term</th>
+                    <th class="bg-secondary">Amount</th>
+                    <th class="bg-secondary">Issue Date</th>
+                    <th class="bg-secondary">Maturity Date</th>
+                    <th class="bg-secondary">Rate</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="bid : ${bids}">
+                    <td class="bg-light" th:text="${bid.getId()}"></td>
+                    <td class="bg-light" th:text="${bid.getAmount()}"></td>
+                    <td class="bg-light" th:text="${bid.getRate()}"></td>
+                    <td class="bg-secondary" th:text="${bid.getTreasurySecurity().getSecurityName()}"></td>
+                    <td class="bg-secondary" th:text="${bid.getTreasurySecurity().getSecurityType()}"></td>
+                    <td class="bg-secondary" th:text="${bid.getTreasurySecurity().getSecurityTerm()}"></td>
+                    <td class="bg-secondary" th:text="${bid.getTreasurySecurity().getTotalAmount()}"></td>
+                    <td class="bg-secondary" th:text="${bid.getTreasurySecurity().getIssueDate()}"></td>
+                    <td class="bg-secondary" th:text="${bid.getTreasurySecurity().getMaturityDate()}"></td>
+                    <td class="bg-secondary" th:text="${bid.getTreasurySecurity().getHighRate()}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer th:replace="fragments/admin/footer :: footer"></footer>
+
+</body>
+</html>
