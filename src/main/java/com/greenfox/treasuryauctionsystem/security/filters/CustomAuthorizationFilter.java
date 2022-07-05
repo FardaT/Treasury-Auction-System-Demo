@@ -46,7 +46,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
             switch (request.getServletPath()) {
-              case "/register", "/login", "/resetpassword" -> response.sendRedirect("/auctions");
+              case "/register", "/login", "/resetpassword", "/" -> response.sendRedirect("/auctions");
             }
 
             filterChain.doFilter(request, response);
