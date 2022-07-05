@@ -121,10 +121,13 @@ public class AuctionServiceImpl implements AuctionService {
       errors.put("ISSUE_DATE_ERROR","Issue date must take place after the auction");
     }
     if(treasurySecurity.getTotalAmount() < 1000000){
-      errors.put("TOTALAMOUNT_ERROR","Total amount must be at least 1.000.000");
+      errors.put("TOTALAMOUNT_ERROR","Total amount must be at least $1.000.000");
+    }
+    if(treasurySecurity.getTotalAmount() % 100 != 0){
+      errors.put("TOTALAMOUNT_ERROR","Total amount must be the product of $100 denominated securities");
     }
     if(treasurySecurity.getTotalAmount() > 100000000){
-      errors.put("TOTALAMOUNT_ERROR","Total amount must not exceed 100.000.000");
+      errors.put("TOTALAMOUNT_ERROR","Total amount must not exceed $100.000.000");
     }
     if(treasurySecurity.getSecurityType() == null){
       errors.put("INVALID_SECURITY_ERROR","Security type cannot be null");

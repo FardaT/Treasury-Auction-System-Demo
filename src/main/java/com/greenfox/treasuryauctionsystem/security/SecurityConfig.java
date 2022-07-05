@@ -79,4 +79,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure (WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/**/*.css");
 	}
+	@Bean
+	public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+		StrictHttpFirewall firewall = new StrictHttpFirewall();
+		firewall.setAllowUrlEncodedSlash(true);
+		firewall.setAllowSemicolon(true);
+		return firewall;
+	}
 }
