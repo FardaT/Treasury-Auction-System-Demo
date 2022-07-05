@@ -37,14 +37,14 @@ public class AuctionController {
     return "redirect:/auctions";
   }
 
-  @GetMapping("/process/{id}")
-  public String processFinishedAuction(@PathVariable Long id){
-    auctionService.process(id);
-    return "redirect:/auctions";
-  }
+//  @GetMapping("/process/{id}")
+//  public String processFinishedAuction(@PathVariable Long id) throws Exception {
+//    auctionService.process(id);
+//    return "redirect:/auctions";
+//  }
 
   @PostMapping("/process")
-  public String processFinishedAuctionPost(@RequestParam Long id){
+  public String processFinishedAuctionPost(@RequestParam Long id) throws Exception {
     auctionService.process(id);
     return "redirect:/auctions";
   }

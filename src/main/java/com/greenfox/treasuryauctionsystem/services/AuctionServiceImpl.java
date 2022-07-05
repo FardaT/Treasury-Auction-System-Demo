@@ -100,7 +100,7 @@ public class AuctionServiceImpl implements AuctionService {
     //todo: -------------------split the bids by security types
     //todo: -------------------split the bids by non-competitive and competitive types
     //todo: -------------------count non-competitive amount
-    //todo: -------------------sort the competitive bids by rate and by timestamp
+    //todo: -------------------sort the competitive bids by rate and by id
     //todo: -------------------calculate high rate by securities
     //todo: -------------------set isAccepted flag of bid and high rate of the securities
     //todo: -------------------set auction isProcessed
@@ -139,8 +139,14 @@ public class AuctionServiceImpl implements AuctionService {
     for (Map.Entry<Long, List<Bid>> entry : bidListMap.entrySet()) {
       for (Bid bid : entry.getValue()) {
         if (bid.isCompetitive()) {
+          if(!competitiveBidListMap.containsKey(bid.getTreasurySecurity().getId())) {
+            competitiveBidListMap.put(bid.getTreasurySecurity().getId(), new ArrayList<>());
+          }
           competitiveBidListMap.get(entry.getKey()).add(bid);
         } else {
+          if(!nonCompetitiveBidListMap.containsKey(bid.getTreasurySecurity().getId())) {
+            nonCompetitiveBidListMap.put(bid.getTreasurySecurity().getId(), new ArrayList<>());
+          }
           nonCompetitiveBidListMap.get(entry.getKey()).add(bid);
         }
       }
@@ -152,6 +158,9 @@ public class AuctionServiceImpl implements AuctionService {
 
     for (Map.Entry<Long, List<Bid>> entry : competitiveBidListMap.entrySet()) {
       for (Bid bid : entry.getValue()) {
+        if(!totalCompetitiveBidAmount.containsKey(bid.getTreasurySecurity().getId())){
+          totalCompetitiveBidAmount.put(bid.getTreasurySecurity().getId(), 0L);
+        }
         Long currentAmount = bid.getAmount();
         totalCompetitiveBidAmount.put(entry.getKey(),
             totalCompetitiveBidAmount.get(entry.getKey()) + currentAmount);
@@ -160,6 +169,9 @@ public class AuctionServiceImpl implements AuctionService {
 
     for (Map.Entry<Long, List<Bid>> entry : nonCompetitiveBidListMap.entrySet()) {
       for (Bid bid : entry.getValue()) {
+        if(!totalNonCompetitiveBidAmount.containsKey(bid.getTreasurySecurity().getId())){
+          totalNonCompetitiveBidAmount.put(bid.getTreasurySecurity().getId(), 0L);
+        }
         Long currentAmount = bid.getAmount();
         totalNonCompetitiveBidAmount.put(entry.getKey(),
             totalNonCompetitiveBidAmount.get(entry.getKey()) + currentAmount);
@@ -172,14 +184,20 @@ public class AuctionServiceImpl implements AuctionService {
       Collections.sort(currentBidList);
     }
 
-    //calculates security's high rate, sets bid's isAccepted & acceptedValue
+    //calculate security's high rate, set bid's isAccepted & acceptedValue
     Map<Long, Float> highRateMap = new HashMap<>();
 
     for (Map.Entry<Long, List<Bid>> entry : competitiveBidListMap.entrySet()) {
 
+      //get security total amount
       long totalAmountOfCurrentSecurity = totalAmountsBySecurities.get(entry.getKey());
-      long remainingTotalAmountAfterNonCompetitiveBidsDeducted =
-          totalAmountOfCurrentSecurity - totalNonCompetitiveBidAmount.get(entry.getKey());
+
+      //get remaining total amount after non-competitive bids deducted
+      long remainingTotalAmountAfterNonCompetitiveBidsDeducted = totalAmountOfCurrentSecurity;
+      if(totalNonCompetitiveBidAmount.containsKey(entry.getKey())) {
+        remainingTotalAmountAfterNonCompetitiveBidsDeducted =
+            totalAmountOfCurrentSecurity - totalNonCompetitiveBidAmount.get(entry.getKey());
+      }
 
       boolean isExceeded = false;
 
@@ -188,6 +206,7 @@ public class AuctionServiceImpl implements AuctionService {
           remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
           bid.setAccepted(true);
           bid.setAcceptedValue(bid.getAmount());
+          highRateMap.put(entry.getKey(), bid.getRate());
         } else if (remainingTotalAmountAfterNonCompetitiveBidsDeducted - bid.getAmount() == 0) {
           remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
           bid.setAccepted(true);
@@ -222,9 +241,12 @@ public class AuctionServiceImpl implements AuctionService {
 
     //sets highRate of all treasurySecurities
     for(TreasurySecurity treasurySecurity : treasurySecurityList) {
-      float finalHighRate = highRateMap.get(treasurySecurity.getId());
-      treasurySecurity.setHighRate(finalHighRate);
-      treasurySecurityRepository.save(treasurySecurity);
+      if(highRateMap.containsKey(treasurySecurity.getId())){
+        float finalHighRate = highRateMap.get(treasurySecurity.getId());
+        treasurySecurity.setHighRate(finalHighRate);
+        treasurySecurityRepository.save(treasurySecurity);
+      }
+
     }
 
     //sets auction's isProcessed flag

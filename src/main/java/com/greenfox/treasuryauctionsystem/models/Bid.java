@@ -1,6 +1,7 @@
 package com.greenfox.treasuryauctionsystem.models;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "bids")
@@ -25,8 +27,6 @@ public class Bid implements Comparable<Bid> {
 
   private boolean isCompetitive;
   private long amount;
-
-  private Timestamp bidTime;
   private Float rate;
   private boolean isAccepted;
   private long acceptedValue;
@@ -43,7 +43,6 @@ public class Bid implements Comparable<Bid> {
     this.treasurySecurity = treasurySecurity;
     this.isCompetitive = isCompetitive;
     this.amount = amount;
-    this.bidTime = new Timestamp(System.currentTimeMillis());
     this.rate = rate;
     this.isAccepted = isAccepted;
     this.isArchived = isArchived;
@@ -91,14 +90,6 @@ public class Bid implements Comparable<Bid> {
     this.amount = amount;
   }
 
-  public Timestamp getBidTime() {
-    return bidTime;
-  }
-
-  public void setBidTime(Timestamp bidTime) {
-    this.bidTime = bidTime;
-  }
-
   public float getRate() {
     return rate;
   }
@@ -141,7 +132,6 @@ public class Bid implements Comparable<Bid> {
     if (i != 0) {
       return i;
     }
-    return Integer.compare(Integer.parseInt(bidTime.toString()),
-        Integer.parseInt(other.bidTime.toString()));
+    return Long.compare(id, other.getId());
   }
 }

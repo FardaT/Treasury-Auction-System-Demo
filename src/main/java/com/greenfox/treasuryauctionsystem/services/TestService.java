@@ -41,19 +41,41 @@ public class TestService {
 
 		Bid bid1 = new Bid();
 		bid1.setCompetitive(true);
-		bid1.setAmount(1111111);
+		bid1.setAmount(300);
 		bid1.setRate(1.1f);
-		bid1.setAccepted(true);
-		bid1.setArchived(true);
+		bid1.setAccepted(false);
+		bid1.setArchived(false);
+
+		Bid bid2 = new Bid();
+		bid2.setCompetitive(true);
+		bid2.setAmount(300);
+		bid2.setRate(1.0f);
+		bid2.setAccepted(false);
+		bid2.setArchived(false);
+
+		Bid bid3 = new Bid();
+		bid3.setCompetitive(true);
+		bid3.setAmount(300);
+		bid3.setRate(1.0f);
+		bid3.setAccepted(false);
+		bid3.setArchived(false);
+
+		Bid bid4 = new Bid();
+		bid4.setCompetitive(false);
+		bid4.setAmount(600);
+
+		Bid bid5 = new Bid();
+		bid5.setCompetitive(false);
+		bid5.setAmount(400);
 
 		TreasurySecurity treasurySecurity1 = new TreasurySecurity();
 		treasurySecurity1.setSecurityName("Bond 1");
 		treasurySecurity1.setSecurityType("Bond");
 		treasurySecurity1.setSecurityTerm("30y");
-		treasurySecurity1.setTotalAmount(150_000_000);
+		treasurySecurity1.setTotalAmount(1_500);
 		treasurySecurity1.setIssueDate(LocalDate.now().plusWeeks(1));
 		treasurySecurity1.setMaturityDate(LocalDate.now().plusWeeks(1).plusYears(30));
-		treasurySecurity1.setHighRate(9.9f);
+//		treasurySecurity1.setHighRate(9.9f);
 
 		TreasurySecurity treasurySecurity2 = new TreasurySecurity();
 		treasurySecurity2.setSecurityName("Bill 1");
@@ -62,7 +84,7 @@ public class TestService {
 		treasurySecurity2.setTotalAmount(55_000_000);
 		treasurySecurity2.setIssueDate(LocalDate.now().plusDays(10));
 		treasurySecurity2.setMaturityDate(LocalDate.now().plusDays(10).plusWeeks(26));
-		treasurySecurity2.setHighRate(8.4f);
+//		treasurySecurity2.setHighRate(8.4f);
 
 		TreasurySecurity treasurySecurity3 = new TreasurySecurity();
 		treasurySecurity3.setSecurityName("Note 1");
@@ -71,7 +93,7 @@ public class TestService {
 		treasurySecurity3.setTotalAmount(220_000_000);
 		treasurySecurity3.setIssueDate(LocalDate.now().plusWeeks(2));
 		treasurySecurity3.setMaturityDate(LocalDate.now().plusWeeks(2).plusYears(5));
-		treasurySecurity3.setHighRate(11.2f);
+//		treasurySecurity3.setHighRate(11.2f);
 
 		AppUser appUser1 = new AppUser();
 		appUser1.setUsername("ablak_aladar");
@@ -125,7 +147,7 @@ public class TestService {
 		Auction auction3 = new Auction();
 		auction3.setAuctionStartDate(LocalDateTime.now().plusDays(1));
 		auction3.setAuctionEndDate(LocalDateTime.now().plusDays(2));
-		auction3.setProcessed(true);
+		auction3.setProcessed(false);
 		auction3.setDisabled(false);
 
 		appUserRepository.save(appUser1);
@@ -149,12 +171,24 @@ public class TestService {
 
 		// add bid to security (sec has many bids)
 		treasurySecurity1.addBid(bid1);
+		treasurySecurity1.addBid(bid2);
+		treasurySecurity1.addBid(bid3);
+		treasurySecurity1.addBid(bid4);
+		treasurySecurity1.addBid(bid5);
 
 		// add bid to user (user has many bids)
 		appUser1.adBid(bid1);
+		appUser1.adBid(bid2);
+		appUser1.adBid(bid3);
+		appUser1.adBid(bid4);
+		appUser1.adBid(bid5);
 
 		// save bid
 		bidRepository.save(bid1);
+		bidRepository.save(bid2);
+		bidRepository.save(bid3);
+		bidRepository.save(bid4);
+		bidRepository.save(bid5);
 
 	}
 }
