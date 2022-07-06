@@ -124,7 +124,7 @@ public class AuctionServiceImpl implements AuctionService {
       errors.put("TOTALAMOUNT_ERROR","Total amount must be at least $1.000.000");
     }
     if(treasurySecurity.getTotalAmount() % 100 != 0){
-      errors.put("TOTALAMOUNT_ERROR","Total amount must be the product of $100 denominated securities");
+      errors.put("TOTALAMOUNT_ERROR","Total amount must be the product of $100 security denominations");
     }
     if(treasurySecurity.getTotalAmount() > 100000000){
       errors.put("TOTALAMOUNT_ERROR","Total amount must not exceed $100.000.000");

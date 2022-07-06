@@ -95,11 +95,11 @@ public class TestService {
 		appUser2.setUsername("bejarat_bela");
 		appUser2.setEmail("bejarat.aladar@gmail.com");
 		//pass: asdfASDF8+
-		appUser1.setPassword("$2a$10$g3qAl4yAlVWp4VWGOHHfMudFYSEl4cuevaXm.KjJGDwYERJrKybWK");
+		appUser2.setPassword("$2a$10$g3qAl4yAlVWp4VWGOHHfMudFYSEl4cuevaXm.KjJGDwYERJrKybWK");
 		appUser2.setInstitution("Morgan Stanley");
 		appUser2.setActivationToken(PasswordResetTokenGenerator.generatePasswordResetToken());
 		appUser2.setActivationTokenExpiration(Utility.setExpiration(ApplicationDetails.expiration));
-		appUser2.setAdmin(false);
+		appUser2.setAdmin(true);
 		appUser2.setActivated(true);
 		appUser2.setApproved(true);
 		appUser2.setDisabled(false);

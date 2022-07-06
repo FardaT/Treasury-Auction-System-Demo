@@ -9,6 +9,7 @@ import com.greenfox.treasuryauctionsystem.models.dtos.TempSecurityDTO;
 import com.greenfox.treasuryauctionsystem.services.AppUserService;
 import com.greenfox.treasuryauctionsystem.services.AuctionService;
 import java.util.Map;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CreateAuctionController {
   private final AuctionService auctionService;
   private final AppUserService appUserService;
+  @Resource(name = "tempAuction")
   private Auction tempAuction = new Auction();
   @Autowired
   public CreateAuctionController(AuctionService auctionService, AppUserService appUserService) {
@@ -32,10 +34,9 @@ public class CreateAuctionController {
     this.appUserService = appUserService;
   }
   @GetMapping("/auctions/create")
-  public String renderAuctionCreationPage(Model model, HttpServletRequest request){
-    AppUser currentUser = appUserService.getUserFromRequest(request);
+  public String renderAuctionCreationPage(Model model){
+
     model.addAttribute("newAuction", tempAuction);
-    model.addAttribute("user", currentUser);
     return "admin/create-auction";
   }
   @PostMapping("/auctions/set-time")
@@ -79,7 +80,7 @@ public class CreateAuctionController {
   public String createAuction(RedirectAttributes redirectAttributes){
     try{
       auctionService.create(tempAuction);
-      tempAuction = new Auction();
+//      tempAuction = new Auction();
     }catch (InvalidAuctionException ex){
       redirectAttributes.addFlashAttribute("INVALID_AUCTION",ex.getMessage());
       return "redirect:/admin/auctions/create";
@@ -88,7 +89,7 @@ public class CreateAuctionController {
   }
   @PostMapping("/auctions/cancel-creation")
   public String createAuction(){
-    tempAuction = new Auction();
+//    tempAuction = new Auction();
     return "redirect:/auctions";
   }
 

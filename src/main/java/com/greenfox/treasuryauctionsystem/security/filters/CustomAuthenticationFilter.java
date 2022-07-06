@@ -34,7 +34,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         new UsernamePasswordAuthenticationToken(username, password);
     return authenticationManager.authenticate(authenticationToken);
   }
-  @Override
+/*  @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                           FilterChain chain, Authentication authentication)
       throws IOException, ServletException {
@@ -62,7 +62,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                                             AuthenticationException failed)
       throws IOException, ServletException {
     response.sendRedirect(request.getContextPath() + "/login?error");
-  }
+  }*/
 
 
 }
