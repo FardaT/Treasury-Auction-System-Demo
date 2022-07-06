@@ -14,9 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class BidController {
@@ -66,14 +68,38 @@ public class BidController {
 
     // STORE
     @PostMapping("admin/bids/store")
-    public String store(BidDTO bidDTO, HttpServletRequest request) {
+    public String store(BidDTO bidDTO, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
         // get currently logged in user
         AppUser currentUser = appUserService.getUserFromRequest(request);
         bidDTO.setUser(currentUser);
 
-        bidService.saveBid(new Bid(bidDTO));
-        return "redirect:/admin/bids";
+        Map<String, String> saveResultMessage = bidService.saveBid(new Bid(bidDTO));
+
+        // validations
+        if (!saveResultMessage.isEmpty()) {
+
+            // required
+            if (saveResultMessage.containsKey("AMOUNT_POSITIVE")) {
+                redirectAttributes.addFlashAttribute("AMOUNT_POSITIVE", saveResultMessage.get("AMOUNT_POSITIVE"));
+            }
+            if (saveResultMessage.containsKey("AMOUNT_HUNDRED")) {
+                redirectAttributes.addFlashAttribute("AMOUNT_HUNDRED", saveResultMessage.get("AMOUNT_HUNDRED"));
+            }
+            if (saveResultMessage.containsKey("AMOUNT_COMPETITIVE")) {
+                redirectAttributes.addFlashAttribute("AMOUNT_COMPETITIVE", saveResultMessage.get("AMOUNT_COMPETITIVE"));
+            }
+            if (saveResultMessage.containsKey("AMOUNT_NONCOMPETITIVE")) {
+                redirectAttributes.addFlashAttribute("AMOUNT_NONCOMPETITIVE", saveResultMessage.get("AMOUNT_NONCOMPETITIVE"));
+            }
+            if (saveResultMessage.containsKey("RATE_RANGE")) {
+                redirectAttributes.addFlashAttribute("RATE_RANGE", saveResultMessage.get("RATE_RANGE"));
+            }
+
+            return "redirect:/admin/bids/create?auction_id=" + bidDTO.getTreasurySecurity().getAuction().getId();
+        } else {
+            return "redirect:/admin/bids";
+        }
     }
 
     // DESTROY

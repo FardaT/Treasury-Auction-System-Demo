@@ -62,11 +62,28 @@
                 <div class="form-group">
                     <label for="amount">Amount:</label>
                     <input type="number" class="form-control" id="amount" name="amount">
+
+                    <div th:if="${AMOUNT_POSITIVE != null}">
+                        <p th:text="${AMOUNT_POSITIVE}" style="color: red;"></p>
+                    </div>
+                    <div th:if="${AMOUNT_HUNDRED != null}">
+                        <p th:text="${AMOUNT_HUNDRED}" style="color: red;"></p>
+                    </div>
+                    <div th:if="${AMOUNT_COMPETITIVE != null}">
+                        <p th:text="${AMOUNT_COMPETITIVE}" style="color: red;"></p>
+                    </div>
+                    <div th:if="${AMOUNT_NONCOMPETITIVE != null}">
+                        <p th:text="${AMOUNT_NONCOMPETITIVE}" style="color: red;"></p>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="rate">Rate:</label>
                     <input type="number" step="0.1" class="form-control" id="rate" name="rate">
+
+                    <div th:if="${RATE_RANGE != null}">
+                        <p th:text="${RATE_RANGE}" style="color: red;"></p>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit</button>

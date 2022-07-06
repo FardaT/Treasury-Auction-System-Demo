@@ -4,6 +4,7 @@ import com.greenfox.treasuryauctionsystem.models.Bid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface BidService {
@@ -12,7 +13,7 @@ public interface BidService {
     List<Bid> getAllBids();
 
     // STORE
-    void saveBid(Bid bid);
+    Map<String, String> saveBid(Bid bid);
 
     // DESTROY
     void disableBid(Long bidId);
