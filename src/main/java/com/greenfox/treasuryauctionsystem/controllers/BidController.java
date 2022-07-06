@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class BidController {
@@ -30,6 +31,21 @@ public class BidController {
         this.appUserService = appUserService;
         this.auctionService = auctionService;
         this.bidService = bidService;
+    }
+
+    // READ
+    @GetMapping("admin/bids")
+    public String read(Model model, HttpServletRequest request) {
+
+        // get currently logged in user
+        AppUser currentUser = appUserService.getUserFromRequest(request);
+        model.addAttribute("user", currentUser);
+
+        // get all the bids
+        List<Bid> bids = bidService.getAllBids();
+        model.addAttribute("bids", bids);
+
+        return "admin/bids";
     }
 
     // CREATE - show form
@@ -57,6 +73,6 @@ public class BidController {
         bidDTO.setUser(currentUser);
 
         bidService.saveBid(new Bid(bidDTO));
-        return "redirect:/auctions";
+        return "redirect:/admin/bids";
     }
 }
