@@ -21,30 +21,32 @@
         <!-- CONTENT -->
         <div class="col-md-10">
 
+            <h3>Auction details</h3>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>start_date</th>
+                    <th>end_date</th>
+                </tr>
+                </thead>
+                <tr>
+                    <td th:text="${auction.id}"></td>
+                    <td th:text="${auction.startDate} + ' ' + ${auction.startTime}"></td>
+                    <td th:text="${auction.endDate} + ' ' + ${auction.endTime}"></td>
+                </tr>
+            </table>
+
+            <h3>Create new bid</h3>
+
             <form th:action="@{/admin/bids/store}" method="post">
-
-                <h3>Auction details</h3>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>start_date</th>
-                        <th>end_date</th>
-                    </tr>
-                    </thead>
-                    <tr>
-                        <td th:text="${auction.id}"></td>
-                        <td th:text="${auction.auctionStartDate}"></td>
-                        <td th:text="${auction.auctionEndDate}"></td>
-                    </tr>
-                </table>
-
                 <div class="form-group">
-                    <label for="treasurySecurity">Select security:</label>
+                    <label for="treasurySecurity">Securities for the auction, select ONE</label>
                     <select class="form-control" id="treasurySecurity" name="treasurySecurity">
-                        <option th:each="treasurySecurity: ${securityList}"
+                        <option th:each="treasurySecurity: ${auction.treasurySecurityList}"
                                 th:value="${treasurySecurity.id}"
-                                th:text="${treasurySecurity.securityName} + ' --- ' + ${treasurySecurity.securityTerm}">
+                                th:text="${treasurySecurity.securityName}">
                         </option>
                     </select>
                 </div>

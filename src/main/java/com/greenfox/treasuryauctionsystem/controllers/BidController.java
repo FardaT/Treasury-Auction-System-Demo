@@ -3,6 +3,7 @@ package com.greenfox.treasuryauctionsystem.controllers;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.Bid;
+import com.greenfox.treasuryauctionsystem.models.dtos.AuctionResponseDTO;
 import com.greenfox.treasuryauctionsystem.models.dtos.BidDTO;
 import com.greenfox.treasuryauctionsystem.services.AppUserService;
 import com.greenfox.treasuryauctionsystem.services.AuctionService;
@@ -41,7 +42,8 @@ public class BidController {
 
         // find the auction
         Auction auction = auctionService.findById(auction_id);
-        model.addAttribute("auction", auction);
+        AuctionResponseDTO auctionResponseDTO = new AuctionResponseDTO(auction);
+        model.addAttribute("auction", auctionResponseDTO);
 
         return "admin/bids_create_form";
     }
@@ -55,7 +57,6 @@ public class BidController {
         bidDTO.setUser(currentUser);
 
         bidService.saveBid(new Bid(bidDTO));
-        return "redirect:/admin/bids/create";
-        // return "redirect:/admin/bids/read";
+        return "redirect:/auctions";
     }
 }
