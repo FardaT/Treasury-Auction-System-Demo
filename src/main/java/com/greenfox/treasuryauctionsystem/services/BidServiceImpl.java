@@ -29,4 +29,15 @@ public class BidServiceImpl implements BidService {
     public void saveBid(Bid bid) {
         bidRepository.save(bid);
     }
+
+    // DESTROY
+    @Override
+    public void disableBid(Long bidId) {
+
+        Bid bid = bidRepository.findById(bidId).orElse(null);
+        if (bid != null) {
+            bid.setDisabled(true);
+            bidRepository.save(bid);
+        }
+    }
 }

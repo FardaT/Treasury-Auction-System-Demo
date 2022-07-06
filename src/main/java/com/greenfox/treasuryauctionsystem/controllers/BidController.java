@@ -75,4 +75,13 @@ public class BidController {
         bidService.saveBid(new Bid(bidDTO));
         return "redirect:/admin/bids";
     }
+
+    // DESTROY
+    @PostMapping("admin/bids/destroy")
+    public String destroy(@RequestParam Long bidId) {
+
+        bidService.disableBid(bidId);
+
+        return "redirect:/admin/bids";
+    }
 }

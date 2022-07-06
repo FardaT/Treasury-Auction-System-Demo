@@ -13,4 +13,7 @@ public interface BidService {
 
     // STORE
     void saveBid(Bid bid);
+
+    // DESTROY
+    void disableBid(Long bidId);
 }
