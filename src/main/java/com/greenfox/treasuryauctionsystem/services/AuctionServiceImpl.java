@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 
@@ -48,7 +49,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     List<Auction> allAuctions = auctionRepository.findAll();
 
-    if (allAuctions == null) {
+    if (allAuctions.size() == 0) {
       throw new NullPointerException();
     }
     for (Auction auction : allAuctions) {
@@ -81,17 +82,21 @@ public class AuctionServiceImpl implements AuctionService {
   }
 
   @Override
-  public void disable(Long id) {
+  public void disable(Long id) throws NoSuchAuctionException{
     Optional<Auction> auction = auctionRepository.findById(id);
+    //todo check if it is upcoming auction
     if (auction.isPresent()) {
       Auction currentAuction = auction.get();
+      if (currentAuction.getAuctionStartDate().isBefore(LocalDateTime.now())) {
+        throw new NoSuchAuctionException("No upcoming auctions in the database");
+      }
       currentAuction.setDisabled(true);
       auctionRepository.save(currentAuction);
     }
   }
 
   @Override
-//  public void process(Long id) throws Exception {
+  @Transactional
   public void process(Long id) throws NoSuchAuctionException {
 
     //get auction by id
@@ -188,8 +193,8 @@ public class AuctionServiceImpl implements AuctionService {
   }
 
   private Map<Long, Float> getHighRateMap(Map<Long, Long> totalAmountsBySecurities,
-                                           Map<Long, List<Bid>> competitiveBidListMap,
-                                           Map<Long, Long> totalNonCompetitiveBidAmount) {
+                                          Map<Long, List<Bid>> competitiveBidListMap,
+                                          Map<Long, Long> totalNonCompetitiveBidAmount) {
     Map<Long, Float> highRateMap = new HashMap<>();
 
     for (Map.Entry<Long, List<Bid>> entry : competitiveBidListMap.entrySet()) {
