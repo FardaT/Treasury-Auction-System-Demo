@@ -61,7 +61,7 @@
 
                 <div class="form-group">
                     <label for="amount">Amount:</label>
-                    <input type="number" class="form-control" id="amount" name="amount">
+                    <input type="number" class="form-control" id="amount" name="amount" required>
 
                     <div th:if="${AMOUNT_POSITIVE != null}">
                         <p th:text="${AMOUNT_POSITIVE}" style="color: red;"></p>
@@ -79,7 +79,7 @@
 
                 <div class="form-group">
                     <label for="rate">Rate:</label>
-                    <input type="number" step="0.1" class="form-control" id="rate" name="rate">
+                    <input type="number" step="0.1" class="form-control" id="rate" name="rate" required>
 
                     <div th:if="${RATE_RANGE != null}">
                         <p th:text="${RATE_RANGE}" style="color: red;"></p>
