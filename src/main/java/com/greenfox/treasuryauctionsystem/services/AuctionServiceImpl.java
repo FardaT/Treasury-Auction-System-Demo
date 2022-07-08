@@ -82,7 +82,7 @@ public class AuctionServiceImpl implements AuctionService {
   }
 
   @Override
-  public void disable(Long id) throws NoSuchAuctionException{
+  public void disable(Long id) throws NoSuchAuctionException {
     Optional<Auction> auction = auctionRepository.findById(id);
     //todo check if it is upcoming auction
     if (auction.isPresent()) {
