@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.models;
 
+import com.greenfox.treasuryauctionsystem.models.dtos.BidDTO;
 import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
 import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
 import com.greenfox.treasuryauctionsystem.utils.Utility;
@@ -7,16 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -55,8 +51,23 @@ public class AppUser {
 		bid.setUser(this);
 	}
 
-  public void removeBid(Bid bid) {
-    bids.remove(bid);
-    bid.setUser(null);
-  }
+	public void removeBid (Bid bid) {
+		bids.remove(bid);
+		bid.setUser(null);
+	}
+
+	public List<BidDTO> createDTOList (List<Bid> bids) {
+		List<BidDTO> returnList = new ArrayList<>();
+		for (Bid item : bids) {
+			returnList.add(new BidDTO(
+					item.getTreasurySecurity().getSecurityName(),
+					item.isCompetitive(),
+					item.getAmount(),
+					item.getRate(),
+					item.isAccepted(),
+					item.isArchived())
+			);
+		}
+		return returnList;
+	}
 }
