@@ -1,6 +1,7 @@
 package com.greenfox.treasuryauctionsystem.services;
 
 import com.greenfox.treasuryauctionsystem.models.AppUser;
+import com.greenfox.treasuryauctionsystem.models.dtos.AppUserDTO;
 import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInput;
 import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public interface AppUserService {
 	// ACTIVATE ACCOUNT BY TOKEN
 	Map<String, String> activateAccount (String activationToken);
 
+	// READ - users from HTTP request
 	AppUser getUserFromRequest (HttpServletRequest request);
 
 	AppUser findUserByEmail (ForgottenPasswordEmailInput emailInput);
@@ -31,6 +33,9 @@ public interface AppUserService {
 
 	// READ - all users
 	List<AppUser> getAllAppUsers ();
+
+	// READ - all users dto
+	List<AppUserDTO> getAllAppUsersDto ();
 
 	// UPDATE - approve user reg (isApproved set to TRUE)
 	AppUser approveAppUser (Long appUserId);
