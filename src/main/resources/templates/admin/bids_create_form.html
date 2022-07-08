@@ -40,55 +40,80 @@
 
             <h3>Create new bid</h3>
 
-            <form th:action="@{/admin/bids/store}" method="post">
-                <div class="form-group">
-                    <label for="treasurySecurity">Securities for the auction, select ONE</label>
-                    <select class="form-control" id="treasurySecurity" name="treasurySecurity">
-                        <option th:each="treasurySecurity: ${auction.treasurySecurityList}"
-                                th:value="${treasurySecurity.id}"
-                                th:text="${treasurySecurity.securityName}">
-                        </option>
-                    </select>
-                </div>
+            <div th:if="${AT_LEAST_ONE} != null">
+                <p th:text="${AT_LEAST_ONE}"
+                   style="color: red;"></p>
+            </div>
 
-                <div class="form-group">
-                    <label for="isCompetitive">Select type:</label>
-                    <select class="form-control" id="isCompetitive" name="isCompetitive">
-                        <option th:value="0" th:text="Noncompetitive"></option>
-                        <option th:value="1" th:text="Competitive"></option>
-                    </select>
-                </div>
+            <div th:if="${AMOUNT_NONCOMPETITIVE} != null">
+                <p th:text="${AMOUNT_NONCOMPETITIVE}"
+                   style="color: red;"></p>
+            </div>
 
-                <div class="form-group">
-                    <label for="amount">Amount:</label>
-                    <input type="number" class="form-control" id="amount" name="amount" required>
+            <form class="form-inline" th:action="@{/admin/bids/store}" th:object="${form}" method="post">
 
-                    <div th:if="${AMOUNT_POSITIVE != null}">
-                        <p th:text="${AMOUNT_POSITIVE}" style="color: red;"></p>
-                    </div>
-                    <div th:if="${AMOUNT_HUNDRED != null}">
-                        <p th:text="${AMOUNT_HUNDRED}" style="color: red;"></p>
-                    </div>
-                    <div th:if="${AMOUNT_COMPETITIVE != null}">
-                        <p th:text="${AMOUNT_COMPETITIVE}" style="color: red;"></p>
-                    </div>
-                    <div th:if="${AMOUNT_NONCOMPETITIVE != null}">
-                        <p th:text="${AMOUNT_NONCOMPETITIVE}" style="color: red;"></p>
-                    </div>
-                </div>
+                <input type="hidden" th:name="auction_id" th:value="${auction.id}">
 
-                <div class="form-group">
-                    <label for="rate">Rate:</label>
-                    <input type="number" step="0.1" class="form-control" id="rate" name="rate" required>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Security name</th>
+                        <th>Type</th>
+                        <th>Offering Amount</th>
+                        <th>Amount</th>
+                        <th>Rate</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="treasurySecurity, itemStat: ${auction.treasurySecurityList}">
 
-                    <div th:if="${RATE_RANGE != null}">
-                        <p th:text="${RATE_RANGE}" style="color: red;"></p>
-                    </div>
-                </div>
+                        <input type="hidden"
+                               id="treasurySecurity"
+                               th:name="${'bidDTOS['+__${itemStat.index}__+'].treasurySecurity'}"
+                               th:value="${treasurySecurity.id}">
+
+                        <td th:text="${treasurySecurity.securityName}"></td>
+
+                        <td>
+                            <select class="form-control" id="isCompetitive"
+                                    th:field="*{bidDTOS[__${itemStat.index}__].isCompetitive}">
+                                <option th:value="0" th:text="Noncompetitive"></option>
+                                <option th:value="1" th:text="Competitive"></option>
+                            </select>
+                        </td>
+
+                        <td th:text="${treasurySecurity.totalAmount}"></td>
+
+                        <td>
+                            <input type="number" class="form-control" id="amount"
+                                   th:field="*{bidDTOS[__${itemStat.index}__].amount}" required>
+
+                            <div th:if="${__${'AMOUNT_POSITIVE_' + itemStat.index}__} != null">
+                                <p th:text="${__${'AMOUNT_POSITIVE_' + itemStat.index}__}" style="color: red;"></p>
+                            </div>
+                            <div th:if="${__${'AMOUNT_COMPETITIVE_' + itemStat.index}__} != null">
+                                <p th:text="${__${'AMOUNT_COMPETITIVE_' + itemStat.index}__}" style="color: red;"></p>
+                            </div>
+                            <div th:if="${__${'AMOUNT_HUNDRED_' + itemStat.index}__} != null">
+                                <p th:text="${__${'AMOUNT_HUNDRED_' + itemStat.index}__}" style="color: red;"></p>
+                            </div>
+                        </td>
+
+                        <td>
+                            <input type="number" step="0.1" class="form-control" id="rate"
+                                   th:field="*{bidDTOS[__${itemStat.index}__].rate}" required>
+
+                            <div th:if="${__${'RATE_RANGE_' + itemStat.index}__} != null">
+                                <p th:text="${__${'RATE_RANGE_' + itemStat.index}__}" style="color: red;"></p>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
 
                 <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
 
+            </form>
         </div>
     </div>
 </div>

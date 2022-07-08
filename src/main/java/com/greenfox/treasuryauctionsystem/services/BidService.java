@@ -1,6 +1,8 @@
 package com.greenfox.treasuryauctionsystem.services;
 
+import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.Bid;
+import com.greenfox.treasuryauctionsystem.models.dtos.BidDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +15,7 @@ public interface BidService {
     List<Bid> getAllBids();
 
     // STORE
-    Map<String, String> saveBid(Bid bid);
+    Map<String, String> saveBid(List<BidDTO> bidDTOS, AppUser appUser);
 
     // DESTROY
     void disableBid(Long bidId);

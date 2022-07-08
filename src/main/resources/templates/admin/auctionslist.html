@@ -45,6 +45,7 @@
                         <th>end date</th>
                         <th>end time</th>
                         <th>BID</th>
+                        <th class="text-center">Securities</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -61,7 +62,15 @@
                         <td>
                             <table>
                                 <thead>
-
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Total Amount</th>
+                                    <th>Term</th>
+                                    <th>Issue Date</th>
+                                    <th>Maturity Date</th>
+                                    <th>High Rate</th>
+                                </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="security : *{treasurySecurityList}" th:object="${security}">
@@ -135,6 +144,7 @@
                         <th>start date</th>
                         <th>end date</th>
                         <th sec:authorize="hasRole('ADMIN')">process</th>
+                        <th class="text-center">Securities</th>
                     </tr>
                     </thead>
                     <tbody>
