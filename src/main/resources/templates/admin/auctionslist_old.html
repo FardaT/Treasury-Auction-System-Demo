@@ -51,8 +51,8 @@
                         <th>start time</th>
                         <th>end date</th>
                         <th>end time</th>
-                        <th>Securities</th>
                         <th>BID</th>
+                        <th class="text-center">Securities</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -63,52 +63,37 @@
                         <td th:text="*{endDate}"></td>
                         <td th:text="*{endTime}"></td>
                         <td>
-                            <!-- Button to Open the Modal -->
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#myModal_ongoing">
-                                Show securities
-                            </button>
-
-                            <!-- The Modal -->
-                            <div class="modal" id="myModal_ongoing">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-
-                                        <!-- Modal body -->
-                                        <div class="modal-body">
-                                            <table>
-                                                <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Type</th>
-                                                    <th>Total Amount</th>
-                                                    <th>Term</th>
-                                                    <th>Issue Date</th>
-                                                    <th>Maturity Date</th>
-                                                    <th>High Rate</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="security : *{treasurySecurityList}"
-                                                    th:object="${security}">
-                                                    <td th:text="*{securityName}"></td>
-                                                    <td th:text="*{securityType}"></td>
-                                                    <td th:text="*{securityTerm}"></td>
-                                                    <td th:text="*{totalAmount}"></td>
-                                                    <td th:text="*{issueDate}"></td>
-                                                    <td th:text="*{maturityDate}"></td>
-                                                    <td th:text="*{highRate}"></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
                             <a th:href="@{/admin/bids/create(auction_id=${auction.id})}" class="btn btn-success"
                                role="button">Place BID</a>
+                        </td>
+                        <td>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Total Amount</th>
+                                    <th>Term</th>
+                                    <th>Issue Date</th>
+                                    <th>Maturity Date</th>
+                                    <th>High Rate</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="security : *{treasurySecurityList}" th:object="${security}">
+                                    <td th:text="*{securityName}"></td>
+                                    <td th:text="*{securityType}"></td>
+                                    <td th:text="*{securityTerm}"></td>
+                                    <td th:text="*{totalAmount}"></td>
+                                    <td th:text="*{issueDate}"></td>
+                                    <td th:text="*{maturityDate}"></td>
+                                    <td th:text="*{highRate}"></td>
+                                </tr>
+
+                                </tbody>
+
+
+                            </table>
                         </td>
                     </tr>
                     </tbody>
@@ -165,8 +150,8 @@
                         <th>id</th>
                         <th>start date</th>
                         <th>end date</th>
-                        <th>Securities</th>
                         <th sec:authorize="hasRole('ADMIN')">process</th>
+                        <th class="text-center">Securities</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -174,59 +159,41 @@
                         <td th:text="*{id}"></td>
                         <td th:text="*{startDate}"></td>
                         <td th:text="*{endDate}"></td>
-                        <td>
-                            <!-- Button to Open the Modal -->
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#myModal_finished">
-                                Show securities
-                            </button>
-
-                            <!-- The Modal -->
-                            <div class="modal" id="myModal_finished">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-
-                                        <!-- Modal body -->
-                                        <div class="modal-body">
-                                            <table>
-                                                <thead>
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <th>Name</th>
-                                                    <th>Type</th>
-                                                    <th>Total Amount</th>
-                                                    <th>Term</th>
-                                                    <th>Issue Date</th>
-                                                    <th>Maturity Date</th>
-                                                    <th>High Rate</th>
-
-                                                </tr>
-
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="security : *{treasurySecurityList}"
-                                                    th:object="${security}">
-                                                    <td th:text="*{id}"></td>
-                                                    <td th:text="*{securityName}"></td>
-                                                    <td th:text="*{securityType}"></td>
-                                                    <td th:text="*{totalAmount}"></td>
-                                                    <td th:text="*{securityTerm}"></td>
-                                                    <td th:text="*{issueDate}"></td>
-                                                    <td th:text="*{maturityDate}"></td>
-                                                    <td th:text="*{highRate}"></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
                         <td th:if="*{!isProcessed}" sec:authorize="hasRole('ADMIN')">
                             <form th:action="@{/auctions/process}" method="post">
                                 <input type="hidden" name="id" th:value="*{id}">
-                                <input type="submit" class="btn btn-success sa_click" value="Process">
+                                <input type="submit" class="btn btn-primary sa_click" value="Process">
                             </form>
+                        </td>
+                        <td>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Total Amount</th>
+                                    <th>Term</th>
+                                    <th>Issue Date</th>
+                                    <th>Maturity Date</th>
+                                    <th>High Rate</th>
+
+                                </tr>
+
+                                </thead>
+                                <tbody>
+                                <tr th:each="security : *{treasurySecurityList}" th:object="${security}">
+                                    <td th:text="*{id}"></td>
+                                    <td th:text="*{securityName}"></td>
+                                    <td th:text="*{securityType}"></td>
+                                    <td th:text="*{totalAmount}"></td>
+                                    <td th:text="*{securityTerm}"></td>
+                                    <td th:text="*{issueDate}"></td>
+                                    <td th:text="*{maturityDate}"></td>
+                                    <td th:text="*{highRate}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </td>
                         <td th:unless="*{!isProcessed}" th:text="processed"></td>
                     </tr>
