@@ -77,7 +77,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/store/**")
 				.antMatchers("/resetpassword")
 				.antMatchers("/resetpassword/**")
-				.antMatchers("/**/*.css");
+				.antMatchers("/**/*.css")
+				.antMatchers("/public");
 	}
 
 	@Bean
