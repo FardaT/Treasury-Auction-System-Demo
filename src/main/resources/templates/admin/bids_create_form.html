@@ -82,11 +82,16 @@
                             </select>
                         </td>
 
-                        <td th:text="${treasurySecurity.totalAmount}"></td>
+                        <td th:text="${treasurySecurity.totalAmount} + ' ' + ${currency}"></td>
 
                         <td>
-                            <input type="number" class="form-control" id="amount"
-                                   th:field="*{bidDTOS[__${itemStat.index}__].amount}" required>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="amount"
+                                       th:field="*{bidDTOS[__${itemStat.index}__].amount}" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" th:text="${currency}"></span>
+                                </div>
+                            </div>
 
                             <div th:if="${__${'AMOUNT_POSITIVE_' + itemStat.index}__} != null">
                                 <p th:text="${__${'AMOUNT_POSITIVE_' + itemStat.index}__}" style="color: red;"></p>

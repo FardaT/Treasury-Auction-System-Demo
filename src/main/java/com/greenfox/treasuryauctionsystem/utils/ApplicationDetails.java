@@ -15,6 +15,8 @@ public class ApplicationDetails {
     public static float min_rate;
     public static float max_rate;
 
+    public static char currency;
+
     @Value("${expiration}")
     public void setExpiration(int expiration) {ApplicationDetails.expiration = expiration;}
     @Value("${percentage}")
@@ -36,6 +38,10 @@ public class ApplicationDetails {
     @Value("${max_rate}")
     public void setMax_rate(float max_rate) {
         ApplicationDetails.max_rate = max_rate;
+    }
+    @Value("${currency}")
+    public void setCurrency(char currency) {
+        ApplicationDetails.currency = currency;
     }
 
     public ApplicationDetails() {

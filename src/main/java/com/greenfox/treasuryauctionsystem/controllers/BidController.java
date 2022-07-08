@@ -9,6 +9,7 @@ import com.greenfox.treasuryauctionsystem.models.dtos.BidsCreationDto;
 import com.greenfox.treasuryauctionsystem.services.AppUserService;
 import com.greenfox.treasuryauctionsystem.services.AuctionService;
 import com.greenfox.treasuryauctionsystem.services.BidService;
+import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,6 +73,7 @@ public class BidController {
         }
 
         model.addAttribute("form", bidsForm);
+        model.addAttribute("currency", ApplicationDetails.currency);
 
         return "admin/bids_create_form";
     }
