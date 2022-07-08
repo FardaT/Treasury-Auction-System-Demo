@@ -58,10 +58,7 @@
                         <td th:text="*{maturityDate}"></td>
                         <td th:text="*{highRate}"></td>
                     </tr>
-
                     </tbody>
-
-
                 </table>
             </td>
         </tr>
@@ -93,7 +90,7 @@
             <td th:text="*{startTime}"></td>
             <td th:text="*{endDate}"></td>
             <td th:text="*{endTime}"></td>
-            <td  sec:authorize="hasRole('ADMIN')">
+            <td sec:authorize="hasRole('ADMIN')">
                 <form th:action="@{/auctions/disable}" method="post">
                     <input type="hidden" name="id" th:value="*{id}">
                     <input type="submit" class="btn btn-success sa_click" value="Delete">
@@ -123,7 +120,8 @@
             <td th:text="*{id}"></td>
             <td th:text="*{startDate}"></td>
             <td th:text="*{endDate}"></td>
-            <td th:if="*{!isProcessed}"  sec:authorize="hasRole('ADMIN')">
+            <td th:if="*{isProcessed}" th:text="processed"></td>
+            <td th:unless="*{isProcessed}" sec:authorize="hasRole('ADMIN')">
                 <form th:action="@{/auctions/process}" method="post">
                     <input type="hidden" name="id" th:value="*{id}">
                     <input type="submit" class="btn btn-success sa_click" value="Process">
@@ -141,9 +139,7 @@
                         <th>Issue Date</th>
                         <th>Maturity Date</th>
                         <th>High Rate</th>
-
                     </tr>
-
                     </thead>
                     <tbody>
                     <tr th:each="security : *{treasurySecurityList}" th:object="${security}">
@@ -159,7 +155,6 @@
                     </tbody>
                 </table>
             </td>
-            <td th:unless="*{!isProcessed}" th:text="processed"></td>
         </tr>
         </tbody>
     </table>
