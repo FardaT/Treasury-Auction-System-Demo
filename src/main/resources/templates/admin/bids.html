@@ -40,9 +40,9 @@
                     <td th:text="${bid.id}"></td>
                     <td th:text="${bid.amount}"></td>
                     <td th:text="${bid.rate}"></td>
-                    <td th:text="${bid.isCompetitive == true ? 'YES' : 'NO'}"></td>
-                    <td th:text="${bid.isAccepted == true ? 'YES' : 'NO'}"></td>
-                    <td th:text="${bid.isArchived == true ? 'YES' : 'NO'}"></td>
+                    <td th:text="${bid.isCompetitive == true ? '&#9989;' : '&#10060;'}"></td>
+                    <td th:text="${bid.isAccepted == true ? '&#9989;' : '&#10060;'}"></td>
+                    <td th:text="${bid.isArchived == true ? '&#9989;' : '&#10060;'}"></td>
                     <td th:text="${bid.treasurySecurity.securityName}"></td>
                     <td>
                         <form th:action="@{/admin/bids/destroy}" th:if="${!bid.isDisabled}" method="post">
