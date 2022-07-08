@@ -17,7 +17,7 @@ public class TempSecurityDTO {
   private String securityName;
   private String securityType;
   private String securityTerm;
-  private long totalAmount;
+  private Long totalAmount;
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private LocalDate issueDate;
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

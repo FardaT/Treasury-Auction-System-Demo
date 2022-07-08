@@ -111,20 +111,25 @@ public class AuctionServiceImpl implements AuctionService {
       }
     }
     if(auction.getTreasurySecurityList().size() > 10){
-      errors.put("INVALID_SECURITY_ERROR", "Auction cannot contain more than 10 securities");
+      errors.put("INVALID_SECURITY_ERROR", "Auction cannot contain more than 10 securities at a time");
     }
     if(treasurySecurity.getIssueDate() == null){
       errors.put("ISSUE_DATE_ERROR","Issue date cannot be null");
       return errors;
     }
-    if(treasurySecurity.getIssueDate().isBefore(ChronoLocalDate.from(auction.getAuctionEndDate().plusDays(1)))){
-      errors.put("ISSUE_DATE_ERROR","Issue date must take place after the auction");
+    if(auction.getAuctionEndDate() != null){
+      if(treasurySecurity.getIssueDate().isBefore(ChronoLocalDate.from(auction.getAuctionEndDate().plusDays(1)))){
+        errors.put("ISSUE_DATE_ERROR","Issue date must take place after the auction");
+      }
+    }
+    if(treasurySecurity.getTotalAmount() == null){
+      errors.put("TOTALAMOUNT_ERROR","Total amount must not be null");
     }
     if(treasurySecurity.getTotalAmount() < 1000000){
       errors.put("TOTALAMOUNT_ERROR","Total amount must be at least $1.000.000");
     }
     if(treasurySecurity.getTotalAmount() % 100 != 0){
-      errors.put("TOTALAMOUNT_ERROR","Total amount must be the product of $100 security denominations");
+      errors.put("TOTALAMOUNT_ERROR","Total amount must be a product of $100 security denominations");
     }
     if(treasurySecurity.getTotalAmount() > 100000000){
       errors.put("TOTALAMOUNT_ERROR","Total amount must not exceed $100.000.000");
@@ -168,6 +173,11 @@ public class AuctionServiceImpl implements AuctionService {
     }
     if(auctionDateDTO.getAuctionEndDate() == null){
       throw new InvalidAuctionException("Auction end time cannot be null");
+    }
+    for (TreasurySecurity ts: auction.getTreasurySecurityList()) {
+      if(ts.getIssueDate().isBefore(ChronoLocalDate.from(auctionDateDTO.getAuctionEndDate()))){
+        throw new InvalidAuctionException("Security Issue date cannot take place before auction.");
+      }
     }
     if(auctionDateDTO.getAuctionStartDate().isBefore(LocalDateTime.now())){
       throw new InvalidAuctionException("Auction start date out of bound");

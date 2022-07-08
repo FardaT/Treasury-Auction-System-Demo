@@ -2,12 +2,33 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <!-- HEADER -->
-<!--<head th:replace="fragments/admin/header :: header"></head>-->
+<head th:replace="fragments/admin/header :: header">
+    <script type="text/javascript">
+        document.getElementById("auctionStart").value = getSavedValue("auctionStart");    // set the value to this input
+        document.getElementById("auctionEnd").value = getSavedValue("auctionEnd");   // set the value to this input
+        /* Here you can add more inputs to set value. if it's saved */
+
+        //Save the value function - save it to localStorage as (ID, VALUE)
+        function saveValue(e){
+            var id = e.id;  // get the sender's id to save it .
+            var val = e.value; // get the value.
+            localStorage.setItem(id, val);// Every time user writing something, the localStorage's value will override .
+        }
+
+        //get the saved value function - return the value of "v" from localStorage.
+        function getSavedValue  (v){
+            if (!localStorage.getItem(v)) {
+                return "";// You can change this to your defualt value.
+            }
+            return localStorage.getItem(v);
+        }
+    </script>
+</head>
 
 <body>
 
 <!-- TOPNAV -->
-<!--<nav th:replace="fragments/admin/topnav :: topnav"></nav>-->
+<nav th:replace="fragments/admin/topnav :: topnav"></nav>
 
 <!-- CONTENT -->
 <div class="container-fluid">
@@ -22,13 +43,10 @@
         <div class="col-md-10">
             <h2>Create auction</h2>
             <div>
-                <form action="/admin/auctions/set-time" method="post" id="set-time">
                     <label for="auctionStart">Start: </label>
-                    <input type="datetime-local" id="auctionStart" name="auctionStartDate" required>
+                    <input type="datetime-local" id="auctionStart" name="auctionStartDate" form="create-auction" onchange='saveValue(this);' required>
                     <label for="auctionEnd">End: </label>
-                    <input type="time" id="auctionEnd" name="auctionEndTime" required>
-                    <button type="submit" form="set-time" class="btn btn-primary">Set date</button>
-                </form>
+                    <input type="time" id="auctionEnd" name="auctionEndTime" form="create-auction" onchange='saveValue(this);' required>
                 <div th:if="${INVALID_AUCTION != null}">
                     <p th:text="${INVALID_AUCTION}" style="color: red;"></p>
                 </div>
@@ -74,9 +92,8 @@
                         <td><span th:if="${ISSUE_DATE_ERROR != null}" th:text="${ISSUE_DATE_ERROR}" style="color: red;"></span></td>
                     </tr>
                 </table>
-                <form action="/admin/auctions/create" method="post"><button type="submit" class="btn btn-primary">Create auction</button></form>
+                <form action="/admin/auctions/create" method="post" id="create-auction"><button type="submit" class="btn btn-primary">Create auction</button></form>
             </div>
-
         </div>
     </div>
 </div>

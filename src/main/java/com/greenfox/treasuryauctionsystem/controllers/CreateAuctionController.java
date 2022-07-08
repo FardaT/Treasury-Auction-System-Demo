@@ -1,17 +1,15 @@
 package com.greenfox.treasuryauctionsystem.controllers;
 
 import com.greenfox.treasuryauctionsystem.exceptions.InvalidAuctionException;
-import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 import com.greenfox.treasuryauctionsystem.models.dtos.AuctionDateDTO;
 import com.greenfox.treasuryauctionsystem.models.dtos.TempSecurityDTO;
-import com.greenfox.treasuryauctionsystem.services.AppUserService;
 import com.greenfox.treasuryauctionsystem.services.AuctionService;
+import java.security.Principal;
 import java.util.Map;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,31 +21,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("admin")
+@Scope("session")
 public class CreateAuctionController {
   private final AuctionService auctionService;
-  private final AppUserService appUserService;
-  @Resource(name = "tempAuction")
   private Auction tempAuction = new Auction();
   @Autowired
-  public CreateAuctionController(AuctionService auctionService, AppUserService appUserService) {
+  public CreateAuctionController(AuctionService auctionService) {
     this.auctionService = auctionService;
-    this.appUserService = appUserService;
   }
   @GetMapping("/auctions/create")
-  public String renderAuctionCreationPage(Model model){
-
+  public String renderAuctionCreationPage(Model model, Principal principal){
+    model.addAttribute("user", principal);
     model.addAttribute("newAuction", tempAuction);
     return "admin/create-auction";
-  }
-  @PostMapping("/auctions/set-time")
-  public String setTempAuctionDate(@ModelAttribute(name="auctionTime")AuctionDateDTO auctionDateDTO, RedirectAttributes redirectAttributes){
-    try {
-      tempAuction = auctionService.setDateToAuction(tempAuction,auctionDateDTO);
-    } catch (InvalidAuctionException ex){
-      redirectAttributes.addFlashAttribute("INVALID_AUCTION", ex.getMessage());
-      return "redirect:/admin/auctions/create";
-    }
-    return "redirect:/admin/auctions/create";
   }
 
   @PostMapping("/auctions/add-security")
@@ -77,10 +63,11 @@ public class CreateAuctionController {
   }
 
   @PostMapping("/auctions/create")
-  public String createAuction(RedirectAttributes redirectAttributes){
+  public String createAuction(@ModelAttribute(name="auctionTime")AuctionDateDTO auctionDateDTO, RedirectAttributes redirectAttributes){
     try{
+      tempAuction = auctionService.setDateToAuction(tempAuction,auctionDateDTO);
       auctionService.create(tempAuction);
-//      tempAuction = new Auction();
+      tempAuction = new Auction();
     }catch (InvalidAuctionException ex){
       redirectAttributes.addFlashAttribute("INVALID_AUCTION",ex.getMessage());
       return "redirect:/admin/auctions/create";
@@ -89,7 +76,7 @@ public class CreateAuctionController {
   }
   @PostMapping("/auctions/cancel-creation")
   public String createAuction(){
-//    tempAuction = new Auction();
+    tempAuction = new Auction();
     return "redirect:/auctions";
   }
 
