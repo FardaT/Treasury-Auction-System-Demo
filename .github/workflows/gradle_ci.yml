@@ -4,6 +4,12 @@ on:
     branches: [develop, master]
 env:
   GMAIL_APP_PASSWORD: ${{secrets.GMAIL_APP_PASSWORD}}
+  currency: ${{secrets.currency}}
+  max_amount: ${{secrets.max_amount}}
+  max_rate: ${{secrets.max_rate}}
+  min_rate: ${{secrets.min_rate}}
+  multiple_of: ${{secrets.multiple_of}}
+  percentage: ${{secrets.percentage}}
 jobs:
   build:
     runs-on: ubuntu-latest
