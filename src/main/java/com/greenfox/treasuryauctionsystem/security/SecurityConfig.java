@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests().anyRequest().authenticated();
 
 		// To bypass authentication & authorization for development, comment out the code above and use the one below
-/*   	http.csrf().disable();
+	/* http.csrf().disable();
     http.sessionManagement().sessionCreationPolicy(STATELESS);
     http.authorizeRequests().anyRequest().permitAll();*/
 

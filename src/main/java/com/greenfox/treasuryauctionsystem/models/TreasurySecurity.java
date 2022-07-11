@@ -16,7 +16,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "treasury_securities")
-public class TreasurySecurity {
+public class TreasurySecurity{
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
   @OneToMany(
       mappedBy = "treasurySecurity",
@@ -24,9 +27,6 @@ public class TreasurySecurity {
       orphanRemoval = true
   )
   private final List<Bid> bidList = new ArrayList<>();
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
   @ManyToOne(fetch = FetchType.LAZY)
   private Auction auction;
   private String securityName;
@@ -143,5 +143,9 @@ public class TreasurySecurity {
   public void removeBid(Bid bid) {
     bidList.remove(bid);
     bid.setTreasurySecurity(null);
+  }
+
+  public List<Bid> getBidList() {
+    return bidList;
   }
 }

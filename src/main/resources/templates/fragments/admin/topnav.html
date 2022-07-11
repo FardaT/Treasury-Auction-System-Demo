@@ -6,7 +6,10 @@
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/profile}" th:text="${user.username}"></a>
+                <div th:if="${user != null}">
+                    <a class="nav-link" th:href="@{/profile}" th:text="${user.username}"></a>
+                </div>
+
             </li>
         </ul>
     </div>

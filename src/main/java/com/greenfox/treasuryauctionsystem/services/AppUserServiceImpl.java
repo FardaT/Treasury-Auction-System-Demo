@@ -153,44 +153,45 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     return token;
   }
 
-  @Override
-  public AppUser validateToken(String token) {
-    return appUserRepository.findAppUserByReactivationToken(token);
-  }
+	@Override
+	public AppUser validateToken (String token) {
+		return appUserRepository.findAppUserByReactivationToken(token);
+	}
 
-  @Override
-  public Map<String, String> saveNewPassword(PasswordReset passwordReset) {
+	@Override
+	public Map<String, String> saveNewPassword (PasswordReset passwordReset) {
 
-    boolean passwordIsSecure = Utility.validatePassword(passwordReset.getPassword());
+		boolean passwordIsSecure = Utility.validatePassword(passwordReset.getPassword());
 
-    AppUser user = appUserRepository.findAppUserByReactivationToken(passwordReset.getToken());
-    boolean isTokenExpired = LocalDateTime.now().isAfter(user.getReactivationTokenExpiration());
-    Map<String, String> errors = new HashMap<>();
+		AppUser user = appUserRepository.findAppUserByReactivationToken(passwordReset.getToken());
+		boolean isTokenExpired = LocalDateTime.now().isAfter(user.getReactivationTokenExpiration());
+		Map<String, String> errors = new HashMap<>();
 
-    if (user == null) {
-      errors.put("INVALID_TOKEN", "Please use a valid token");
-      return errors;
+		if (user == null) {
+			errors.put("INVALID_TOKEN", "Please use a valid token");
+			return errors;
+		}
+		if (isTokenExpired) {
+			errors.put("TOKEN_EXPIRED", "Your token expired. Please reset your password again.");
+			return errors;
+		}
+		if (!passwordReset.getPassword().equals(passwordReset.getConfirm())) {
+			errors.put("PASSWORDS_DONT_MATCH", "The passwords don't match");
+			return errors;
+		}
+		if (!passwordIsSecure) {
+			errors.put("ENTER_MORE_SECURE_PASSWORD", "Please enter a more secure password");
+			return errors;
+		}
+		user.setPassword(passwordEncoder.encode(passwordReset.getPassword()));
+
+        user.setReactivationToken(null);
+        user.setReactivationTokenExpiration(null);
+        user.setActivated(true);
+        appUserRepository.save(user);
+        return errors;
     }
-    if (isTokenExpired) {
-      errors.put("TOKEN_EXPIRED", "Your token expired. Please reset your password again.");
-      return errors;
-    }
-    if (!passwordReset.getPassword().equals(passwordReset.getConfirm())) {
-      errors.put("PASSWORDS_DONT_MATCH", "The passwords don't match");
-      return errors;
-    }
-    if (!passwordIsSecure) {
-      errors.put("ENTER_MORE_SECURE_PASSWORD", "Please enter a more secure password");
-      return errors;
-    }
-//        user.setPassword(passwordReset.getPassword());
-    user.setPassword(passwordEncoder.encode(passwordReset.getPassword()));
 
-    user.setReactivationToken(null);
-    user.setReactivationTokenExpiration(null);
-    appUserRepository.save(user);
-    return errors;
-  }
 
   // READ - all users
   @Override
@@ -248,7 +249,6 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
   @Override
   public AppUser getUserByUsername(String username) {
-    AppUser appUser = appUserRepository.findByUsername(username);
-    return appUser;
+    return appUserRepository.findByUsername(username);
   }
 }
