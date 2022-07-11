@@ -44,8 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll().and()
 				.formLogin()
 				.loginPage("/login")
-				.successForwardUrl("/auctions")
-				.defaultSuccessUrl("/auctions").and()
+				.defaultSuccessUrl("/auctions", true).and()
 				.logout()
 				.logoutSuccessUrl("/login").and()
 				.authorizeRequests().anyRequest().authenticated();
