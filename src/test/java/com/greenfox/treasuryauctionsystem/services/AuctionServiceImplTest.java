@@ -1,6 +1,11 @@
 package com.greenfox.treasuryauctionsystem.services;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.greenfox.treasuryauctionsystem.exceptions.NoSuchAuctionException;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.Bid;
@@ -9,43 +14,47 @@ import com.greenfox.treasuryauctionsystem.repositories.AppUserRepository;
 import com.greenfox.treasuryauctionsystem.repositories.AuctionRepository;
 import com.greenfox.treasuryauctionsystem.repositories.BidRepository;
 import com.greenfox.treasuryauctionsystem.repositories.TreasurySecurityRepository;
-import com.greenfox.treasuryauctionsystem.seeders.AppUserSeeder;
-import com.greenfox.treasuryauctionsystem.seeders.AuctionSeeder;
 import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
 import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
 import com.greenfox.treasuryauctionsystem.utils.Utility;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@Service
-public class TestService {
+//@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class AuctionServiceImplTest {
 
   private AppUserRepository appUserRepository;
   private BidRepository bidRepository;
   private AuctionRepository auctionRepository;
   private TreasurySecurityRepository treasurySecurityRepository;
+  private AuctionService auctionService;
 
-    // SEEDERS
-    private final AppUserSeeder appUserSeeder;
-    private final AuctionSeeder auctionSeeder;
 
   @Autowired
-  public TestService(AppUserRepository appUserRepository, BidRepository bidRepository,
-                     AuctionRepository auctionRepository,
-                     TreasurySecurityRepository treasurySecurityRepository, AppUserSeeder appUserSeeder, AuctionSeeder auctionSeeder) {
-    this.appUserRepository = appUserRepository;
-    this.bidRepository = bidRepository;
+  public AuctionServiceImplTest(AppUserRepository appUserRepository,
+                                AuctionRepository auctionRepository,
+                                TreasurySecurityRepository treasurySecurityRepository,
+                                BidRepository bidRepository, AuctionService auctionService) {
     this.auctionRepository = auctionRepository;
     this.treasurySecurityRepository = treasurySecurityRepository;
-
-      // SEEDERS
-      this.auctionSeeder = auctionSeeder;
-      this.appUserSeeder = appUserSeeder;
+    this.bidRepository = bidRepository;
+    this.appUserRepository = appUserRepository;
+    this.auctionService = auctionService;
   }
 
-  public void fillDatabase() {
+  @BeforeAll
+  public void initialDBFill() {
 
     Bid bid1 = new Bid();
     bid1.setCompetitive(true);
@@ -144,7 +153,7 @@ public class TestService {
     auction1.addTreasurySecurity(treasurySecurity3);
     appUser1.setDisabled(false);
 
-    //ongoing
+//    ongoing
     Auction auction2 = new Auction();
     auction2.setAuctionStartDate(LocalDateTime.now());
     auction2.setAuctionEndDate(LocalDateTime.now().plusDays(10));
@@ -172,7 +181,7 @@ public class TestService {
     appUserRepository.save(appUser2);
 
     // save auction and security
-    auctionRepository.save(auction1);
+//    auctionRepository.save(auction1);
     treasurySecurityRepository.save(treasurySecurity1);
     treasurySecurityRepository.save(treasurySecurity2);
     treasurySecurityRepository.save(treasurySecurity3);
@@ -197,11 +206,143 @@ public class TestService {
     bidRepository.save(bid3);
     bidRepository.save(bid4);
     bidRepository.save(bid5);
+  }
+
+  @Test
+  @Order(5)
+  void getAllAuctionsByStatus_GetCorrectSize() {
+    assertEquals(3, auctionService.getAllAuctionsByStatus().size());
+    assertEquals(1, auctionService.getAllAuctionsByStatus().get("finished").size());
+    assertEquals(1, auctionService.getAllAuctionsByStatus().get("ongoing").size());
+    assertEquals(1, auctionService.getAllAuctionsByStatus().get("upcoming").size());
+  }
+
+  @Test
+  @Order(6)
+  void getAllAuctionsByStatus_GetAuctions() {
+    assertEquals(1_000_000L,
+        auctionService.getAllAuctionsByStatus().get("finished").get(0).getId());
+    assertEquals(1_000_001L, auctionService.getAllAuctionsByStatus().get("ongoing").get(0).getId());
+    assertEquals(1_000_002L,
+        auctionService.getAllAuctionsByStatus().get("upcoming").get(0).getId());
+  }
+
+  @Test
+  @Order(10)
+  void getAllAuctionsByStatus_TrowsException() {
+    auctionRepository.deleteAll();
+    assertThrows(NullPointerException.class, () -> auctionService.getAllAuctionsByStatus());
 
   }
 
-    public void seedDatabase() {
-        appUserSeeder.saveAppUsers();
-        auctionSeeder.saveAuctions();
+  @Test
+  @Order(7)
+  void disable_DisableAuction() {
+    if (auctionRepository.findById(1_000_002L).isPresent()) {
+      assertFalse(auctionRepository.findById(1_000_002L).get().isDisabled());
+      auctionService.disable(1_000_002L);
+      assertTrue(auctionRepository.findById(1_000_002L).get().isDisabled());
     }
+  }
+
+  @Test
+  @Order(8)
+  void disable_ThrowsException() {
+    if (auctionRepository.findById(1_000_000L).isPresent()) {
+      assertThrows(NoSuchAuctionException.class, () -> auctionService.disable(1_000_000L));
+    }
+  }
+
+  @Test
+  @Order(1)
+  void process_WithValidValues_ReturnsInitialValue() {
+    System.out.println(auctionRepository.findById(1_000_000L).get().isProcessed());
+    if (auctionRepository.findById(1_000_000L).isPresent()) {
+      assertFalse(auctionRepository.findById(1_000_000L).get().isProcessed());
+    }
+
+    if (auctionRepository.findById(1_000_000L).isPresent()) {
+      if (bidRepository.findById(6L).isPresent()) {
+        assertFalse(bidRepository.findById(6L).get().isAccepted());
+      }
+      if (bidRepository.findById(7L).isPresent()) {
+        assertFalse(bidRepository.findById(7L).get().isAccepted());
+      }
+      if (bidRepository.findById(8L).isPresent()) {
+        assertFalse(bidRepository.findById(8L).get().isAccepted());
+      }
+      if (bidRepository.findById(9L).isPresent()) {
+        assertFalse(bidRepository.findById(9L).get().isAccepted());
+      }
+      if (bidRepository.findById(10L).isPresent()) {
+        assertFalse(bidRepository.findById(10L).get().isAccepted());
+      }
+
+      if (treasurySecurityRepository.findById(3L).isPresent()) {
+        assertEquals(0, treasurySecurityRepository.findById(3L).get().getHighRate());
+      }
+
+      if (treasurySecurityRepository.findById(4L).isPresent()) {
+        assertEquals(0, treasurySecurityRepository.findById(4L).get().getHighRate());
+      }
+
+      if (treasurySecurityRepository.findById(5L).isPresent()) {
+        assertEquals(0, treasurySecurityRepository.findById(5L).get().getHighRate());
+      }
+    }
+    auctionService.process(1_000_000L);
+  }
+
+  @Test
+  @Order(2)
+  void process_WithValidValues_ReturnsAuctionProcessed() {
+
+    if (auctionRepository.findById(1_000_000L).isPresent()) {
+      assertTrue(auctionRepository.findById(1_000_000L).get().isProcessed());
+    }
+  }
+
+  @Test
+  @Order(3)
+  void process_WithValidValues_BidsAccepted() {
+
+    auctionService.process(1_000_000L);
+
+    if (auctionRepository.findById(1_000_000L).isPresent()) {
+      if (bidRepository.findById(6L).isPresent()) {
+        assertFalse(bidRepository.findById(6L).get().isAccepted());
+      }
+      if (bidRepository.findById(7L).isPresent()) {
+        assertTrue(bidRepository.findById(7L).get().isAccepted());
+      }
+      if (bidRepository.findById(8L).isPresent()) {
+        assertTrue(bidRepository.findById(8L).get().isAccepted());
+      }
+      if (bidRepository.findById(9L).isPresent()) {
+        assertTrue(bidRepository.findById(9L).get().isAccepted());
+      }
+      if (bidRepository.findById(10L).isPresent()) {
+        assertTrue(bidRepository.findById(10L).get().isAccepted());
+      }
+    }
+  }
+
+  @Test
+  @Order(4)
+  void process_WithValidValues_TreasurySecurityHighRateIsSet() {
+
+    auctionService.process(1_000_000L);
+
+    if (treasurySecurityRepository.findById(3L).isPresent()) {
+      assertEquals(1.0, treasurySecurityRepository.findById(3L).get().getHighRate());
+    }
+
+    if (treasurySecurityRepository.findById(4L).isPresent()) {
+      assertEquals(0, treasurySecurityRepository.findById(4L).get().getHighRate());
+    }
+
+    if (treasurySecurityRepository.findById(5L).isPresent()) {
+      assertEquals(0, treasurySecurityRepository.findById(5L).get().getHighRate());
+    }
+  }
 }

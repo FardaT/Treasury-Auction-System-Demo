@@ -1,11 +1,9 @@
 package com.greenfox.treasuryauctionsystem.models;
-
 import com.greenfox.treasuryauctionsystem.models.dtos.BidDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,7 +18,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Bid {
+public class Bid implements Comparable<Bid> {
 
     // FIELDS
     @Id
@@ -35,10 +33,12 @@ public class Bid {
 
     private boolean isCompetitive;
     private long amount;
-    private float rate;
+    private Float rate;
     private boolean isAccepted = false;
     private boolean isArchived = false;
     private boolean isDisabled = false; // for soft delete/cancel
+
+    private long acceptedValue;
 
     public Bid(BidDTO bidDTO) {
         this.id = bidDTO.getId();
@@ -51,4 +51,13 @@ public class Bid {
         this.isArchived = bidDTO.isArchived();
         this.isDisabled = bidDTO.isDisabled();
     }
+
+  @Override
+  public int compareTo(Bid other) {
+    int i = rate.compareTo(other.getRate());
+    if (i != 0) {
+      return i;
+    }
+    return Long.compare(id, other.getId());
+  }
 }
