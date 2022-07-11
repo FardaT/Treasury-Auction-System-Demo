@@ -144,7 +144,7 @@
                         <td sec:authorize="hasRole('ADMIN')">
                             <form th:action="@{/auctions/disable}" method="post">
                                 <input type="hidden" name="id" th:value="*{id}">
-                                <input type="submit" class="btn btn-danger sa_click" value="Delete">
+                                <input type="submit" class="btn btn-danger sa_click_twoButtons" value="Delete">
                             </form>
                         </td>
 
@@ -225,7 +225,7 @@
                         <td th:if="*{!isProcessed}" sec:authorize="hasRole('ADMIN')">
                             <form th:action="@{/auctions/process}" method="post">
                                 <input type="hidden" name="id" th:value="*{id}">
-                                <input type="submit" class="btn btn-success sa_click" value="Process">
+                                <input type="submit" class="btn btn-success sa_click_twoButtons" value="Process">
                             </form>
                         </td>
                         <td th:unless="*{!isProcessed}" th:text="processed"></td>
