@@ -4,6 +4,7 @@ import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInput;
 import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
 import com.greenfox.treasuryauctionsystem.services.AppUserService;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,9 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -200,9 +199,9 @@ public class AppUserController {
 
 	// READ - all users
 	@GetMapping("admin/users")
-	public String read (Model model, HttpServletRequest request) {
+	public String read (Model model, Principal principal) {
 		// get currently logged in user
-		AppUser currentUser = appUserService.getUserFromRequest(request);
+		AppUser currentUser = appUserService.getUserByUsername(principal.getName());
 
 		// get all users from db
 		List<AppUser> appUsers = appUserService.getAllAppUsers();

@@ -3,26 +3,6 @@
 
 <!-- HEADER -->
 <head th:replace="fragments/admin/header :: header">
-    <script type="text/javascript">
-        document.getElementById("auctionStart").value = getSavedValue("auctionStart");    // set the value to this input
-        document.getElementById("auctionEnd").value = getSavedValue("auctionEnd");   // set the value to this input
-        /* Here you can add more inputs to set value. if it's saved */
-
-        //Save the value function - save it to localStorage as (ID, VALUE)
-        function saveValue(e){
-            var id = e.id;  // get the sender's id to save it .
-            var val = e.value; // get the value.
-            localStorage.setItem(id, val);// Every time user writing something, the localStorage's value will override .
-        }
-
-        //get the saved value function - return the value of "v" from localStorage.
-        function getSavedValue  (v){
-            if (!localStorage.getItem(v)) {
-                return "";// You can change this to your defualt value.
-            }
-            return localStorage.getItem(v);
-        }
-    </script>
 </head>
 
 <body>
@@ -43,10 +23,12 @@
         <div class="col-md-10">
             <h2>Create auction</h2>
             <div>
-                    <label for="auctionStart">Start: </label>
-                    <input type="datetime-local" id="auctionStart" name="auctionStartDate" form="create-auction" onchange='saveValue(this);' required>
-                    <label for="auctionEnd">End: </label>
-                    <input type="time" id="auctionEnd" name="auctionEndTime" form="create-auction" onchange='saveValue(this);' required>
+                    <label for="auctionStartDate">Start date: </label>
+                    <input type="date" id="auctionStartDate" name="auctionStartDateFormat" form="create-auction"  required> <!--th:value="${auctionTime.auctionStartDateFormat != null ? auctionTime.auctionStartDateFormat : ''}"-->
+                    <label for="auctionStartTime">Start time: </label>
+                    <input type="time" id="auctionStartTime" name="auctionStartTime" form="create-auction" required>
+                    <label for="auctionEndTime">End time: </label>
+                    <input type="time" id="auctionEndTime" name="auctionEndTime" form="create-auction" required>
                 <div th:if="${INVALID_AUCTION != null}">
                     <p th:text="${INVALID_AUCTION}" style="color: red;"></p>
                 </div>
@@ -82,7 +64,7 @@
                             <option th:value="${errorSecurityValue != null} ? ${errorSecurityValue.securityTerm} : 'none'" selected disabled hidden th:text="${errorSecurityValue != null} ? ${errorSecurityValue.securityTerm} : 'Select term'"></option>
                         </select></td>
                         <td><input type="number" name="totalAmount" form="addSecurityForm" th:value="${errorSecurityValue != null} ? ${errorSecurityValue.totalAmount} : ''"></td>
-                        <td><input type="datetime-local" name="issueDate" form="addSecurityForm" th:value="${errorSecurityValue != null} ? ${#temporals.formatISO(errorSecurityValue.issueDate)} : ''"></td>
+                        <td><input type="date" id="issueDate" name="issueDate" form="addSecurityForm" ></td> <!--th:value="${errorSecurityValue != null} ? ${#temporals.formatISO(errorSecurityValue.issueDate)} : ''"-->
                         <td><button type="submit" form="addSecurityForm" class="btn btn-primary">Add</button></td>
                     </tr>
                     <tr>
@@ -92,7 +74,9 @@
                         <td><span th:if="${ISSUE_DATE_ERROR != null}" th:text="${ISSUE_DATE_ERROR}" style="color: red;"></span></td>
                     </tr>
                 </table>
-                <form action="/admin/auctions/create" method="post" id="create-auction"><button type="submit" class="btn btn-primary">Create auction</button></form>
+                <form action="/admin/auctions/create" method="post" id="create-auction"><button type="submit" class="btn btn-primary sa_create_auction_confirmation">Create auction</button></form>
+                <form hidden action="/admin/auctions/cancel-creation" method="post" id="cancel-auction-creation"><button hidden type="submit" class="btn btn-primary sa_create_auction_confirmation">Delete auction</button></form>
+
             </div>
         </div>
     </div>

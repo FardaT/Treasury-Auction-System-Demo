@@ -13,8 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
-
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -46,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll().and()
 				.formLogin()
 				.loginPage("/login")
+				.successForwardUrl("/auctions")
 				.defaultSuccessUrl("/auctions").and()
 				.logout()
 				.logoutSuccessUrl("/login").and()

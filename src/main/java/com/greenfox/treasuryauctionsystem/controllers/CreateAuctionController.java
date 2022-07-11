@@ -1,10 +1,12 @@
 package com.greenfox.treasuryauctionsystem.controllers;
 
 import com.greenfox.treasuryauctionsystem.exceptions.InvalidAuctionException;
+import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 import com.greenfox.treasuryauctionsystem.models.dtos.AuctionDateDTO;
 import com.greenfox.treasuryauctionsystem.models.dtos.TempSecurityDTO;
+import com.greenfox.treasuryauctionsystem.services.AppUserService;
 import com.greenfox.treasuryauctionsystem.services.AuctionService;
 import java.security.Principal;
 import java.util.Map;
@@ -24,14 +26,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Scope("session")
 public class CreateAuctionController {
   private final AuctionService auctionService;
+  private final AppUserService appUserService;
   private Auction tempAuction = new Auction();
   @Autowired
-  public CreateAuctionController(AuctionService auctionService) {
+  public CreateAuctionController(AuctionService auctionService, AppUserService appUserService) {
     this.auctionService = auctionService;
+    this.appUserService = appUserService;
   }
   @GetMapping("/auctions/create")
   public String renderAuctionCreationPage(Model model, Principal principal){
-    model.addAttribute("user", principal);
+    AppUser currentUser = appUserService.getUserByUsername(principal.getName());
+    model.addAttribute("user", currentUser);
     model.addAttribute("newAuction", tempAuction);
     return "admin/create-auction";
   }
@@ -54,6 +59,7 @@ public class CreateAuctionController {
         redirectAttributes.addFlashAttribute("SECURITY_TERM_ERROR",addSecurityResultMessage.get("SECURITY_TERM_ERROR"));
       }
       redirectAttributes.addFlashAttribute("errorSecurityValue", tempSecurityDTO);
+      /*redirectAttributes.addFlashAttribute("auctionTime", auctionDateDTO);*/
       return "redirect:/admin/auctions/create";
     } else {
       TreasurySecurity treasurySecurity = new TreasurySecurity(tempSecurityDTO);
@@ -75,7 +81,7 @@ public class CreateAuctionController {
     return "redirect:/auctions";
   }
   @PostMapping("/auctions/cancel-creation")
-  public String createAuction(){
+  public String cancelAuctionCreation(){
     tempAuction = new Auction();
     return "redirect:/auctions";
   }

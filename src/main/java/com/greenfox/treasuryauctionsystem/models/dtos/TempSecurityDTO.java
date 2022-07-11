@@ -1,10 +1,7 @@
 package com.greenfox.treasuryauctionsystem.models.dtos;
 
 import java.time.LocalDate;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -12,19 +9,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Setter
 public class TempSecurityDTO {
 
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
   private String securityName;
   private String securityType;
   private String securityTerm;
   private Long totalAmount;
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate issueDate;
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private LocalDate maturityDate;
 
   public TempSecurityDTO(String securityType, String securityTerm,
-                         long totalAmount, LocalDate issueDate) {
+                         Long totalAmount, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate issueDate) {
     this.securityName = securityTerm + " " + securityType;
     this.securityType = securityType;
     this.securityTerm = securityTerm;
