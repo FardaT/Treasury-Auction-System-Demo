@@ -75,10 +75,10 @@
                         <td th:text="${treasurySecurity.securityName}"></td>
 
                         <td>
-                            <select class="form-control" id="isCompetitive"
+                            <select class="form-control isCompetitive" id="isCompetitive"
                                     th:field="*{bidDTOS[__${itemStat.index}__].isCompetitive}">
-                                <option th:value="0" th:text="Noncompetitive"></option>
                                 <option th:value="1" th:text="Competitive"></option>
+                                <option th:value="0" th:text="Noncompetitive"></option>
                             </select>
                         </td>
 
@@ -105,7 +105,7 @@
                         </td>
 
                         <td>
-                            <input type="number" step="0.1" class="form-control" id="rate"
+                            <input type="number" step="0.1" class="form-control rate" id="rate"
                                    th:field="*{bidDTOS[__${itemStat.index}__].rate}" required>
 
                             <div th:if="${__${'RATE_RANGE_' + itemStat.index}__} != null">
