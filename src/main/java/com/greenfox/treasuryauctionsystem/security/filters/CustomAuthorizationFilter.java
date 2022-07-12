@@ -24,37 +24,39 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                   FilterChain filterChain) throws ServletException, IOException {
-    if(request.getServletPath().equals("/login")) {
-      filterChain.doFilter(request, response);
-  } else {
-      Optional<Cookie> authorizationCookie = Arrays.stream(request.getCookies())
-          .filter(cookie->"jwtoken".equals(cookie.getName())).findAny();
-      if(authorizationCookie.isPresent()){
-        try {
-          String token = authorizationCookie.get().getValue();
-          //TODO handle security key securely
-          Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-          JWTVerifier verifier = JWT.require(algorithm).build();
-          DecodedJWT decodedJWT = verifier.verify(token);
-          String username = decodedJWT.getSubject();
-          String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
-          Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-          stream(roles).forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role));
-          });
+      if (request.getCookies() != null){
+        Optional<Cookie> authorizationCookie = Arrays.stream(request.getCookies())
+            .filter(cookie->"jwtoken".equals(cookie.getName())).findAny();
+        if(authorizationCookie.isPresent()){
+          try {
+            String token = authorizationCookie.get().getValue();
+            //TODO handle security key securely
+            Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            String username = decodedJWT.getSubject();
+            String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
+            Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            stream(roles).forEach(role -> {
+              authorities.add(new SimpleGrantedAuthority(role));
+            });
 
-          UsernamePasswordAuthenticationToken authenticationToken =
-              new UsernamePasswordAuthenticationToken(username, null, authorities);
-          SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(username, null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-          filterChain.doFilter(request, response);
+            switch (request.getServletPath()) {
+              case "/register", "/login", "/resetpassword", "/" -> response.sendRedirect("/auctions");
+            }
 
-        } catch (Exception exception){
-          filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
+
+          } catch (Exception exception){
+            response.sendRedirect("/logout");
+          }
         }
-      } else {
+    } else {
         filterChain.doFilter(request, response);
       }
-    }
   }
 }

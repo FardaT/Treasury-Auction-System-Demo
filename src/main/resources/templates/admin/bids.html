@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- HEADER -->
+<head th:replace="fragments/admin/header :: header"></head>
+
+<body>
+
+<!-- TOPNAV -->
+<nav th:replace="fragments/admin/topnav :: topnav"></nav>
+
+<!-- CONTENT -->
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- SIDENAV -->
+        <div class="col-md-2">
+            <ul th:replace="fragments/admin/sidenav :: sidenav"></ul>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="col-md-10">
+            <h1>List of BIDS</h1>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Amount</th>
+                    <th>Rate</th>
+                    <th>Competitive?</th>
+                    <th>Accepted?</th>
+                    <th>Archived?</th>
+                    <th>Security</th>
+                    <th>Auction</th>
+                    <th>Disabled?</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="bid : ${bids}">
+                    <td th:text="${bid.id}"></td>
+                    <td th:text="${bid.amount}"></td>
+                    <td th:text="${bid.rate}"></td>
+                    <td th:text="${bid.isCompetitive == true ? '&#9989;' : '&#10060;'}"></td>
+                    <td th:text="${bid.isAccepted == true ? '&#9989;' : '&#10060;'}"></td>
+                    <td th:text="${bid.isArchived == true ? '&#9989;' : '&#10060;'}"></td>
+                    <td th:text="${bid.treasurySecurity.securityName}"></td>
+                    <td th:text="${bid.treasurySecurity.auction.id}"></td>
+                    <td>
+                        <form th:action="@{/admin/bids/destroy}" th:if="${!bid.isDisabled}" method="post">
+                            <input type="hidden" name="bidId" th:value="${bid.id}">
+                            <input type="submit" class="btn btn-danger" value="Delete">
+                        </form>
+                        <div th:if="${bid.isDisabled}">
+                            <b><span style="color: red;">YES</span></b>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer th:replace="fragments/admin/footer :: footer"></footer>
+
+</body>
+</html>
