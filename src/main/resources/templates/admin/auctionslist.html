@@ -57,6 +57,9 @@
                         <th>start time</th>
                         <th>end date</th>
                         <th>end time</th>
+                        <th>Bond</th>
+                        <th>Bill</th>
+                        <th>Note</th>
                         <th>Securities</th>
                         <th>BID</th>
                     </thead>
@@ -68,6 +71,18 @@
                         <td th:text="*{startTime}"></td>
                         <td th:text="*{endDate}"></td>
                         <td th:text="*{endTime}"></td>
+                        <td>
+                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'Bond')}">&#9989;</span>
+                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'Bond')}">&#10060;</span>
+                        </td>
+                        <td>
+                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'Bill')}">&#9989;</span>
+                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'Bill')}">&#10060;</span>
+                        </td>
+                        <td>
+                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'Note')}">&#9989;</span>
+                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'Note')}">&#10060;</span>
+                        </td>
                         <td>
                             <!-- Button to Open the Modal -->
                             <button type="button" class="btn btn-primary" data-toggle="modal"

@@ -4,7 +4,9 @@ import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AuctionResponseDTO {
 
@@ -17,6 +19,8 @@ public class AuctionResponseDTO {
     private String endTime;
     private boolean isProcessed;
     private boolean isDisabled;
+
+    private Set<String> treasurySecurityTypeList = new HashSet<>();
 
     public AuctionResponseDTO(Auction auction) {
 
@@ -31,6 +35,10 @@ public class AuctionResponseDTO {
         this.endTime = auction.getAuctionEndDate().format(timeFormatter);
         this.isProcessed = auction.isProcessed();
         this.isDisabled = auction.isDisabled();
+
+        for (TreasurySecurity treasurySecurity : treasurySecurityList) {
+            treasurySecurityTypeList.add(treasurySecurity.getSecurityType());
+        }
     }
 
     public Long getId() {
@@ -63,5 +71,9 @@ public class AuctionResponseDTO {
 
     public boolean isDisabled() {
         return isDisabled;
+    }
+
+    public Set<String> getTreasurySecurityTypeList() {
+        return treasurySecurityTypeList;
     }
 }
