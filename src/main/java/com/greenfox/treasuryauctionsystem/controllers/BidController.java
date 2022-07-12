@@ -10,7 +10,9 @@ import com.greenfox.treasuryauctionsystem.services.AppUserService;
 import com.greenfox.treasuryauctionsystem.services.AuctionService;
 import com.greenfox.treasuryauctionsystem.services.BidService;
 import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
+
 import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +59,11 @@ public class BidController {
 
     // CREATE - show form
     @GetMapping("admin/bids/create")
-    public String create(Model model, Principal principal, @RequestParam Long auction_id) {
+    public String create(
+            Model model,
+            Principal principal,
+            @RequestParam Long auction_id,
+            RedirectAttributes redirectAttributes) {
 
         // get currently logged in user
         AppUser currentUser = appUserService.getUserByUsername(principal.getName());
@@ -76,7 +83,13 @@ public class BidController {
         model.addAttribute("form", bidsForm);
         model.addAttribute("currency", ApplicationDetails.currency);
 
-        return "admin/bids_create_form";
+        // you can only place bids for ONGOING auctions
+        if (auction.getAuctionStartDate().isBefore(LocalDateTime.now()) && auction.getAuctionEndDate().isAfter(LocalDateTime.now())) {
+            return "admin/bids_create_form";
+        } else {
+            redirectAttributes.addFlashAttribute("BIDDING_CLOSED", "This auction is either upcoming or finished");
+            return "redirect:/auctions";
+        }
     }
 
     // STORE
@@ -94,7 +107,7 @@ public class BidController {
 
         Map<String, String> saveResultMessage = bidService.saveBid(bids, currentUser);
 
-         // validations
+        // validations
         if (!saveResultMessage.isEmpty()) {
 
             if (saveResultMessage.containsKey("AT_LEAST_ONE")) {
@@ -102,23 +115,25 @@ public class BidController {
                 return "redirect:/admin/bids/create?auction_id=" + auction_id;
             }
 
-            int index = 0;
+            Auction auction = auctionService.findById(Long.valueOf(auction_id));
+
             for (String i : saveResultMessage.keySet()) {
 
-                if (saveResultMessage.containsKey("AMOUNT_POSITIVE_" + index)) {
-                    redirectAttributes.addFlashAttribute("AMOUNT_POSITIVE_" + index, saveResultMessage.get("AMOUNT_POSITIVE_" + index));
-                }
-                if (saveResultMessage.containsKey("AMOUNT_HUNDRED_" + index)) {
-                    redirectAttributes.addFlashAttribute("AMOUNT_HUNDRED_" + index, saveResultMessage.get("AMOUNT_HUNDRED_" + index));
-                }
-                if (saveResultMessage.containsKey("AMOUNT_COMPETITIVE_" + index)) {
-                    redirectAttributes.addFlashAttribute("AMOUNT_COMPETITIVE_" + index, saveResultMessage.get("AMOUNT_COMPETITIVE_" + index));
-                }
-                if (saveResultMessage.containsKey("RATE_RANGE_" + index)) {
-                    redirectAttributes.addFlashAttribute("RATE_RANGE_" + index, saveResultMessage.get("RATE_RANGE_" + index));
+                for (int counter = 0; counter < auction.getTreasurySecurityList().size(); counter++) {
+                    if (saveResultMessage.containsKey("AMOUNT_POSITIVE_" + counter)) {
+                        redirectAttributes.addFlashAttribute("AMOUNT_POSITIVE_" + counter, saveResultMessage.get(i));
+                    }
+                    if (saveResultMessage.containsKey("AMOUNT_HUNDRED_" + counter)) {
+                        redirectAttributes.addFlashAttribute("AMOUNT_HUNDRED_" + counter, saveResultMessage.get("AMOUNT_HUNDRED_" + counter));
+                    }
+                    if (saveResultMessage.containsKey("AMOUNT_COMPETITIVE_" + counter)) {
+                        redirectAttributes.addFlashAttribute("AMOUNT_COMPETITIVE_" + counter, saveResultMessage.get(i));
+                    }
+                    if (saveResultMessage.containsKey("RATE_RANGE_" + counter)) {
+                        redirectAttributes.addFlashAttribute("RATE_RANGE_" + counter, saveResultMessage.get(i));
+                    }
                 }
 
-                index++;
             }
 
             if (saveResultMessage.containsKey("AMOUNT_NONCOMPETITIVE")) {

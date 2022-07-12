@@ -38,13 +38,13 @@ public class BidServiceImpl implements BidService {
         // do we have at least one bid?
         boolean allEmpty = true;
         for (BidDTO bidDTO : bidDTOS) {
-            if(bidDTO.getAmount() != 0) {
+            if (bidDTO.getAmount() != 0) {
                 allEmpty = false;
             }
         }
 
         // do we have at least one bid?
-        if(allEmpty) {
+        if (allEmpty) {
             errors.put("AT_LEAST_ONE", "You have to place at least one bid!");
         } else {
 
@@ -58,7 +58,7 @@ public class BidServiceImpl implements BidService {
                 // VALIDATIONS
 
                 // to see if we need validation
-                if(bid.getAmount() != 0) {
+                if (bid.getAmount() != 0) {
 
                     if (bid.getAmount() < 0) {
                         errors.put("AMOUNT_POSITIVE_" + index, "Amount has to be a positive number!");
@@ -72,18 +72,16 @@ public class BidServiceImpl implements BidService {
                         if (bid.getAmount() > bid.getTreasurySecurity().getTotalAmount() * ApplicationDetails.percentage) {
                             errors.put("AMOUNT_COMPETITIVE_" + index, "Competitive bidding is limited to 35% of the offering amount for each bidder!");
                         }
+                        if (bid.getRate() <= ApplicationDetails.min_rate || bid.getRate() > ApplicationDetails.max_rate) {
+                            errors.put("RATE_RANGE_" + index, "Rate has to be between 0 and 10!");
+                        }
                     } else {
                         // Noncompetitive bidding is limited to purchases of $5 million per auction
                         sum += bid.getAmount();
                     }
 
-                    if (bid.getRate() <= ApplicationDetails.min_rate || bid.getRate() > ApplicationDetails.max_rate) {
-                        errors.put("RATE_RANGE_" + index, "Rate has to be between 0 and 10!");
-                    }
-
-                    index++;
-
                 }
+                index++;
             }
 
             if (sum > ApplicationDetails.max_amount) {
