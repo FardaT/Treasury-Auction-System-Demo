@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface AuctionService {
 
-  Map<String, List<AuctionResponseDTO>> getAllAuctionsByStatus() throws NullPointerException;
+  Map<String, List<AuctionResponseDTO>> getAllAuctionsByStatus();
 
   void disable(Long id)throws NoSuchAuctionException;
 

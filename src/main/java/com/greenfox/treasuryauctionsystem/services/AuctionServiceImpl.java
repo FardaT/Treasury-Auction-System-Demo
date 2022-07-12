@@ -1,20 +1,18 @@
 package com.greenfox.treasuryauctionsystem.services;
 
 import com.greenfox.treasuryauctionsystem.exceptions.InvalidAuctionException;
+import com.greenfox.treasuryauctionsystem.exceptions.NoSuchAuctionException;
 import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.Bid;
 import com.greenfox.treasuryauctionsystem.models.NonCompetitiveBidComparator;
-
 import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 import com.greenfox.treasuryauctionsystem.models.dtos.AuctionDateDTO;
-import com.greenfox.treasuryauctionsystem.exceptions.NoSuchAuctionException;
-import com.greenfox.treasuryauctionsystem.models.Bid;
 import com.greenfox.treasuryauctionsystem.models.dtos.AuctionResponseDTO;
 import com.greenfox.treasuryauctionsystem.models.dtos.TempSecurityDTO;
 import com.greenfox.treasuryauctionsystem.repositories.AuctionRepository;
-import com.greenfox.treasuryauctionsystem.utils.TreasurySecurityTermConstraint;
 import com.greenfox.treasuryauctionsystem.repositories.BidRepository;
 import com.greenfox.treasuryauctionsystem.repositories.TreasurySecurityRepository;
+import com.greenfox.treasuryauctionsystem.utils.TreasurySecurityTermConstraint;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
@@ -52,8 +50,7 @@ public class AuctionServiceImpl implements AuctionService {
   }
 
   @Override
-  public Map<String, List<AuctionResponseDTO>> getAllAuctionsByStatus()
-      throws NullPointerException {
+  public Map<String, List<AuctionResponseDTO>> getAllAuctionsByStatus() {
 
     Map<String, List<AuctionResponseDTO>> auctionsMap = new HashMap<>();
     auctionsMap.put("finished", null);
@@ -62,9 +59,6 @@ public class AuctionServiceImpl implements AuctionService {
 
     List<Auction> allAuctions = auctionRepository.findAll();
 
-    if (allAuctions.size() == 0) {
-      throw new NullPointerException();
-    }
     for (Auction auction : allAuctions) {
       if (!auction.isDisabled()) {
         if (auction.getAuctionEndDate().isBefore(LocalDateTime.now())) {
@@ -158,7 +152,6 @@ public class AuctionServiceImpl implements AuctionService {
             nonCompetitiveBidListMap.get(entry.getKey()).add(bid);
           }
         }
-
       }
     }
 
