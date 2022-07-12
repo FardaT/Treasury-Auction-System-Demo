@@ -1,5 +1,7 @@
 package com.greenfox.treasuryauctionsystem.models;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -7,10 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "bids")
-public class Bid {
+public class Bid implements Comparable<Bid> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,15 +27,17 @@ public class Bid {
 
   private boolean isCompetitive;
   private long amount;
-  private float rate;
+  private Float rate;
   private boolean isAccepted;
+  private long acceptedValue;
   private boolean isArchived;
 
   public Bid() {
   }
 
-  public Bid(Long id, TreasurySecurity treasurySecurity, AppUser user, boolean isCompetitive, long amount, float rate,
-             boolean isAccepted, boolean isArchived) {
+  public Bid(Long id, TreasurySecurity treasurySecurity, AppUser user, boolean isCompetitive,
+             long amount, float rate,
+             boolean isAccepted, boolean isArchived, long acceptedValue) {
     this.id = id;
     this.user = user;
     this.treasurySecurity = treasurySecurity;
@@ -41,6 +46,7 @@ public class Bid {
     this.rate = rate;
     this.isAccepted = isAccepted;
     this.isArchived = isArchived;
+    this.acceptedValue = acceptedValue;
   }
 
   public Long getId() {
@@ -88,6 +94,10 @@ public class Bid {
     return rate;
   }
 
+  public void setRate(Float rate) {
+    this.rate = rate;
+  }
+
   public void setRate(float rate) {
     this.rate = rate;
   }
@@ -106,5 +116,22 @@ public class Bid {
 
   public void setArchived(boolean archived) {
     isArchived = archived;
+  }
+
+  public long getAcceptedValue() {
+    return acceptedValue;
+  }
+
+  public void setAcceptedValue(long acceptedValue) {
+    this.acceptedValue = acceptedValue;
+  }
+
+  @Override
+  public int compareTo(Bid other) {
+    int i = rate.compareTo(other.getRate());
+    if (i != 0) {
+      return i;
+    }
+    return Long.compare(id, other.getId());
   }
 }

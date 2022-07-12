@@ -206,14 +206,14 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 			errors.put("ENTER_MORE_SECURE_PASSWORD", "Please enter a more secure password");
 			return errors;
 		}
-//        user.setPassword(passwordReset.getPassword());
 		user.setPassword(passwordEncoder.encode(passwordReset.getPassword()));
 
-		user.setReactivationToken(null);
-		user.setReactivationTokenExpiration(null);
-		appUserRepository.save(user);
-		return errors;
-	}
+        user.setReactivationToken(null);
+        user.setReactivationTokenExpiration(null);
+        user.setActivated(true);
+        appUserRepository.save(user);
+        return errors;
+    }
 
 	// READ - all users
 	@Override
