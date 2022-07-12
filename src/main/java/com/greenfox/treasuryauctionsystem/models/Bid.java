@@ -1,4 +1,5 @@
 package com.greenfox.treasuryauctionsystem.models;
+
 import com.greenfox.treasuryauctionsystem.models.dtos.BidDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

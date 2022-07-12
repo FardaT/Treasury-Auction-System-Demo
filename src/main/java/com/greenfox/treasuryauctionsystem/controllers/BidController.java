@@ -10,6 +10,7 @@ import com.greenfox.treasuryauctionsystem.services.AppUserService;
 import com.greenfox.treasuryauctionsystem.services.AuctionService;
 import com.greenfox.treasuryauctionsystem.services.BidService;
 import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,10 +41,10 @@ public class BidController {
 
     // READ
     @GetMapping("admin/bids")
-    public String read(Model model, HttpServletRequest request) {
+    public String read(Model model, Principal principal) {
 
         // get currently logged in user
-        AppUser currentUser = appUserService.getUserFromRequest(request);
+        AppUser currentUser = appUserService.getUserByUsername(principal.getName());
         model.addAttribute("user", currentUser);
 
         // get all the bids
@@ -55,10 +56,10 @@ public class BidController {
 
     // CREATE - show form
     @GetMapping("admin/bids/create")
-    public String create(Model model, HttpServletRequest request, @RequestParam Long auction_id) {
+    public String create(Model model, Principal principal, @RequestParam Long auction_id) {
 
         // get currently logged in user
-        AppUser currentUser = appUserService.getUserFromRequest(request);
+        AppUser currentUser = appUserService.getUserByUsername(principal.getName());
         model.addAttribute("user", currentUser);
 
         // find the auction
@@ -82,14 +83,14 @@ public class BidController {
     @PostMapping("admin/bids/store")
     public String store(
             @ModelAttribute BidsCreationDto form,
-            HttpServletRequest request,
+            Principal principal,
             RedirectAttributes redirectAttributes,
             @RequestParam String auction_id) {
 
         List<BidDTO> bids = form.getBidDTOS();
 
         // get currently logged in user
-        AppUser currentUser = appUserService.getUserFromRequest(request);
+        AppUser currentUser = appUserService.getUserByUsername(principal.getName());
 
         Map<String, String> saveResultMessage = bidService.saveBid(bids, currentUser);
 

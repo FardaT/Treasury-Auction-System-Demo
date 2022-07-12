@@ -20,14 +20,14 @@
 
         <!-- CONTENT -->
         <div class="col-md-10">
-            <h1 th:text="'Wellcome to  Treasury Auction System ' + ${user.getUsername()} + '!'"></h1>
+            <h1 th:text="'Wellcome to  Treasury Auction System ' + ${user.username} + '!'"></h1>
 
             <ul th:object="${user}">
-                <li th:text="'Username: ' + ${user.getUsername()}"></li>
-                <li th:text="'Email: ' + ${user.getEmail()}"></li>
-                <li th:text="'Institution: ' + ${user.getInstitution()}"></li>
+                <li th:text="'Username: ' + *{username}"></li>
+                <li th:text="'Email: ' + *{email}"></li>
+                <li th:text="'Institution: ' + *{institution}"></li>
             </ul>
-            <h3 th:text="${user.getUsername()} + '\'s bids: '"></h3>
+            <h3 th:text="${user.username} + '\'s bids: '"></h3>
 
             <table class="table">
                 <thead>

@@ -27,9 +27,9 @@ public class TestService {
   private AuctionRepository auctionRepository;
   private TreasurySecurityRepository treasurySecurityRepository;
 
-    // SEEDERS
-    private final AppUserSeeder appUserSeeder;
-    private final AuctionSeeder auctionSeeder;
+  // SEEDERS
+  private final AppUserSeeder appUserSeeder;
+  private final AuctionSeeder auctionSeeder;
 
   @Autowired
   public TestService(AppUserRepository appUserRepository, BidRepository bidRepository,
@@ -40,9 +40,9 @@ public class TestService {
     this.auctionRepository = auctionRepository;
     this.treasurySecurityRepository = treasurySecurityRepository;
 
-      // SEEDERS
-      this.auctionSeeder = auctionSeeder;
-      this.appUserSeeder = appUserSeeder;
+    // SEEDERS
+    this.auctionSeeder = auctionSeeder;
+    this.appUserSeeder = appUserSeeder;
   }
 
   public void fillDatabase() {
@@ -200,8 +200,8 @@ public class TestService {
 
   }
 
-    public void seedDatabase() {
-        appUserSeeder.saveAppUsers();
-        auctionSeeder.saveAuctions();
-    }
+  public void seedDatabase() {
+    appUserSeeder.saveAppUsers();
+    auctionSeeder.saveAuctions();
+  }
 }
