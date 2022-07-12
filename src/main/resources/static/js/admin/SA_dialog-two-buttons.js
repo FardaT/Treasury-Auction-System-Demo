@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $(".sa_click").click(function (e) {
+    $(".sa_click_2").click(function (e) {
         e.preventDefault();
         var form = $(this).parents('form');
         Swal.fire({

@@ -2,12 +2,11 @@ package com.greenfox.treasuryauctionsystem.controllers;
 
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.services.AppUserService;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class GetProfile {
@@ -21,8 +20,8 @@ public class GetProfile {
 
 	//@GetMapping("/admin/profile")
 	@GetMapping("/profile")
-	public String getProfile (HttpServletRequest request, Model model) {
-		AppUser currentUser = appUserService.getUserFromRequest(request);
+	public String getProfile (Principal principal, Model model) {
+		AppUser currentUser = appUserService.getUserByUsername(principal.getName());
 		model.addAttribute("user", currentUser);
 		model.addAttribute("bids", currentUser.getBids());
 

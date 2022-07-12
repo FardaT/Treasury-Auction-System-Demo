@@ -20,9 +20,6 @@ public interface AppUserService {
 	// ACTIVATE ACCOUNT BY TOKEN
 	Map<String, String> activateAccount (String activationToken);
 
-	// READ - users from HTTP request
-	AppUser getUserFromRequest (HttpServletRequest request);
-
 	AppUser findUserByEmail (ForgottenPasswordEmailInput emailInput);
 
 	String saveToken (AppUser appUser);
@@ -45,4 +42,7 @@ public interface AppUserService {
 
 	// UPDATE - disable user (isDisabled set to TRUE)
 	AppUser disableAppUser (Long appUserId);
+
+	AppUser getUserByUsername(String username);
+
 }
