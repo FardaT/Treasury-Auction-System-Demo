@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.models;
 
+import com.greenfox.treasuryauctionsystem.models.dtos.TempSecurityDTO;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +17,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "treasury_securities")
 public class TreasurySecurity{
-
-
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
   @OneToMany(
       mappedBy = "treasurySecurity",
-      cascade = CascadeType.MERGE,
+      cascade = CascadeType.ALL,
       orphanRemoval = true
   )
   private final List<Bid> bidList = new ArrayList<>();
@@ -54,6 +53,14 @@ public class TreasurySecurity{
     this.issueDate = issueDate;
     this.maturityDate = maturityDate;
     this.highRate = highRate;
+  }
+  public TreasurySecurity(TempSecurityDTO tempSecurityDTO) {
+    this.securityName = tempSecurityDTO.getSecurityName();
+    this.securityType = tempSecurityDTO.getSecurityType();
+    this.securityTerm = tempSecurityDTO.getSecurityTerm();
+    this.totalAmount = tempSecurityDTO.getTotalAmount();
+    this.issueDate = tempSecurityDTO.getIssueDate();
+    this.maturityDate = tempSecurityDTO.getMaturityDate();
   }
 
   public Long getId() {

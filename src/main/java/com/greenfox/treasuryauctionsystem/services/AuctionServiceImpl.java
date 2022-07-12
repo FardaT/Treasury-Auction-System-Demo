@@ -1,15 +1,22 @@
 package com.greenfox.treasuryauctionsystem.services;
 
-import com.greenfox.treasuryauctionsystem.exceptions.NoSuchAuctionException;
+import com.greenfox.treasuryauctionsystem.exceptions.InvalidAuctionException;
 import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.Bid;
 import com.greenfox.treasuryauctionsystem.models.NonCompetitiveBidComparator;
+
 import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
+import com.greenfox.treasuryauctionsystem.models.dtos.AuctionDateDTO;
+import com.greenfox.treasuryauctionsystem.exceptions.NoSuchAuctionException;
+import com.greenfox.treasuryauctionsystem.models.Bid;
 import com.greenfox.treasuryauctionsystem.models.dtos.AuctionResponseDTO;
+import com.greenfox.treasuryauctionsystem.models.dtos.TempSecurityDTO;
 import com.greenfox.treasuryauctionsystem.repositories.AuctionRepository;
+import com.greenfox.treasuryauctionsystem.utils.TreasurySecurityTermConstraint;
 import com.greenfox.treasuryauctionsystem.repositories.BidRepository;
 import com.greenfox.treasuryauctionsystem.repositories.TreasurySecurityRepository;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -305,5 +312,110 @@ public class AuctionServiceImpl implements AuctionService {
       }
     }
     return highRateMap;
+  }
+
+  // find auction by id
+  @Override
+  public Auction findById(Long auction_id) {
+    return auctionRepository.findById(auction_id).orElse(null);
+  }
+  @Override
+  public void create(Auction auction) {
+    if (auction.getTreasurySecurityList().isEmpty()){
+      throw new InvalidAuctionException("Auction must contain security");
+    }
+    auctionRepository.save(auction);
+  }
+
+  @Override
+  public Map<String, String> validateSecurityForAuction(Auction auction, TempSecurityDTO treasurySecurity) {
+    Map<String, String> errors = new HashMap<>();
+    List<TreasurySecurity> securityList = auction.getTreasurySecurityList();
+    for (TreasurySecurity ts : securityList) {
+      if (ts.getSecurityName().equals(treasurySecurity.getSecurityName())){
+        errors.put("INVALID_SECURITY_ERROR", "Auction cannot contain duplicate securities");
+      }
+    }
+    if(auction.getTreasurySecurityList().size() > 10){
+      errors.put("INVALID_SECURITY_ERROR", "Auction cannot contain more than 10 securities at a time");
+    }
+    if(treasurySecurity.getIssueDate() == null){
+      errors.put("ISSUE_DATE_ERROR","Issue date cannot be null");
+      return errors;
+    }
+    if(auction.getAuctionEndDate() != null){
+      if(treasurySecurity.getIssueDate().isBefore(ChronoLocalDate.from(auction.getAuctionEndDate().plusDays(1)))){
+        errors.put("ISSUE_DATE_ERROR","Issue date must take place after the auction");
+      }
+    }
+    if(treasurySecurity.getTotalAmount() == null){
+      errors.put("TOTALAMOUNT_ERROR","Total amount must not be null");
+    }
+    if(treasurySecurity.getTotalAmount() < 1000000){
+      errors.put("TOTALAMOUNT_ERROR","Total amount must be at least $1.000.000");
+    }
+    if(treasurySecurity.getTotalAmount() % 100 != 0){
+      errors.put("TOTALAMOUNT_ERROR","Total amount must be a product of $100 security denominations");
+    }
+    if(treasurySecurity.getTotalAmount() > 100000000){
+      errors.put("TOTALAMOUNT_ERROR","Total amount must not exceed $100.000.000");
+    }
+    if(treasurySecurity.getSecurityType() == null){
+      errors.put("INVALID_SECURITY_ERROR","Security type cannot be null");
+      return errors;
+    }
+    if(treasurySecurity.getMaturityDate() == null){
+      errors.put("INVALID_SECURITY_ERROR","Maturity date cannot be null");
+      return errors;
+    }
+    if(!TreasurySecurityTermConstraint.validSecurities.contains(treasurySecurity.getSecurityType())){
+      errors.put("INVALID_SECURITY_ERROR","Invalid treasury security");
+    }
+    if(treasurySecurity.getSecurityTerm() == null){
+      errors.put("SECURITY_TERM_ERROR","Security term cannot be null");
+      return errors;
+    }
+    if(treasurySecurity.getSecurityType().equals("T-Bill")){
+      if (!TreasurySecurityTermConstraint.validBillTerm.contains(treasurySecurity.getSecurityTerm())){
+        errors.put("SECURITY_TERM_ERROR","Bill term out of bound");
+      }
+    }
+    if(treasurySecurity.getSecurityType().equals("T-Note")){
+      if(!TreasurySecurityTermConstraint.validNoteTerm.contains(treasurySecurity.getSecurityTerm())){
+        errors.put("SECURITY_TERM_ERROR","Note term out of bound");
+      }
+    }
+    if(treasurySecurity.getSecurityType().equals("T-Bond")){
+      if (!TreasurySecurityTermConstraint.validBondTerm.contains(treasurySecurity.getSecurityTerm())){
+        errors.put("SECURITY_TERM_ERROR","Bond term out of bound");
+      }
+    }
+    return errors;
+  }
+  @Override
+  public Auction setDateToAuction(Auction auction, AuctionDateDTO auctionDateDTO) {
+    if(auctionDateDTO.getAuctionStartDate() == null){
+      throw new InvalidAuctionException("Auction start time cannot be null");
+    }
+    if(auctionDateDTO.getAuctionEndDate() == null){
+      throw new InvalidAuctionException("Auction end time cannot be null");
+    }
+    for (TreasurySecurity ts: auction.getTreasurySecurityList()) {
+      if(ts.getIssueDate().isBefore(ChronoLocalDate.from(auctionDateDTO.getAuctionEndDate()))){
+        throw new InvalidAuctionException("Security Issue date cannot take place before auction.");
+      }
+    }
+    if(auctionDateDTO.getAuctionStartDate().isBefore(LocalDateTime.now())){
+      throw new InvalidAuctionException("Auction start date out of bound");
+    }
+    if(auctionDateDTO.getAuctionEndDate().isBefore(LocalDateTime.now())){
+      throw new InvalidAuctionException("Auction end date out of bound");
+    }
+    if(auctionDateDTO.getAuctionEndDate().isBefore(auctionDateDTO.getAuctionStartDate())){
+      throw new InvalidAuctionException("Invalid auction end time");
+    }
+    auction.setAuctionStartDate(auctionDateDTO.getAuctionStartDate());
+    auction.setAuctionEndDate(auctionDateDTO.getAuctionEndDate());
+    return auction;
   }
 }

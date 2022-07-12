@@ -1,7 +1,10 @@
 package com.greenfox.treasuryauctionsystem.models;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
+import com.greenfox.treasuryauctionsystem.models.dtos.BidDTO;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,122 +12,46 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "bids")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Bid implements Comparable<Bid> {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+    // FIELDS
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  private TreasurySecurity treasurySecurity;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TreasurySecurity treasurySecurity;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  private AppUser user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private AppUser user;
 
-  private boolean isCompetitive;
-  private long amount;
-  private Float rate;
-  private boolean isAccepted;
-  private long acceptedValue;
-  private boolean isArchived;
+    private boolean isCompetitive;
+    private long amount;
+    private Float rate;
+    private boolean isAccepted = false;
+    private boolean isArchived = false;
+    private boolean isDisabled = false; // for soft delete/cancel
 
-  public Bid() {
-  }
+    private long acceptedValue;
 
-  public Bid(Long id, TreasurySecurity treasurySecurity, AppUser user, boolean isCompetitive,
-             long amount, float rate,
-             boolean isAccepted, boolean isArchived, long acceptedValue) {
-    this.id = id;
-    this.user = user;
-    this.treasurySecurity = treasurySecurity;
-    this.isCompetitive = isCompetitive;
-    this.amount = amount;
-    this.rate = rate;
-    this.isAccepted = isAccepted;
-    this.isArchived = isArchived;
-    this.acceptedValue = acceptedValue;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public TreasurySecurity getTreasurySecurity() {
-    return treasurySecurity;
-  }
-
-  public void setTreasurySecurity(
-      TreasurySecurity treasurySecurity) {
-    this.treasurySecurity = treasurySecurity;
-  }
-
-  public AppUser getUser() {
-    return user;
-  }
-
-  public void setUser(AppUser user) {
-    this.user = user;
-  }
-
-  public boolean isCompetitive() {
-    return isCompetitive;
-  }
-
-  public void setCompetitive(boolean competitive) {
-    isCompetitive = competitive;
-  }
-
-  public long getAmount() {
-    return amount;
-  }
-
-  public void setAmount(long amount) {
-    this.amount = amount;
-  }
-
-  public float getRate() {
-    return rate;
-  }
-
-  public void setRate(Float rate) {
-    this.rate = rate;
-  }
-
-  public void setRate(float rate) {
-    this.rate = rate;
-  }
-
-  public boolean isAccepted() {
-    return isAccepted;
-  }
-
-  public void setAccepted(boolean accepted) {
-    isAccepted = accepted;
-  }
-
-  public boolean isArchived() {
-    return isArchived;
-  }
-
-  public void setArchived(boolean archived) {
-    isArchived = archived;
-  }
-
-  public long getAcceptedValue() {
-    return acceptedValue;
-  }
-
-  public void setAcceptedValue(long acceptedValue) {
-    this.acceptedValue = acceptedValue;
-  }
+    public Bid(BidDTO bidDTO) {
+        this.id = bidDTO.getId();
+        this.treasurySecurity = bidDTO.getTreasurySecurity();
+        this.user = bidDTO.getUser();
+        this.isCompetitive = bidDTO.getIsCompetitive().equals("1");
+        this.amount = bidDTO.getAmount();
+        this.rate = bidDTO.getRate();
+        this.isAccepted = bidDTO.isAccepted();
+        this.isArchived = bidDTO.isArchived();
+        this.isDisabled = bidDTO.isDisabled();
+    }
 
   @Override
   public int compareTo(Bid other) {
