@@ -67,6 +67,10 @@ public class TestService {
     bid5.setCompetitive(false);
     bid5.setAmount(400);
 
+    Bid bid6 = new Bid();
+    bid6.setCompetitive(false);
+    bid6.setAmount(600);
+
     TreasurySecurity treasurySecurity1 = new TreasurySecurity();
     treasurySecurity1.setSecurityName("Bond 1");
     treasurySecurity1.setSecurityType("Bond");
@@ -174,6 +178,7 @@ public class TestService {
     treasurySecurity1.addBid(bid3);
     treasurySecurity1.addBid(bid4);
     treasurySecurity1.addBid(bid5);
+    treasurySecurity1.addBid(bid6);
 
     // add bid to user (user has many bids)
     appUser1.adBid(bid1);
@@ -188,6 +193,7 @@ public class TestService {
     bidRepository.save(bid3);
     bidRepository.save(bid4);
     bidRepository.save(bid5);
+    bidRepository.save(bid6);
 
   }
 }

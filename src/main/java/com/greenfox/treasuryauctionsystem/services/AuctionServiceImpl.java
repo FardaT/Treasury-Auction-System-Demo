@@ -3,6 +3,7 @@ package com.greenfox.treasuryauctionsystem.services;
 import com.greenfox.treasuryauctionsystem.exceptions.NoSuchAuctionException;
 import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.Bid;
+import com.greenfox.treasuryauctionsystem.models.NonCompetitiveBidComparator;
 import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 import com.greenfox.treasuryauctionsystem.models.dtos.AuctionResponseDTO;
 import com.greenfox.treasuryauctionsystem.repositories.AuctionRepository;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,10 @@ public class AuctionServiceImpl implements AuctionService {
   private final TreasurySecurityRepository treasurySecurityRepository;
 
   private final BidRepository bidRepository;
+
+  @Value("${highrate}")
+  String systemHighRate;
+
 
   @Autowired
   public AuctionServiceImpl(AuctionRepository auctionRepository,
@@ -81,6 +87,7 @@ public class AuctionServiceImpl implements AuctionService {
     return auctionsMap;
   }
 
+
   @Override
   public void disable(Long id) throws NoSuchAuctionException {
     Optional<Auction> auction = auctionRepository.findById(id);
@@ -130,17 +137,21 @@ public class AuctionServiceImpl implements AuctionService {
 
     for (Map.Entry<Long, List<Bid>> entry : bidListMap.entrySet()) {
       for (Bid bid : entry.getValue()) {
-        if (bid.isCompetitive()) {
-          if (!competitiveBidListMap.containsKey(bid.getTreasurySecurity().getId())) {
-            competitiveBidListMap.put(bid.getTreasurySecurity().getId(), new ArrayList<>());
+        // TODO: 2022. 07. 12. check if bid is not disabled HERE
+        if (true) {
+          if (bid.isCompetitive()) {
+            if (!competitiveBidListMap.containsKey(bid.getTreasurySecurity().getId())) {
+              competitiveBidListMap.put(bid.getTreasurySecurity().getId(), new ArrayList<>());
+            }
+            competitiveBidListMap.get(entry.getKey()).add(bid);
+          } else {
+            if (!nonCompetitiveBidListMap.containsKey(bid.getTreasurySecurity().getId())) {
+              nonCompetitiveBidListMap.put(bid.getTreasurySecurity().getId(), new ArrayList<>());
+            }
+            nonCompetitiveBidListMap.get(entry.getKey()).add(bid);
           }
-          competitiveBidListMap.get(entry.getKey()).add(bid);
-        } else {
-          if (!nonCompetitiveBidListMap.containsKey(bid.getTreasurySecurity().getId())) {
-            nonCompetitiveBidListMap.put(bid.getTreasurySecurity().getId(), new ArrayList<>());
-          }
-          nonCompetitiveBidListMap.get(entry.getKey()).add(bid);
         }
+
       }
     }
 
@@ -158,26 +169,61 @@ public class AuctionServiceImpl implements AuctionService {
       }
     }
 
-    //sorts the lists of the competitiveBidListMap
+    //sort the lists of the competitiveBidListMap and the nonCompetitiveBidListMap
     for (Map.Entry<Long, List<Bid>> entry : competitiveBidListMap.entrySet()) {
       List<Bid> currentBidList = entry.getValue();
       Collections.sort(currentBidList);
     }
-
-    //calculate security's high rate, set bid's isAccepted & acceptedValue
-    Map<Long, Float> highRateMap =
-        getHighRateMap(totalAmountsBySecurities, competitiveBidListMap,
-            totalNonCompetitiveBidAmount);
-
-    //set all noncompetitive auctions setAcceptedValue and setAcceptedFlag
     for (Map.Entry<Long, List<Bid>> entry : nonCompetitiveBidListMap.entrySet()) {
-      for (Bid bid : entry.getValue()) {
-        bid.setAcceptedValue(bid.getAmount());
-        bid.setAccepted(true);
-        bidRepository.save(bid);
-      }
+      List<Bid> currentBidList = entry.getValue();
+      NonCompetitiveBidComparator nonCompetitiveBidComparator = new NonCompetitiveBidComparator();
+      currentBidList.sort(nonCompetitiveBidComparator);
     }
 
+    // checks non-competitive bids
+    for (Map.Entry<Long, Long> entry : totalNonCompetitiveBidAmount.entrySet()) {
+      //set all noncompetitive auctions setAcceptedValue and setAcceptedFlag
+      if (entry.getValue() <= totalAmountsBySecurities.get(entry.getKey())) {
+        for (Map.Entry<Long, List<Bid>> bidEntry : nonCompetitiveBidListMap.entrySet()) {
+          for (Bid bid : bidEntry.getValue()) {
+            bid.setAcceptedValue(bid.getAmount());
+            bid.setAccepted(true);
+            bid.setArchived(true);
+            bidRepository.save(bid);
+            long remainingAmount = totalAmountsBySecurities.get(entry.getKey()) - bid.getAmount();
+            totalAmountsBySecurities.put(entry.getKey(), remainingAmount);
+          }
+        }
+        //if non-competitve exceeds total amount this else block will handle the case
+      } else {
+        for (Map.Entry<Long, List<Bid>> bidEntry : nonCompetitiveBidListMap.entrySet()) {
+          long remainingAmount = totalAmountsBySecurities.get(entry.getKey());
+          for (Bid bid : bidEntry.getValue()) {
+            if (remainingAmount > 0) {
+              if (bid.getAmount() < remainingAmount) {
+                bid.setAcceptedValue(bid.getAmount());
+              } else {
+                bid.setAcceptedValue(remainingAmount);
+              }
+              bid.setAccepted(true);
+              bid.setArchived(true);
+              bidRepository.save(bid);
+              remainingAmount = remainingAmount - bid.getAmount();
+            } else {
+              bid.setAccepted(false);
+              bid.setArchived(true);
+              bid.setAcceptedValue(0);
+              bidRepository.save(bid);
+              remainingAmount = remainingAmount - bid.getAmount();
+            }
+          }
+          totalAmountsBySecurities.put(entry.getKey(), remainingAmount);
+        }
+      }
+    }
+    //calculate security's high rate, set bid's isAccepted & acceptedValue
+    Map<Long, Float> highRateMap =
+        getHighRateMap(totalAmountsBySecurities, competitiveBidListMap);
     //set highRate of all treasurySecurities
     for (TreasurySecurity treasurySecurity : treasurySecurityList) {
       if (highRateMap.containsKey(treasurySecurity.getId())) {
@@ -186,59 +232,76 @@ public class AuctionServiceImpl implements AuctionService {
         treasurySecurityRepository.save(treasurySecurity);
       }
     }
-
     //sets auction's isProcessed flag
     currentAuction.setProcessed(true);
     auctionRepository.save(currentAuction);
   }
 
+
   private Map<Long, Float> getHighRateMap(Map<Long, Long> totalAmountsBySecurities,
-                                          Map<Long, List<Bid>> competitiveBidListMap,
-                                          Map<Long, Long> totalNonCompetitiveBidAmount) {
+                                          Map<Long, List<Bid>> competitiveBidListMap) {
     Map<Long, Float> highRateMap = new HashMap<>();
 
     for (Map.Entry<Long, List<Bid>> entry : competitiveBidListMap.entrySet()) {
 
+
+      //this block is commented out because the non-competitive amounts are already deducted
       //get security total amount
-      long totalAmountOfCurrentSecurity = totalAmountsBySecurities.get(entry.getKey());
+//      long totalAmountOfCurrentSecurity = totalAmountsBySecurities.get(entry.getKey());
 
       //get remaining total amount after non-competitive bids deducted
-      long remainingTotalAmountAfterNonCompetitiveBidsDeducted = totalAmountOfCurrentSecurity;
-      if (totalNonCompetitiveBidAmount.containsKey(entry.getKey())) {
-        remainingTotalAmountAfterNonCompetitiveBidsDeducted =
-            totalAmountOfCurrentSecurity - totalNonCompetitiveBidAmount.get(entry.getKey());
-      }
+//      long remainingTotalAmountAfterNonCompetitiveBidsDeducted = totalAmountOfCurrentSecurity;
+//      if (totalNonCompetitiveBidAmount.containsKey(entry.getKey())) {
+//        remainingTotalAmountAfterNonCompetitiveBidsDeducted =
+//            totalAmountOfCurrentSecurity - totalNonCompetitiveBidAmount.get(entry.getKey());
+//      }
 
-      boolean isExceeded = false;
+      long remainingTotalAmountAfterNonCompetitiveBidsDeducted =
+          totalAmountsBySecurities.get(entry.getKey());
 
-      //check high rate & save bids & treasurySecurity & auction
-      for (Bid bid : entry.getValue()) {
-        if (remainingTotalAmountAfterNonCompetitiveBidsDeducted - bid.getAmount() > 0) {
-          remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
-          bid.setAccepted(true);
-          bid.setAcceptedValue(bid.getAmount());
-          highRateMap.put(entry.getKey(), bid.getRate());
-        } else if (remainingTotalAmountAfterNonCompetitiveBidsDeducted - bid.getAmount() == 0) {
-          remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
-          bid.setAccepted(true);
-          bid.setAcceptedValue(bid.getAmount());
-          highRateMap.put(entry.getKey(), bid.getRate());
-          isExceeded = true;
-        } else {
-          remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
-          if (!isExceeded) {
+      //if non-competitive exceeds the total amount all competitive bids will be refused
+      if (remainingTotalAmountAfterNonCompetitiveBidsDeducted <= 0) {
+        for (Bid bid : entry.getValue()) {
+          bid.setAccepted(false);
+          bid.setAcceptedValue(0);
+        }
+        //highrate is set to an arbitrary float rate
+        highRateMap.put(entry.getKey(), Float.valueOf(systemHighRate));
+
+      } else {
+
+        boolean isExceeded = false;
+
+        //check high rate & save bids & treasurySecurity & auction
+        for (Bid bid : entry.getValue()) {
+          if (remainingTotalAmountAfterNonCompetitiveBidsDeducted - bid.getAmount() > 0) {
+            remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
             bid.setAccepted(true);
+            bid.setAcceptedValue(bid.getAmount());
             highRateMap.put(entry.getKey(), bid.getRate());
-            long currentAcceptedValue =
-                bid.getAmount() + remainingTotalAmountAfterNonCompetitiveBidsDeducted;
-            bid.setAcceptedValue(currentAcceptedValue);
+          } else if (remainingTotalAmountAfterNonCompetitiveBidsDeducted - bid.getAmount() == 0) {
+            remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
+            bid.setAccepted(true);
+            bid.setAcceptedValue(bid.getAmount());
+            highRateMap.put(entry.getKey(), bid.getRate());
             isExceeded = true;
           } else {
-            bid.setAccepted(false);
-            bid.setAcceptedValue(0);
+            remainingTotalAmountAfterNonCompetitiveBidsDeducted -= bid.getAmount();
+            if (!isExceeded) {
+              bid.setAccepted(true);
+              highRateMap.put(entry.getKey(), bid.getRate());
+              long currentAcceptedValue =
+                  bid.getAmount() + remainingTotalAmountAfterNonCompetitiveBidsDeducted;
+              bid.setAcceptedValue(currentAcceptedValue);
+              isExceeded = true;
+            } else {
+              bid.setAccepted(false);
+              bid.setAcceptedValue(0);
+            }
           }
+          bid.setArchived(true);
+          bidRepository.save(bid);
         }
-        bidRepository.save(bid);
       }
     }
     return highRateMap;

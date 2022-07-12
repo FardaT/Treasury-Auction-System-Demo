@@ -3,7 +3,9 @@ package com.greenfox.treasuryauctionsystem.models.dtos;
 import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AuctionResponseDTO {
 
@@ -16,7 +18,6 @@ public class AuctionResponseDTO {
   private String endTime;
   private boolean isProcessed;
   private boolean isDisabled;
-
   public AuctionResponseDTO(Auction auction) {
 
     DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -39,27 +40,21 @@ public class AuctionResponseDTO {
   public List<TreasurySecurity> getTreasurySecurityList() {
     return treasurySecurityList;
   }
-
   public String getStartDate() {
     return startDate;
   }
-
   public String getStartTime() {
     return startTime;
   }
-
   public String getEndDate() {
     return endDate;
   }
-
   public String getEndTime() {
     return endTime;
   }
-
   public boolean isProcessed() {
     return isProcessed;
   }
-
   public boolean isDisabled() {
     return isDisabled;
   }
