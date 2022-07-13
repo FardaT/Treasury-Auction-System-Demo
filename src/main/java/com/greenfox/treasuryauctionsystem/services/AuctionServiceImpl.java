@@ -139,7 +139,7 @@ public class AuctionServiceImpl implements AuctionService {
     for (Map.Entry<Long, List<Bid>> entry : bidListMap.entrySet()) {
       for (Bid bid : entry.getValue()) {
         // TODO: 2022. 07. 12. check if bid is not disabled HERE
-        if (true) {
+        if (!bid.isDisabled()) {
           if (bid.isCompetitive()) {
             if (!competitiveBidListMap.containsKey(bid.getTreasurySecurity().getId())) {
               competitiveBidListMap.put(bid.getTreasurySecurity().getId(), new ArrayList<>());
