@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BidDTO2 {
+public class BidResponseDTO {
 
 	private String treasurySecurity;
 	private boolean isCompetitive;
@@ -17,5 +17,16 @@ public class BidDTO2 {
 	private Float rate;
 	private boolean isAccepted;
 	private boolean isArchived;
+/*	ID-
+	Amount
+	Rate
 
+	Security Name
+	Security	Type
+	Security	Term
+	Amount
+	Issue Date
+	Maturity Date
+	Rate
+*/
 }

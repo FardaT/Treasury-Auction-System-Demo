@@ -16,7 +16,7 @@ public class AppUserDTO {
 
 	private String username;
 	private String email;
-	private List<BidDTO2> bids = new ArrayList<>();
+	private List<BidResponseDTO> bids = new ArrayList<>();
 	private String institution;
 	private boolean isAdmin;
 	private boolean isActivated;

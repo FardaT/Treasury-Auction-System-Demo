@@ -1,7 +1,6 @@
 package com.greenfox.treasuryauctionsystem.models;
 
-import com.greenfox.treasuryauctionsystem.models.dtos.BidDTO;
-import com.greenfox.treasuryauctionsystem.models.dtos.BidDTO2;
+import com.greenfox.treasuryauctionsystem.models.dtos.BidResponseDTO;
 import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
 import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
 import com.greenfox.treasuryauctionsystem.utils.Utility;
@@ -57,10 +56,10 @@ public class AppUser {
 		bid.setUser(null);
 	}
 
-	public List<BidDTO2> createDTOList (List<Bid> bids) {
-		List<BidDTO2> returnList = new ArrayList<>();
+	public List<BidResponseDTO> createDTOList (List<Bid> bids) {
+		List<BidResponseDTO> returnList = new ArrayList<>();
 		for (Bid item : bids) {
-			returnList.add(new BidDTO2(
+			returnList.add(new BidResponseDTO(
 					item.getTreasurySecurity().getSecurityName(),
 					item.isCompetitive(),
 					item.getAmount(),
