@@ -39,7 +39,7 @@ public class AuctionController {
         model.addAttribute("user", currentUser);
 
         Map<String, List<AuctionResponseDTO>> auctions = auctionService.getAllAuctionsByStatus();
-        model.addAttribute("auctions", auctions);
+
 
         return "/admin/auctionslist";
     }

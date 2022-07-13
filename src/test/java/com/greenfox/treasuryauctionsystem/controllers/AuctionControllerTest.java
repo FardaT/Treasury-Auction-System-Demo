@@ -32,35 +32,35 @@ class AuctionControllerTest {
   @MockBean
   private AuctionService auctionService;
 
-  @Test
-  void showAllAuctions() {
-    assertTrue(true);
-  }
+//  @Test
+//  void showAllAuctions() {
+//    assertTrue(true);
+//  }
 
-  @Test
-  void deleteAuctionPost() throws Exception {
+//  @Test
+//  void deleteAuctionPost() throws Exception {
+//
+//
+////    Map<String, Long> requestBody = new HashMap<>();
+////    requestBody.put("id", 1L);
+////    Cookie cookie = new Cookie("jwt_token", "asdf");
+//
+//
+////    mvc.perform(MockMvcRequestBuilders.post("/auctions/disable")).
+//
+////    mvc.perform(MockMvcRequestBuilders.post("/auctions/disable")
+////        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+////        .content(String.valueOf(requestBody)))
+////        .andExpect(status().isOk());
+//
+//
+//    assertTrue(true);
+//
+//  }
 
-
-//    Map<String, Long> requestBody = new HashMap<>();
-//    requestBody.put("id", 1L);
-//    Cookie cookie = new Cookie("jwt_token", "asdf");
-
-
-//    mvc.perform(MockMvcRequestBuilders.post("/auctions/disable")).
-
-//    mvc.perform(MockMvcRequestBuilders.post("/auctions/disable")
-//        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-//        .content(String.valueOf(requestBody)))
-//        .andExpect(status().isOk());
-
-
-    assertTrue(true);
-
-  }
-
-  @Test
-  void processFinishedAuctionPost() {
-    assertTrue(true);
-  }
+//  @Test
+//  void processFinishedAuctionPost() {
+//    assertTrue(true);
+//  }
 }
 
