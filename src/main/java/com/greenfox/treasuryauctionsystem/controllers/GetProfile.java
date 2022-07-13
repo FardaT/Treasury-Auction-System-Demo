@@ -30,7 +30,7 @@ public class GetProfile {
 	@GetMapping("/profile")
 	public String getProfile (Principal principal, Model model) {
 		AppUser currentUser = appUserService.getUserByUsername(principal.getName());
-		List<BidResponseDTO> allBidsDto = bidService.getAllBidsDto(principal.getName());
+		//List<BidResponseDTO> allBidsDto = bidService.getAllBidsDto(principal.getName());
 		model.addAttribute("user", currentUser);
 		//model.addAttribute("bids", allBidsDto);
 		model.addAttribute("bids", currentUser.getBids());
