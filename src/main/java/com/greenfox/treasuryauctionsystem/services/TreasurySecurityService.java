@@ -9,5 +9,4 @@ import org.springframework.stereotype.Service;
 public interface TreasurySecurityService {
 
   List<TreasurySecurityResponseDTO> getTreasurySecurities(boolean isOngoing, String sortBy, String order);
-
 }

@@ -36,7 +36,6 @@ public class TreasurySecurityServiceImpl implements TreasurySecurityService {
     this.auctionRepository = auctionRepository;
   }
 
-
   @Override
   public List<TreasurySecurityResponseDTO> getTreasurySecurities(boolean isOngoing,
                                                                  String sortBy,

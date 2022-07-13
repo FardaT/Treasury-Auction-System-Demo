@@ -1,6 +1,5 @@
 package com.greenfox.treasuryauctionsystem.controllers;
 
-import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 import com.greenfox.treasuryauctionsystem.models.dtos.TreasurySecurityResponseDTO;
 import com.greenfox.treasuryauctionsystem.services.TreasurySecurityService;
 import java.util.List;
@@ -26,9 +25,9 @@ public class TreasurySecurityController {
   @GetMapping
   public String getAllTreasurySecurities(Model model,
                                          @RequestParam(defaultValue = "type") String ongoingSortBy,
-                                         @RequestParam(defaultValue = "asc")  String ongoingOrder,
-                                         @RequestParam(defaultValue = "type")  String upcomingSortBy,
-                                         @RequestParam(defaultValue = "asc")  String upcomingOrder) {
+                                         @RequestParam(defaultValue = "asc") String ongoingOrder,
+                                         @RequestParam(defaultValue = "type") String upcomingSortBy,
+                                         @RequestParam(defaultValue = "asc") String upcomingOrder) {
 
     List<TreasurySecurityResponseDTO> ongoingAuctionSecurityList =
         treasurySecurityService.getTreasurySecurities(true, ongoingSortBy, ongoingOrder);
@@ -40,6 +39,5 @@ public class TreasurySecurityController {
     model.addAttribute("upcoming", upcomingAuctionSecurityList);
 
     return "admin/securities";
-
   }
 }

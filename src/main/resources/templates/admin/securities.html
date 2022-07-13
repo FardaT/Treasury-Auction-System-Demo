@@ -17,7 +17,7 @@
     </select>
     <select th:name="ongoingOrder" id="ongoingOrder">
         <option value="null" disabled selected>Select order</option>
-        <option value="asc" >ascending</option>
+        <option value="asc">ascending</option>
         <option value="desc">descending</option>
     </select>
 
@@ -26,7 +26,7 @@
     </div>
     <div th:unless="${#lists.isEmpty(ongoing)}" class="table-container">
 
-        <h3>Ongoing auctions</h3>
+        <h3>Securities of the ongoing auctions</h3>
 
         <table class="table">
             <thead>
@@ -39,10 +39,9 @@
                 <th>issue date</th>
                 <th>maturity date</th>
                 <th>BID</th>
-
             </thead>
-            <tbody>
 
+            <tbody>
             <tr th:each="security : ${ongoing}" th:object="${security}">
                 <td th:text="*{id}"></td>
                 <td th:text="*{securityName}"></td>
@@ -58,7 +57,6 @@
                        role="button">Place BID</a>
                 </td>
             </tr>
-
             </tbody>
         </table>
     </div>
@@ -66,6 +64,7 @@
     <label for="upcomingSortBy">Sort securities</label>
     <select th:name="upcomingSortBy" id="upcomingSortBy">
         <option value="default" disabled selected>Select sort type</option>
+        <option value="type">type</option>
         <option value="name">name</option>
         <option value="issueDate">issue date</option>
         <option value="maturityDate">maturity date</option>
@@ -95,8 +94,8 @@
                 <th>maturity date</th>
                 <th>BID</th>
             </thead>
-            <tbody>
 
+            <tbody>
             <tr th:each="security : ${upcoming}" th:object="${security}">
                 <td th:text="*{id}"></td>
                 <td th:text="*{securityName}"></td>
