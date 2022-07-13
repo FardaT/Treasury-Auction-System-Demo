@@ -209,12 +209,12 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 			appUserDTOList.add(new AppUserDTO(
 					item.getUsername(),
 					item.getEmail(),
-					item.createDTOList(item.getBids()),
 					item.getInstitution(),
 					item.isAdmin(),
 					item.isActivated(),
 					item.isApproved(),
-					item.isDisabled())
+					item.isDisabled(),
+					item.createDTOList(item.getBids()))
 			);
 		}
 		return appUserDTOList;

@@ -16,11 +16,11 @@ public class AppUserDTO {
 
 	private String username;
 	private String email;
-	private List<BidResponseDTO> bids = new ArrayList<>();
 	private String institution;
 	private boolean isAdmin;
 	private boolean isActivated;
 	private boolean isApproved;
 	private boolean isDisabled;
+	private List<BidResponseDTO> bids = new ArrayList<>();
 
 }
