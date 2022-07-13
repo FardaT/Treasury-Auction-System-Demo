@@ -1,7 +1,9 @@
 package com.greenfox.treasuryauctionsystem.services;
 
 import com.greenfox.treasuryauctionsystem.models.AppUser;
+import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.Bid;
+import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 import com.greenfox.treasuryauctionsystem.models.dtos.BidDTO;
 import com.greenfox.treasuryauctionsystem.repositories.BidRepository;
 import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class BidServiceImpl implements BidService {
@@ -31,7 +34,7 @@ public class BidServiceImpl implements BidService {
 
     // STORE
     @Override
-    public Map<String, String> saveBid(List<BidDTO> bidDTOS, AppUser appUser) {
+    public Map<String, String> saveBid(List<BidDTO> bidDTOS, AppUser appUser, Auction auction) {
 
         Map<String, String> errors = new HashMap<>();
 
@@ -50,6 +53,18 @@ public class BidServiceImpl implements BidService {
 
             int index = 0;
             int sum = 0;
+            List<Bid> bidsOfUser = appUser.getBids();
+
+            // Noncompetitive bidding is limited to purchases of $5 million per auction
+            List<TreasurySecurity> treasurySecurityList = auction.getTreasurySecurityList();
+            for (TreasurySecurity treasurySecurity : treasurySecurityList) {
+                for (Bid bidOfUser : bidsOfUser) {
+                    if (Objects.equals(treasurySecurity.getId(), bidOfUser.getTreasurySecurity().getId()) && !bidOfUser.isCompetitive()) {
+                        sum += bidOfUser.getAmount();
+                    }
+                }
+            }
+
             for (BidDTO bidDTO : bidDTOS) {
 
                 // CREATE BID OBJECTS FROM INCOMING DTOs
@@ -59,6 +74,13 @@ public class BidServiceImpl implements BidService {
 
                 // to see if we need validation
                 if (bid.getAmount() != 0) {
+
+                    // ONE SECURITY, ONE USER, ONE BID
+                    for (Bid bidOfUser : bidsOfUser) {
+                        if (Objects.equals(bidOfUser.getTreasurySecurity().getId(), bid.getTreasurySecurity().getId())) {
+                            errors.put("ONE_BID_" + index, "You have already put a bid on this security!");
+                        }
+                    }
 
                     if (bid.getAmount() < 0) {
                         errors.put("AMOUNT_POSITIVE_" + index, "Amount has to be a positive number!");
@@ -87,6 +109,8 @@ public class BidServiceImpl implements BidService {
             if (sum > ApplicationDetails.max_amount) {
                 errors.put("AMOUNT_NONCOMPETITIVE", "Noncompetitive bidding is limited to purchases of $5 million per auction!");
             }
+
+            // System.out.println(sum);
 
             if (errors.isEmpty()) {
                 for (BidDTO bidDTO : bidDTOS) {

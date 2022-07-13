@@ -72,7 +72,12 @@
                                th:name="${'bidDTOS['+__${itemStat.index}__+'].treasurySecurity'}"
                                th:value="${treasurySecurity.id}">
 
-                        <td th:text="${treasurySecurity.securityName}"></td>
+                        <td>
+                            <p th:text="${treasurySecurity.securityName}"></p>
+                            <div th:if="${__${'ONE_BID_' + itemStat.index}__} != null">
+                                <p th:text="${__${'ONE_BID_' + itemStat.index}__}" style="color: red;"></p>
+                            </div>
+                        </td>
 
                         <td>
                             <select class="form-control isCompetitive" id="isCompetitive"

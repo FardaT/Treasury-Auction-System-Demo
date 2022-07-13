@@ -105,7 +105,8 @@ public class BidController {
         // get currently logged in user
         AppUser currentUser = appUserService.getUserByUsername(principal.getName());
 
-        Map<String, String> saveResultMessage = bidService.saveBid(bids, currentUser);
+        Auction auction = auctionService.findById(Long.valueOf(auction_id));
+        Map<String, String> saveResultMessage = bidService.saveBid(bids, currentUser, auction);
 
         // validations
         if (!saveResultMessage.isEmpty()) {
@@ -115,22 +116,23 @@ public class BidController {
                 return "redirect:/admin/bids/create?auction_id=" + auction_id;
             }
 
-            Auction auction = auctionService.findById(Long.valueOf(auction_id));
-
             for (String i : saveResultMessage.keySet()) {
 
                 for (int counter = 0; counter < auction.getTreasurySecurityList().size(); counter++) {
+                    if (saveResultMessage.containsKey("ONE_BID_" + counter)) {
+                        redirectAttributes.addFlashAttribute("ONE_BID_" + counter, saveResultMessage.get("ONE_BID_" + counter));
+                    }
                     if (saveResultMessage.containsKey("AMOUNT_POSITIVE_" + counter)) {
-                        redirectAttributes.addFlashAttribute("AMOUNT_POSITIVE_" + counter, saveResultMessage.get(i));
+                        redirectAttributes.addFlashAttribute("AMOUNT_POSITIVE_" + counter, saveResultMessage.get("AMOUNT_POSITIVE_" + counter));
                     }
                     if (saveResultMessage.containsKey("AMOUNT_HUNDRED_" + counter)) {
                         redirectAttributes.addFlashAttribute("AMOUNT_HUNDRED_" + counter, saveResultMessage.get("AMOUNT_HUNDRED_" + counter));
                     }
                     if (saveResultMessage.containsKey("AMOUNT_COMPETITIVE_" + counter)) {
-                        redirectAttributes.addFlashAttribute("AMOUNT_COMPETITIVE_" + counter, saveResultMessage.get(i));
+                        redirectAttributes.addFlashAttribute("AMOUNT_COMPETITIVE_" + counter, saveResultMessage.get("AMOUNT_COMPETITIVE_" + counter));
                     }
                     if (saveResultMessage.containsKey("RATE_RANGE_" + counter)) {
-                        redirectAttributes.addFlashAttribute("RATE_RANGE_" + counter, saveResultMessage.get(i));
+                        redirectAttributes.addFlashAttribute("RATE_RANGE_" + counter, saveResultMessage.get("RATE_RANGE_" + counter));
                     }
                 }
 
