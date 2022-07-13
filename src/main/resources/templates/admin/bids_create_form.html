@@ -50,7 +50,7 @@
                    style="color: red;"></p>
             </div>
 
-            <form class="form-inline" th:action="@{/admin/bids/store}" th:object="${form}" method="post">
+            <form class="form-inline" th:action="@{/bids/store}" th:object="${form}" method="post">
 
                 <input type="hidden" th:name="auction_id" th:value="${auction.id}">
 

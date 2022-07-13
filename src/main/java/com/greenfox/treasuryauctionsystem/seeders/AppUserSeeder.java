@@ -41,8 +41,8 @@ public class AppUserSeeder {
         user.setActivationToken(PasswordResetTokenGenerator.generatePasswordResetToken());
         user.setActivationTokenExpiration(Utility.setExpiration(ApplicationDetails.expiration));
         user.setAdmin(false);
-        user.setActivated(false);
-        user.setApproved(false);
+        user.setActivated(true);
+        user.setApproved(true);
         user.setDisabled(false);
 
         // SAVE

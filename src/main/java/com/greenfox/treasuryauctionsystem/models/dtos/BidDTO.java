@@ -16,14 +16,10 @@ import javax.persistence.*;
 public class BidDTO {
 
     // FIELDS
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     private TreasurySecurity treasurySecurity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     private AppUser user;
 
     private String isCompetitive;

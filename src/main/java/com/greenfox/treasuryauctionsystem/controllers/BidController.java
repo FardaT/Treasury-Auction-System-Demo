@@ -58,7 +58,7 @@ public class BidController {
     }
 
     // CREATE - show form
-    @GetMapping("admin/bids/create")
+    @GetMapping("bids/create")
     public String create(
             Model model,
             Principal principal,
@@ -93,7 +93,7 @@ public class BidController {
     }
 
     // STORE
-    @PostMapping("admin/bids/store")
+    @PostMapping("bids/store")
     public String store(
             @ModelAttribute BidsCreationDto form,
             Principal principal,
@@ -142,14 +142,14 @@ public class BidController {
                 redirectAttributes.addFlashAttribute("AMOUNT_NONCOMPETITIVE", saveResultMessage.get("AMOUNT_NONCOMPETITIVE"));
             }
 
-            return "redirect:/admin/bids/create?auction_id=" + auction_id;
+            return "redirect:/bids/create?auction_id=" + auction_id;
         } else {
-            return "redirect:/admin/bids";
+            return "redirect:/bids";
         }
     }
 
     // DESTROY
-    @PostMapping("admin/bids/destroy")
+    @PostMapping("bids/destroy")
     public String destroy(@RequestParam Long bidId) {
 
         bidService.disableBid(bidId);
