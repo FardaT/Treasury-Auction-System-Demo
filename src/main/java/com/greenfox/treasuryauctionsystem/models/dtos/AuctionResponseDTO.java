@@ -4,12 +4,13 @@ import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AuctionResponseDTO {
 
     private Long id;
-
     private List<TreasurySecurity> treasurySecurityList;
     private String startDate;
     private String startTime;
@@ -37,31 +38,26 @@ public class AuctionResponseDTO {
         return id;
     }
 
-    public List<TreasurySecurity> getTreasurySecurityList() {
-        return treasurySecurityList;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public boolean isProcessed() {
-        return isProcessed;
-    }
-
-    public boolean isDisabled() {
-        return isDisabled;
-    }
+  public List<TreasurySecurity> getTreasurySecurityList() {
+    return treasurySecurityList;
+  }
+  public String getStartDate() {
+    return startDate;
+  }
+  public String getStartTime() {
+    return startTime;
+  }
+  public String getEndDate() {
+    return endDate;
+  }
+  public String getEndTime() {
+    return endTime;
+  }
+  public boolean isProcessed() {
+    return isProcessed;
+  }
+  public boolean isDisabled() {
+    return isDisabled;
+  }
 }
+

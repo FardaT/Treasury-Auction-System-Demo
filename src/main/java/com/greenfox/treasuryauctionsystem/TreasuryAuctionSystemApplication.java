@@ -44,7 +44,7 @@ public class TreasuryAuctionSystemApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         //emailService.sendSimpleMessage("szecsi.istvan@gmail.com", "Hi, from the Mighty Rooster Team", "This is a test email template for your treasury application");
         //testService.seedDatabase();
-        // testService.fillDatabase();
+         //testService.fillDatabase();
         // System.out.println(ApplicationDetails.expiration);
     }
 }
