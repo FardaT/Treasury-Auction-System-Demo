@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bids")
@@ -38,6 +40,7 @@ public class Bid implements Comparable<Bid> {
     private boolean isAccepted = false;
     private boolean isArchived = false;
     private boolean isDisabled = false; // for soft delete/cancel
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     private long acceptedValue;
 
@@ -51,14 +54,15 @@ public class Bid implements Comparable<Bid> {
         this.isAccepted = bidDTO.isAccepted();
         this.isArchived = bidDTO.isArchived();
         this.isDisabled = bidDTO.isDisabled();
+        this.createdAt = bidDTO.getCreatedAt();
     }
 
-  @Override
-  public int compareTo(Bid other) {
-    int i = rate.compareTo(other.getRate());
-    if (i != 0) {
-      return i;
+    @Override
+    public int compareTo(Bid other) {
+        int i = rate.compareTo(other.getRate());
+        if (i != 0) {
+            return i;
+        }
+        return Long.compare(id, other.getId());
     }
-    return Long.compare(id, other.getId());
-  }
 }

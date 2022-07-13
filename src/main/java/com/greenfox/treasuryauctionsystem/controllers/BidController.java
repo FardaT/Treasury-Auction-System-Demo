@@ -144,7 +144,7 @@ public class BidController {
 
             return "redirect:/bids/create?auction_id=" + auction_id;
         } else {
-            return "redirect:/bids";
+            return "redirect:/profile";
         }
     }
 
@@ -154,6 +154,6 @@ public class BidController {
 
         bidService.disableBid(bidId);
 
-        return "redirect:/admin/bids";
+        return "redirect:/profile";
     }
 }

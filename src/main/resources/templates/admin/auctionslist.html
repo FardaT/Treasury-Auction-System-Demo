@@ -132,7 +132,8 @@
                                 </div>
                             </div>
                         </td>
-                        <td sec:authorize="hasRole('USER')">
+                        <td>
+                        <!-- <td sec:authorize="hasRole('USER')"> -->
                             <a th:href="@{/bids/create(auction_id=${auction.id})}" class="btn btn-success"
                                role="button">Place BID</a>
                         </td>

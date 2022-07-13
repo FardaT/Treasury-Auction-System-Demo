@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,4 +29,5 @@ public class BidDTO {
     private boolean isAccepted = false;
     private boolean isArchived = false;
     private boolean isDisabled = false; // for soft delete/cancel
+    private LocalDateTime createdAt = LocalDateTime.now();
 }
