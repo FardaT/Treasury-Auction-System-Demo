@@ -23,6 +23,10 @@
 
             <h3>Auction details</h3>
 
+            <form action="">
+                <input type="hidden" id="ending" th:value="${ending}">
+            </form>
+
             <table class="table">
                 <thead>
                 <tr>
@@ -34,9 +38,16 @@
                 <tr>
                     <td th:text="${auction.id}"></td>
                     <td th:text="${auction.startDate} + ' ' + ${auction.startTime}"></td>
-                    <td th:text="${auction.endDate} + ' ' + ${auction.endTime}"></td>
+                    <td th:text="${auction.endDate} + ' ' + ${auction.endTime}">
+                    </td>
                 </tr>
             </table>
+
+            <div class="text-center">
+                <h3>
+                    Remaining time: <span id="demo"></span>
+                </h3>
+            </div>
 
             <h3>Create new bid</h3>
 

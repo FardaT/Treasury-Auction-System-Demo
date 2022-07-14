@@ -73,6 +73,7 @@ public class BidController {
         Auction auction = auctionService.findById(auction_id);
         AuctionResponseDTO auctionResponseDTO = new AuctionResponseDTO(auction);
         model.addAttribute("auction", auctionResponseDTO);
+        model.addAttribute("ending", auction.getAuctionEndDate());
 
         // As we can see, we passed a list of 3 empty Book objects to the view via the wrapper class.
         BidsCreationDto bidsForm = new BidsCreationDto();
