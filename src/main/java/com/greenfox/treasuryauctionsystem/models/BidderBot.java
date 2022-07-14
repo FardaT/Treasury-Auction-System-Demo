@@ -44,11 +44,16 @@ public class BidderBot extends AppUser{
     long maxNonCompetitiveBid = 50000L; // 50000 * 100 denominations to get $5 mil limit
     for(TreasurySecurity sec : auction.getTreasurySecurityList()){
       int maxCompetitiveBid = (int)(sec.getTotalAmount() * 0.35) / 100; // to get the product of 100 denominations
+      //not bidding for a security
+      if(rnd.nextFloat(1.0f)*0.7f > 0.5f){
+        continue;
+      }
       Bid tempBid = new Bid();
       tempBid.setTreasurySecurity(sec);
       tempBid.setUser(this);
+      //how to act when the bot is institutional investor: more likely to bid competitively, more budget, tend to buy long terms securities, smaller variety of rates
       if(behaviour.equals("institutional")){
-        boolean weightedBidTypeProbability = rnd.nextFloat(2.0f)*1.5f > 1.0f; // institutional more likely to bid competitively
+        boolean weightedBidTypeProbability = rnd.nextFloat(1.0f)*1.5f > 0.5f;
         long institutionalCompetitiveBidAmount = (rnd.nextLong(maxCompetitiveBid - 7000) + 7000) * 100;
         long institutionalNonCompetitiveBidAmount = (rnd.nextLong(maxNonCompetitiveBid - 5000) + 5000) * 100;
         switch (sec.getSecurityType()){
@@ -89,8 +94,10 @@ public class BidderBot extends AppUser{
             }
             break;
         }
-        } else {
-        boolean weightedBidTypeProbability = rnd.nextFloat(2.0f)*0.6f > 1.0f; // retail investor tend to be non-competitive
+        }
+      //how to act when the bot is retail investor: more likely to bid non-competitively, less budget, shorter terms, higher variety of rates
+      else {
+        boolean weightedBidTypeProbability = rnd.nextFloat(1.0f)*0.7f > 0.5f; // retail investor tend to be non-competitive
         long retailBidAmount = (rnd.nextLong(8000 - 100) + 100) * 100; // times 100 for $100 denominations
         switch (sec.getSecurityType()){
           case "T-Bill":
@@ -106,6 +113,10 @@ public class BidderBot extends AppUser{
             }
             break;
           case "T-Note":
+            //retail more likely to skip on longer terms like T-notes and T-bonds
+            if(rnd.nextFloat(1.0f)*0.8f > 0.5f){
+              continue;
+            }
             if(weightedBidTypeProbability){
               tempBid.setCompetitive(true);
               tempBid.setAmount(retailBidAmount);
@@ -118,6 +129,10 @@ public class BidderBot extends AppUser{
             }
             break;
           case "T-Bond":
+            //retail more likely to skip on longer terms like T-notes and T-bonds
+            if(rnd.nextFloat(1.0f)*0.6f > 0.5f){
+              continue;
+            }
             if(weightedBidTypeProbability){
               tempBid.setCompetitive(true);
               tempBid.setAmount(retailBidAmount);

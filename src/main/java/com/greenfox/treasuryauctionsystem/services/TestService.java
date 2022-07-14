@@ -174,8 +174,6 @@ public class TestService {
     auction2.setProcessed(false);
     auction2.setDisabled(false);
 
-    BidderBot bidderBot = new BidderBot(auction2);
-    appUserRepository.save(bidderBot);
 
     //upcoming
     Auction auction3 = new Auction();
