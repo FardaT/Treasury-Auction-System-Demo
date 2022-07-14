@@ -36,6 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/confirm_token").permitAll()
 				.antMatchers("/confirm_token/**").permitAll()
 				.antMatchers("/store").permitAll()
+				.antMatchers("/public").permitAll()
+				.antMatchers("/public/**").permitAll()
 				.antMatchers("/store/**").permitAll()
 				.antMatchers("/resetpassword").permitAll()
 				.antMatchers("/resetpassword/**").permitAll()

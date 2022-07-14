@@ -32,4 +32,12 @@ public class BidDTO {
     private boolean isAccepted = false;
     private boolean isArchived = false;
     private boolean isDisabled = false; // for soft delete/cancel
+	/*
+	private String treasurySecurity;
+	private boolean isCompetitive;
+	private long amount;
+	private float rate;
+	private boolean isAccepted;
+	private boolean isArchived;
+	 */
 }
