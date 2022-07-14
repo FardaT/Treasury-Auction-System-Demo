@@ -3,6 +3,8 @@ package com.greenfox.treasuryauctionsystem.models;
 import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
 import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
 import com.greenfox.treasuryauctionsystem.utils.Utility;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,15 +26,16 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Getter
 @Setter
+@Inheritance(strategy = InheritanceType.JOINED)
 public class AppUser {
 
 	// FIELDS
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private String username;
+	protected String username;
 	private String email;
-	private String password;
+	protected String password;
 	@OneToMany(
 			mappedBy = "user",
 			cascade = CascadeType.MERGE,
@@ -44,10 +47,20 @@ public class AppUser {
 	private LocalDateTime activationTokenExpiration = Utility.setExpiration(ApplicationDetails.expiration);
 	private String reactivationToken;
 	private LocalDateTime reactivationTokenExpiration;
-	private boolean isAdmin = false;
-	private boolean isActivated = false;
-	private boolean isApproved = false;
+	protected boolean isAdmin = false;
+	protected boolean isActivated = false;
+	protected boolean isApproved = false;
 	private boolean isDisabled = false;
+
+	//Bot constructor
+	public AppUser(String username, String password, boolean isAdmin, boolean isActivated,
+				   boolean isApproved) {
+		this.username = username;
+		this.password = password;
+		this.isAdmin = isAdmin;
+		this.isActivated = isActivated;
+		this.isApproved = isApproved;
+	}
 
 	// CUSTOM
 	public void adBid (Bid bid) {

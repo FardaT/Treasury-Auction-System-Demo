@@ -4,6 +4,7 @@ package com.greenfox.treasuryauctionsystem.services;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.Bid;
+import com.greenfox.treasuryauctionsystem.models.BidderBot;
 import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 import com.greenfox.treasuryauctionsystem.repositories.AppUserRepository;
 import com.greenfox.treasuryauctionsystem.repositories.AuctionRepository;
@@ -131,6 +132,9 @@ public class TestService {
     appUser2.setActivated(true);
     appUser2.setApproved(true);
     appUser2.setDisabled(false);
+
+    BidderBot bidderBot = new BidderBot();
+    appUserRepository.save(bidderBot);
     // appUser2.setReactivationToken("a_reactivationtoken");
     // appUser2.setReactivationTokenExpiration(LocalDateTime.now());
 
