@@ -32,13 +32,17 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <td class="text-center" colspan="3" th:text="'Auction'"></td>
+                    <td class="text-center" colspan="7" th:text="'Auction'"></td>
                     <td class="text-center" colspan="7" th:text="'Security'"></td>
                 </tr>
                 <tr>
                     <th class="bg-light">ID</th>
                     <th class="bg-light">Amount</th>
                     <th class="bg-light">Rate</th>
+                    <th class="bg-light">Competitive?</th>
+                    <th class="bg-light">Accepted?</th>
+                    <th class="bg-light">Archived?</th>
+                    <th class="bg-light">Disabled?</th>
                     <th class="bg-secondary">Security Name</th>
                     <th class="bg-secondary">Security Type</th>
                     <th class="bg-secondary">Security Term</th>
@@ -52,7 +56,19 @@
                 <tr th:each="bid : ${bids}">
                     <td class="bg-light" th:text="${bid.getId()}"></td>
                     <td class="bg-light" th:text="${bid.getAmount()}"></td>
-                    <td class="bg-light" th:text="${bid.getRate()}"></td>
+                    <td class="bg-light" th:text="${bid.getRate() == null ? '-' : bid.getRate()}"></td>
+                    <td class="bg-light" th:text="${bid.isCompetitive == true ? '&#9989;' : '&#10060;'}"></td>
+                    <td class="bg-light" th:text="${bid.isAccepted == true ? '&#9989;' : '&#10060;'}"></td>
+                    <td class="bg-light" th:text="${bid.isArchived == true ? '&#9989;' : '&#10060;'}"></td>
+                    <td class="bg-light">
+                        <form th:action="@{/admin/profile/destroy}" th:if="${!bid.isDisabled}" method="post">
+                            <input type="hidden" name="bidId" th:value="${bid.id}">
+                            <input type="submit" class="btn btn-danger" value="Delete">
+                        </form>
+                        <div th:if="${bid.isDisabled}">
+                            <b><span style="color: red;">YES</span></b>
+                        </div>
+                    </td>
                     <td class="bg-secondary" th:text="${bid.getTreasurySecurity().getSecurityName()}"></td>
                     <td class="bg-secondary" th:text="${bid.getTreasurySecurity().getSecurityType()}"></td>
                     <td class="bg-secondary" th:text="${bid.getTreasurySecurity().getSecurityTerm()}"></td>

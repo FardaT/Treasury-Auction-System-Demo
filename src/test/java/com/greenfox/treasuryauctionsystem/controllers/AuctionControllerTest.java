@@ -1,5 +1,6 @@
 package com.greenfox.treasuryauctionsystem.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,7 +35,7 @@ class AuctionControllerTest {
 
   @Test
   void showAllAuctions() {
-    assertTrue(true);
+    assertNotNull(mvc);
   }
 
   @Test

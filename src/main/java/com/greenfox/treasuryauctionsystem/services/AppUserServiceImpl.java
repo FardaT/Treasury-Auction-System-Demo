@@ -5,6 +5,7 @@ import com.greenfox.treasuryauctionsystem.exceptions.AppUserStatusException;
 import com.greenfox.treasuryauctionsystem.exceptions.IllegalArgumentException;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.BidderBot;
+import com.greenfox.treasuryauctionsystem.models.dtos.AppUserDTO;
 import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInput;
 import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
 import com.greenfox.treasuryauctionsystem.repositories.AppUserRepository;
@@ -199,6 +200,26 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
   public List<AppUser> getAllAppUsers() {
     return appUserRepository.findAll();
   }
+
+	// READ - all users dto
+	@Override
+	public List<AppUserDTO> getAllAppUsersDto () {
+		List<AppUserDTO> appUserDTOList = new ArrayList<>();
+
+		for (AppUser item : appUserRepository.findAll()) {
+			appUserDTOList.add(new AppUserDTO(
+					item.getUsername(),
+					item.getEmail(),
+					item.getInstitution(),
+					item.isAdmin(),
+					item.isActivated(),
+					item.isApproved(),
+					item.isDisabled(),
+					item.createDTOList(item.getBids()))
+			);
+		}
+		return appUserDTOList;
+	}
 
   // UPDATE - approve user reg (isApproved set to TRUE)
   @Override
