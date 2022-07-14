@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login").and()
                 .authorizeRequests().anyRequest().authenticated();
 
-        // To bypass authentication & authorization for development, comment out the code above and use the one below
+    // To bypass authentication & authorization for development, comment out the code above and use the one below
 	/* http.csrf().disable();
     http.sessionManagement().sessionCreationPolicy(STATELESS);
     http.authorizeRequests().anyRequest().permitAll();*/

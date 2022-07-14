@@ -11,7 +11,6 @@ import java.util.Set;
 public class AuctionResponseDTO {
 
     private Long id;
-
     private List<TreasurySecurity> treasurySecurityList;
     private String startDate;
     private String startTime;

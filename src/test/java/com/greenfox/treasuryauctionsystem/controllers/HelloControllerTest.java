@@ -28,10 +28,10 @@ public class HelloControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username="ablak_aladar",roles={"ADMIN"})
 	void helloController() throws Exception {
 		//Unauthorized because of spring security
-		//mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get("/hello")).andExpect(status().isFound());
+		//mockMvc.perform(MockMvcRequestBuilders.get("/hello")).andExpect(status().isUnauthorized());
 		//mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(status().is2xxSuccessful());
 	}
 

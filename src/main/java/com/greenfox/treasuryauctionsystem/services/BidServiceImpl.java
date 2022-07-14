@@ -5,11 +5,13 @@ import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.Bid;
 import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 import com.greenfox.treasuryauctionsystem.models.dtos.BidDTO;
+import com.greenfox.treasuryauctionsystem.models.dtos.BidResponseDTO;
 import com.greenfox.treasuryauctionsystem.repositories.BidRepository;
 import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,13 +20,13 @@ import java.util.Objects;
 @Service
 public class BidServiceImpl implements BidService {
 
-    // DI
-    private final BidRepository bidRepository;
+	// DI
+	private final BidRepository bidRepository;
 
-    @Autowired
-    public BidServiceImpl(BidRepository bidRepository) {
-        this.bidRepository = bidRepository;
-    }
+	@Autowired
+	public BidServiceImpl (BidRepository bidRepository) {
+		this.bidRepository = bidRepository;
+	}
 
     // READ
     @Override
@@ -33,11 +35,31 @@ public class BidServiceImpl implements BidService {
         return bidRepository.findAllOrderBy();
     }
 
+	// READ
+	@Override
+	public List<BidResponseDTO> getAllBidsDto (String userName) {
+		List<BidResponseDTO> bidResponseDTOList = new ArrayList<>();
+
+		for (Bid item : bidRepository.findAll()) {
+			if (item.getUser().getUsername().equals(userName)) {
+				bidResponseDTOList.add(new BidResponseDTO(
+						item.getTreasurySecurity().getSecurityName(),
+						item.isCompetitive(),
+						item.getAmount(),
+						item.getRate(),
+						item.isAccepted(),
+						item.isArchived())
+				);
+			}
+		}
+		return bidResponseDTOList;
+	}
+
     // STORE
     @Override
     public Map<String, String> saveBid(List<BidDTO> bidDTOS, AppUser appUser, Auction auction) {
 
-        Map<String, String> errors = new HashMap<>();
+		Map<String, String> errors = new HashMap<>();
 
         // do we have at least one bid?
         boolean allEmpty = true;
@@ -68,13 +90,13 @@ public class BidServiceImpl implements BidService {
 
             for (BidDTO bidDTO : bidDTOS) {
 
-                // CREATE BID OBJECTS FROM INCOMING DTOs
-                Bid bid = new Bid(bidDTO);
-
-                // VALIDATIONS
+				// CREATE BID OBJECTS FROM INCOMING DTOs
+				Bid bid = new Bid(bidDTO);
 
                 // to see if we need validation
                 if (bid.getAmount() != 0) {
+
+					// VALIDATIONS
 
                     // ONE SECURITY, ONE USER, ONE BID
                     for (Bid bidOfUser : bidsOfUser) {
@@ -83,12 +105,12 @@ public class BidServiceImpl implements BidService {
                         }
                     }
 
-                    if (bid.getAmount() < 0) {
-                        errors.put("AMOUNT_POSITIVE_" + index, "Amount has to be a positive number!");
-                    }
-                    if (bid.getAmount() % ApplicationDetails.multiple_of != 0) {
-                        errors.put("AMOUNT_HUNDRED_" + index, "Amount has to be the multiple of hundred!");
-                    }
+					if (bid.getAmount() < 0) {
+						errors.put("AMOUNT_POSITIVE_" + index, "Amount has to be a positive number!");
+					}
+					if (bid.getAmount() % ApplicationDetails.multiple_of != 0) {
+						errors.put("AMOUNT_HUNDRED_" + index, "Amount has to be the multiple of hundred!");
+					}
 
                     // Competitive bidding is limited to 35% of the offering amount for each bidder
                     if (bid.isCompetitive()) {
@@ -102,14 +124,13 @@ public class BidServiceImpl implements BidService {
                         // Noncompetitive bidding is limited to purchases of $5 million per auction
                         sum += bid.getAmount();
                     }
-
                 }
                 index++;
             }
 
-            if (sum > ApplicationDetails.max_amount) {
-                errors.put("AMOUNT_NONCOMPETITIVE", "Noncompetitive bidding is limited to purchases of $5 million per auction!");
-            }
+			if (sum > ApplicationDetails.max_amount) {
+				errors.put("AMOUNT_NONCOMPETITIVE", "Noncompetitive bidding is limited to purchases of $5 million per auction!");
+			}
 
             // System.out.println(sum);
 
@@ -123,19 +144,18 @@ public class BidServiceImpl implements BidService {
                     }
                 }
             }
+		}
+		return errors;
+	}
 
-        }
-        return errors;
-    }
+	// DESTROY
+	@Override
+	public void disableBid (Long bidId) {
 
-    // DESTROY
-    @Override
-    public void disableBid(Long bidId) {
-
-        Bid bid = bidRepository.findById(bidId).orElse(null);
-        if (bid != null) {
-            bid.setDisabled(true);
-            bidRepository.save(bid);
-        }
-    }
+		Bid bid = bidRepository.findById(bidId).orElse(null);
+		if (bid != null) {
+			bid.setDisabled(true);
+			bidRepository.save(bid);
+		}
+	}
 }
