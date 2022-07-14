@@ -29,7 +29,8 @@ public class BidServiceImpl implements BidService {
     // READ
     @Override
     public List<Bid> getAllBids() {
-        return bidRepository.findAll();
+        // return bidRepository.findAll();
+        return bidRepository.findAllOrderBy();
     }
 
     // STORE

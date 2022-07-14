@@ -34,6 +34,7 @@
                     <th>Archived?</th>
                     <th>Security</th>
                     <th>Auction</th>
+                    <th>User</th>
                     <th>Disabled?</th>
                 </tr>
                 </thead>
@@ -49,6 +50,7 @@
                     <td th:text="${bid.isArchived == true ? '&#9989;' : '&#10060;'}"></td>
                     <td th:text="${bid.treasurySecurity.securityName}"></td>
                     <td th:text="${bid.treasurySecurity.auction.id}"></td>
+                    <td th:text="${bid.user.username}"></td>
                     <td>
                         <form th:action="@{/bids/destroy}" th:if="${!bid.isDisabled}" method="post">
                             <input type="hidden" name="bidId" th:value="${bid.id}">
