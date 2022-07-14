@@ -108,9 +108,9 @@ public class TestService {
     treasurySecurity3.setMaturityDate(LocalDate.now().plusWeeks(2).plusYears(5));
 
     TreasurySecurity treasurySecurity4 = new TreasurySecurity();
-    treasurySecurity4.setSecurityName("Note 1");
-    treasurySecurity4.setSecurityType("Note");
-    treasurySecurity4.setSecurityTerm("5y");
+    treasurySecurity4.setSecurityName("5-year T-Note");
+    treasurySecurity4.setSecurityType("T-Note");
+    treasurySecurity4.setSecurityTerm("5-year");
     treasurySecurity4.setTotalAmount(220_000_000);
     treasurySecurity4.setIssueDate(LocalDate.now().plusWeeks(2));
     treasurySecurity4.setMaturityDate(LocalDate.now().plusWeeks(2).plusYears(5));
@@ -152,8 +152,7 @@ public class TestService {
     appUser2.setApproved(true);
     appUser2.setDisabled(false);
 
-    BidderBot bidderBot = new BidderBot();
-    appUserRepository.save(bidderBot);
+
     // appUser2.setReactivationToken("a_reactivationtoken");
     // appUser2.setReactivationTokenExpiration(LocalDateTime.now());
 
@@ -174,6 +173,9 @@ public class TestService {
     auction2.addTreasurySecurity(treasurySecurity4);
     auction2.setProcessed(false);
     auction2.setDisabled(false);
+
+    BidderBot bidderBot = new BidderBot(auction2);
+    appUserRepository.save(bidderBot);
 
     //upcoming
     Auction auction3 = new Auction();

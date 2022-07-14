@@ -1,60 +1,138 @@
 package com.greenfox.treasuryauctionsystem.models;
 
-import com.greenfox.treasuryauctionsystem.utils.BotDetails;
 import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
 public class BidderBot extends AppUser{
-  private static int botNumber = 0;
-
+  private static int botNumber = 1;
   private static final List<String> behaviourList  = new ArrayList<>(
       Arrays.asList("institutional", "retail"));
   private String behaviour;
-
-  private Long totalBudget;
   @Transient
-  private Map<String, Long> budgetAllocation;
-  @Transient
-  private Map<String, Float> rateEntryPoint;
-  private LocalDateTime bidActuationTime;
+  private List<Bid> bids;
   @Transient
   private Random rnd = new Random();
-  public BidderBot() {
-    username = "BotUser_" + behaviour + "_" + botNumber++;
+  public BidderBot(Auction auction) {
     password = PasswordResetTokenGenerator.generatePasswordResetToken();
     isAdmin = false;
     isApproved = true;
     isActivated = true;
     behaviour = behaviourList.get(rnd.nextInt(behaviourList.size()));
-    totalBudget = generateBudget("institutional");
-    budgetAllocation = budgetAllocation;
-    rateEntryPoint = rateEntryPoint;
+    username = "BotUser_" + behaviour + "_" + botNumber++;
+    bids = generateBudgetAllocation(behaviour, auction);
   }
-  public BidderBot(String behaviour) {
-    this();
+  public BidderBot(Auction auction,String behaviour) {
+    this(auction);
     this.behaviour = behaviour;
   }
-  private Long generateBudget(String behaviour) {
-    if (behaviour.equals("institutional")) {
-      return (rnd.nextLong(300000 - 100000) +
-          100000) * 100;
-    } else {
-      return (rnd.nextLong(300000 - 100000) +
-          100000) * 100;
+  private List<Bid> generateBudgetAllocation(String behaviour, Auction auction){
+    List<Bid> bidList = new ArrayList<>();
+    long maxNonCompetitiveBid = 50000L; // 50000 * 100 denominations to get $5 mil limit
+    for(TreasurySecurity sec : auction.getTreasurySecurityList()){
+      int maxCompetitiveBid = (int)(sec.getTotalAmount() * 0.35) / 100; // to get the product of 100 denominations
+      Bid tempBid = new Bid();
+      tempBid.setTreasurySecurity(sec);
+      tempBid.setUser(this);
+      if(behaviour.equals("institutional")){
+        boolean weightedBidTypeProbability = rnd.nextFloat(2.0f)*1.5f > 1.0f; // institutional more likely to bid competitively
+        long institutionalCompetitiveBidAmount = (rnd.nextLong(maxCompetitiveBid - 7000) + 7000) * 100;
+        long institutionalNonCompetitiveBidAmount = (rnd.nextLong(maxNonCompetitiveBid - 5000) + 5000) * 100;
+        switch (sec.getSecurityType()){
+          case "T-Bill":
+            if(weightedBidTypeProbability){
+              tempBid.setCompetitive(true);
+              tempBid.setAmount(institutionalCompetitiveBidAmount);
+              tempBid.setRate(rnd.nextFloat(3.000f - 1.100f) + 1.100f);
+            } else {
+              tempBid.setCompetitive(false);
+              tempBid.setAmount(institutionalNonCompetitiveBidAmount);
+              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount();
+              tempBid.setRate(0.0f);
+            }
+            break;
+          case "T-Note":
+            if(weightedBidTypeProbability){
+              tempBid.setCompetitive(true);
+              tempBid.setAmount(institutionalCompetitiveBidAmount);
+              tempBid.setRate(rnd.nextFloat(3.200f - 2.500f) + 2.500f);
+            } else {
+              tempBid.setCompetitive(false);
+              tempBid.setAmount(institutionalNonCompetitiveBidAmount);
+              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount();
+              tempBid.setRate(0.0f);
+            }
+            break;
+          case "T-Bond":
+            if(weightedBidTypeProbability){
+              tempBid.setCompetitive(true);
+              tempBid.setAmount(institutionalCompetitiveBidAmount);
+              tempBid.setRate(rnd.nextFloat(4.500f - 1.200f) + 1.200f);
+            } else {
+              tempBid.setCompetitive(false);
+              tempBid.setAmount(institutionalNonCompetitiveBidAmount);
+              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount();
+              tempBid.setRate(0.0f);
+            }
+            break;
+        }
+        } else {
+        boolean weightedBidTypeProbability = rnd.nextFloat(2.0f)*0.6f > 1.0f; // retail investor tend to be non-competitive
+        long retailBidAmount = (rnd.nextLong(8000 - 100) + 100) * 100; // times 100 for $100 denominations
+        switch (sec.getSecurityType()){
+          case "T-Bill":
+            if(weightedBidTypeProbability){
+              tempBid.setCompetitive(true);
+              tempBid.setAmount(retailBidAmount);
+              tempBid.setRate(rnd.nextFloat(4.400f - 0.800f) + 0.800f);
+            } else {
+              tempBid.setCompetitive(false);
+              tempBid.setAmount(retailBidAmount);
+              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount();
+              tempBid.setRate(0.0f);
+            }
+            break;
+          case "T-Note":
+            if(weightedBidTypeProbability){
+              tempBid.setCompetitive(true);
+              tempBid.setAmount(retailBidAmount);
+              tempBid.setRate(rnd.nextFloat(4.000f - 2.000f) + 2.000f);
+            } else {
+              tempBid.setCompetitive(false);
+              tempBid.setAmount(retailBidAmount);
+              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount();
+              tempBid.setRate(0.0f);
+            }
+            break;
+          case "T-Bond":
+            if(weightedBidTypeProbability){
+              tempBid.setCompetitive(true);
+              tempBid.setAmount(retailBidAmount);
+              tempBid.setRate(rnd.nextFloat(4.500f - 1.800f) + 1.800f);
+            } else {
+              tempBid.setCompetitive(false);
+              tempBid.setAmount(retailBidAmount);
+              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount();
+              tempBid.setRate(0.0f);
+            }
+            break;
+        }
+      }
+      bidList.add(tempBid);
     }
+    return bidList;
   }
 }
