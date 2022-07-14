@@ -114,7 +114,7 @@ public class BidController {
 
             if (saveResultMessage.containsKey("AT_LEAST_ONE")) {
                 redirectAttributes.addFlashAttribute("AT_LEAST_ONE", saveResultMessage.get("AT_LEAST_ONE"));
-                return "redirect:/admin/bids/create?auction_id=" + auction_id;
+                return "redirect:/bids/create?auction_id=" + auction_id;
             }
 
             for (String i : saveResultMessage.keySet()) {
