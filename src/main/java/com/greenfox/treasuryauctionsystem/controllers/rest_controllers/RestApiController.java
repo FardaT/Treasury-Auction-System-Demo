@@ -35,8 +35,8 @@ public class RestApiController {
 		return appUserService.getAllAppUsersDto();
 	}
 
-	@GetMapping("/bids")
+	/*@GetMapping("/bids")
 	public List<BidResponseDTO> getBids(Principal principal) {
 		return bidService.getAllBidsDto(principal.getName());
-	}
+	}*/
 }
