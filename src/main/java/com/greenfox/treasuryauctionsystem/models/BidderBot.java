@@ -41,21 +41,22 @@ public class BidderBot extends AppUser{
   }
   private List<Bid> generateBudgetAllocation(String behaviour, Auction auction){
     List<Bid> bidList = new ArrayList<>();
-    long maxNonCompetitiveBid = 50000L; // 50000 * 100 denominations to get $5 mil limit
+    long maxNonCompetitiveBid = 50000L; // 50000 times 100 (down below) to get denominations in $5 mil limit
     for(TreasurySecurity sec : auction.getTreasurySecurityList()){
       int maxCompetitiveBid = (int)(sec.getTotalAmount() * 0.35) / 100; // to get the product of 100 denominations
-      //not bidding for a security
+      // Chance of not bidding for a security - skip to next one in list
       if(rnd.nextFloat(1.0f)*0.7f > 0.5f){
         continue;
       }
       Bid tempBid = new Bid();
       tempBid.setTreasurySecurity(sec);
       tempBid.setUser(this);
-      //how to act when the bot is institutional investor: more likely to bid competitively, more budget, tend to buy long terms securities, smaller variety of rates
+      // How to act when the bot is institutional investor: more likely to bid competitively, more budget, tend to buy both long and short term securities, smaller variety of rates
       if(behaviour.equals("institutional")){
         boolean weightedBidTypeProbability = rnd.nextFloat(1.0f)*1.5f > 0.5f;
         long institutionalCompetitiveBidAmount = (rnd.nextLong(maxCompetitiveBid - 7000) + 7000) * 100;
         long institutionalNonCompetitiveBidAmount = (rnd.nextLong(maxNonCompetitiveBid - 5000) + 5000) * 100;
+        // Different rates and amounts for each types of security whether they are competitive or non-competitive bids
         switch (sec.getSecurityType()){
           case "T-Bill":
             if(weightedBidTypeProbability){
@@ -95,7 +96,7 @@ public class BidderBot extends AppUser{
             break;
         }
         }
-      //how to act when the bot is retail investor: more likely to bid non-competitively, less budget, shorter terms, higher variety of rates
+      // How to act when the bot is retail investor: more likely to bid non-competitively, less budget, shorter terms, higher variety of rates
       else {
         boolean weightedBidTypeProbability = rnd.nextFloat(1.0f)*0.7f > 0.5f; // retail investor tend to be non-competitive
         long retailBidAmount = (rnd.nextLong(8000 - 100) + 100) * 100; // times 100 for $100 denominations
