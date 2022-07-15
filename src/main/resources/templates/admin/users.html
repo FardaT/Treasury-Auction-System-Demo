@@ -4,69 +4,92 @@
 <!-- HEADER -->
 <head th:replace="fragments/admin/header :: header"></head>
 
-<body>
+<body class="sb-nav-fixed">
 
 <!-- TOPNAV -->
 <nav th:replace="fragments/admin/topnav :: topnav"></nav>
 
 <!-- CONTENT -->
-<div class="container-fluid">
-    <div class="row">
+<div id="layoutSidenav">
 
-        <!-- SIDENAV -->
-        <div class="col-md-2">
-            <ul th:replace="fragments/admin/sidenav :: sidenav"></ul>
-        </div>
+    <!-- SIDENAV -->
+    <div th:replace="fragments/admin/sidenav :: sidenav"></div>
 
-        <!-- CONTENT -->
-        <div class="col-md-10">
-            <div th:if="${flashMessage != null}" class="alert alert-success">
-                <strong>Success!</strong> <span th:text="${flashMessage}"></span>
-            </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <h1 class="mt-4 ml-5">Users</h1>
+                <div class="card mb-4 ml-5">
+                    <div class="card-body">
+                        This is a list of all users in the system.
+                    </div>
+                </div>
 
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Approved?</th>
-                    <th>Enable/Disable</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="appUser : ${appUsers}">
-                    <td th:text="${appUser.id}"></td>
-                    <td th:text="${appUser.username}"></td>
-                    <td th:text="${appUser.email}"></td>
-                    <td>
-                        <form th:action="@{/admin/users/approve}" th:if="${!appUser.isApproved}" method="post">
-                            <input type="hidden" name="appUserId" th:value="${appUser.id}">
-                            <input type="submit" class="btn btn-success sa_click" value="Approve">
-                        </form>
-                        <div th:if="${appUser.isApproved}">
-                            &#9989;
+                <div th:if="${flashMessage != null}" class="alert alert-success ml-5">
+                    <strong>Success!</strong> <span th:text="${flashMessage}"></span>
+                </div>
+
+                <div class="card mb-4">
+                    <!--                    <div class="card-header">-->
+                    <!--                        <i class="fas fa-table mr-1"></i>-->
+                    <!--                        DataTable Example-->
+                    <!--                    </div>-->
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
+                                   cellspacing="0">
+
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Approved</th>
+                                    <th>Enable/Disable</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="appUser : ${appUsers}">
+                                    <td th:text="${appUser.id}"></td>
+                                    <td th:text="${appUser.username}"></td>
+                                    <td th:text="${appUser.email}"></td>
+                                    <td class="text-center">
+                                        <form th:action="@{/admin/users/approve}" th:if="${!appUser.isApproved}"
+                                              method="post">
+                                            <input type="hidden" name="appUserId" th:value="${appUser.id}">
+                                            <input type="submit" class="btn btn-success sa_click" value="Approve">
+                                        </form>
+                                        <div th:if="${appUser.isApproved}">
+                                            &#9989;
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <form th:action="@{/admin/users/enable}" th:if="${appUser.isDisabled}"
+                                              method="post">
+                                            <input type="hidden" name="appUserId" th:value="${appUser.id}">
+                                            <input type="submit" class="btn btn-success sa_click" value="Enable">
+                                        </form>
+                                        <form th:action="@{/admin/users/disable}" th:if="${!appUser.isDisabled}"
+                                              method="post">
+                                            <input type="hidden" name="appUserId" th:value="${appUser.id}">
+                                            <input type="submit" class="btn btn-danger sa_click" value="Disable">
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+
+                            </table>
                         </div>
-                    </td>
-                    <td>
-                        <form th:action="@{/admin/users/enable}" th:if="${appUser.isDisabled}" method="post">
-                            <input type="hidden" name="appUserId" th:value="${appUser.id}">
-                            <input type="submit" class="btn btn-success sa_click" value="Enable">
-                        </form>
-                        <form th:action="@{/admin/users/disable}" th:if="${!appUser.isDisabled}" method="post">
-                            <input type="hidden" name="appUserId" th:value="${appUser.id}">
-                            <input type="submit" class="btn btn-danger sa_click" value="Disable">
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer th:replace="fragments/admin/footer :: footer"></footer>
     </div>
 </div>
 
 <!-- FOOTER -->
-<footer th:replace="fragments/admin/footer :: footer"></footer>
+<div th:replace="fragments/admin/scripts :: scripts"></div>
 
 </body>
 </html>
