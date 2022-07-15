@@ -88,9 +88,9 @@ public class TestService {
 //		treasurySecurity1.setHighRate(9.9f);
 
     TreasurySecurity treasurySecurity2 = new TreasurySecurity();
-    treasurySecurity2.setSecurityName("Bill 1");
-    treasurySecurity2.setSecurityType("Bill");
-    treasurySecurity2.setSecurityTerm("26w");
+    treasurySecurity2.setSecurityName("26-week T-Bill");
+    treasurySecurity2.setSecurityType("T-Bill");
+    treasurySecurity2.setSecurityTerm("26-week");
     treasurySecurity2.setTotalAmount(55_000_000);
     treasurySecurity2.setIssueDate(LocalDate.now().plusDays(10));
     treasurySecurity2.setMaturityDate(LocalDate.now().plusDays(10).plusWeeks(26));
@@ -150,6 +150,7 @@ public class TestService {
     appUser2.setDisabled(false);
 
 
+
     // appUser2.setReactivationToken("a_reactivationtoken");
     // appUser2.setReactivationTokenExpiration(LocalDateTime.now());
 
@@ -168,9 +169,13 @@ public class TestService {
     auction2.setAuctionStartDate(LocalDateTime.now());
     auction2.setAuctionEndDate(LocalDateTime.now().plusDays(10));
     auction2.addTreasurySecurity(treasurySecurity4);
+    auction1.addTreasurySecurity(treasurySecurity2);
     auction2.setProcessed(false);
     auction2.setDisabled(false);
 
+    BidderBot bot = new BidderBot();
+    appUserRepository.save(bot);
+    bot.setBids(bot.generateBudgetAllocation(auction2));
 
     //upcoming
     Auction auction3 = new Auction();
@@ -223,6 +228,10 @@ public class TestService {
     bidRepository.save(bid4);
     bidRepository.save(bid5);
     bidRepository.save(bid6);
+
+    for(Bid bid : bot.getBids()){
+      bidRepository.save(bid);
+    }
 
   }
 

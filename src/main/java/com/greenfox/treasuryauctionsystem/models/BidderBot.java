@@ -1,6 +1,7 @@
 package com.greenfox.treasuryauctionsystem.models;
 
 import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,11 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -23,23 +22,20 @@ public class BidderBot extends AppUser{
       Arrays.asList("institutional", "retail"));
   private String behaviour;
   @Transient
-  private List<Bid> bids;
-  @Transient
   private Random rnd = new Random();
-  public BidderBot(Auction auction) {
+  public BidderBot() {
     password = PasswordResetTokenGenerator.generatePasswordResetToken();
     isAdmin = false;
     isApproved = true;
     isActivated = true;
     behaviour = behaviourList.get(rnd.nextInt(behaviourList.size()));
     username = "BotUser_" + behaviour + "_" + botNumber++;
-    bids = generateBudgetAllocation(behaviour, auction);
   }
   public BidderBot(Auction auction,String behaviour) {
-    this(auction);
+    this();
     this.behaviour = behaviour;
   }
-  private List<Bid> generateBudgetAllocation(String behaviour, Auction auction){
+  public List<Bid> generateBudgetAllocation(Auction auction){
     List<Bid> bidList = new ArrayList<>();
     long maxNonCompetitiveBid = 50000L; // 50000 times 100 (down below) to get denominations in $5 mil limit
     for(TreasurySecurity sec : auction.getTreasurySecurityList()){
@@ -51,8 +47,9 @@ public class BidderBot extends AppUser{
       Bid tempBid = new Bid();
       tempBid.setTreasurySecurity(sec);
       tempBid.setUser(this);
+      tempBid.setCreatedAt(LocalDateTime.now());
       // How to act when the bot is institutional investor: more likely to bid competitively, more budget, tend to buy both long and short term securities, smaller variety of rates
-      if(behaviour.equals("institutional")){
+      if(this.behaviour.equals("institutional")){
         boolean weightedBidTypeProbability = rnd.nextFloat(1.0f)*1.5f > 0.5f;
         long institutionalCompetitiveBidAmount = (rnd.nextLong(maxCompetitiveBid - 7000) + 7000) * 100;
         long institutionalNonCompetitiveBidAmount = (rnd.nextLong(maxNonCompetitiveBid - 5000) + 5000) * 100;

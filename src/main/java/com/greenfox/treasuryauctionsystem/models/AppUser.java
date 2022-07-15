@@ -34,10 +34,10 @@ public class AppUser {
 	protected String password;
 	@OneToMany(
 			mappedBy = "user",
-			cascade = CascadeType.MERGE,
+			cascade = CascadeType.ALL,
 			orphanRemoval = true
 	)
-	private List<Bid> bids = new ArrayList<>();
+	protected List<Bid> bids = new ArrayList<>();
 	private String institution;
 	private String activationToken = PasswordResetTokenGenerator.generatePasswordResetToken();
 	private LocalDateTime activationTokenExpiration = Utility.setExpiration(ApplicationDetails.expiration);
