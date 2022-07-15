@@ -76,7 +76,7 @@
         <option value="desc">descending</option>
     </select>
     <div th:if="${ #lists.isEmpty(upcoming)}">
-        <h3>No ongoing auctions</h3>
+        <h3>No upcoming auctions</h3>
     </div>
     <div th:unless="${#lists.isEmpty(upcoming)}" class="table-container">
 
