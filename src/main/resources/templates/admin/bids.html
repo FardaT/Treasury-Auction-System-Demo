@@ -2,73 +2,94 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <!-- HEADER -->
-<head th:replace="fragments/admin/header :: header"></head>
+<head th:replace="fragments/admin/header :: header">
 
-<body>
+<body class="sb-nav-fixed">
 
 <!-- TOPNAV -->
 <nav th:replace="fragments/admin/topnav :: topnav"></nav>
 
 <!-- CONTENT -->
-<div class="container-fluid">
-    <div class="row">
+<div id="layoutSidenav">
 
-        <!-- SIDENAV -->
-        <div class="col-md-2">
-            <ul th:replace="fragments/admin/sidenav :: sidenav"></ul>
-        </div>
+    <!-- SIDENAV -->
+    <div th:replace="fragments/admin/sidenav :: sidenav"></div>
 
-        <!-- CONTENT -->
-        <div class="col-md-10">
-            <h1>List of BIDS</h1>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <h1 class="mt-4 ml-5">Bids</h1>
+                <div class="card mb-4 ml-5">
+                    <div class="card-body">
+                        This is a list of all bids in the system. If you wish to check the auctions please visit the
+                        <a th:href="@{/auctions}">auctions page</a>.
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <!--                    <div class="card-header">-->
+                    <!--                        <i class="fas fa-table mr-1"></i>-->
+                    <!--                        DataTable Example-->
+                    <!--                    </div>-->
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
+                                   cellspacing="0">
 
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Created At</th>
-                    <th>Amount</th>
-                    <th>Rate</th>
-                    <th>Competitive?</th>
-                    <th>Accepted?</th>
-                    <th>Archived?</th>
-                    <th>Security</th>
-                    <th>Auction</th>
-                    <th>User</th>
-                    <th>Disabled?</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="bid : ${bids}">
-                    <td th:text="${bid.id}"></td>
-                    <!-- https://www.baeldung.com/dates-in-thymeleaf -->
-                    <td th:text="${#temporals.format(bid.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
-                    <td th:text="${bid.amount}"></td>
-                    <td th:text="${bid.rate}"></td>
-                    <td th:text="${bid.isCompetitive == true ? '&#9989;' : '&#10060;'}"></td>
-                    <td th:text="${bid.isAccepted == true ? '&#9989;' : '&#10060;'}"></td>
-                    <td th:text="${bid.isArchived == true ? '&#9989;' : '&#10060;'}"></td>
-                    <td th:text="${bid.treasurySecurity.securityName}"></td>
-                    <td th:text="${bid.treasurySecurity.auction.id}"></td>
-                    <td th:text="${bid.user.username}"></td>
-                    <td>
-                        <form th:action="@{/bids/destroy}" th:if="${!bid.isDisabled}" method="post">
-                            <input type="hidden" name="bidId" th:value="${bid.id}">
-                            <input type="submit" class="btn btn-danger" value="Delete">
-                        </form>
-                        <div th:if="${bid.isDisabled}">
-                            <b><span style="color: red;">YES</span></b>
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Created At</th>
+                                    <th>Amount</th>
+                                    <th>Rate</th>
+                                    <th>Competitive</th>
+                                    <th>Accepted</th>
+                                    <th>Archived</th>
+                                    <th>Security</th>
+                                    <th>Auction</th>
+                                    <th>User</th>
+                                    <th>Disabled</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="bid : ${bids}">
+                                    <td th:text="${bid.id}"></td>
+                                    <!-- https://www.baeldung.com/dates-in-thymeleaf -->
+                                    <td th:text="${#temporals.format(bid.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
+                                    <td th:text="${bid.amount}"></td>
+                                    <td th:text="${bid.rate}"></td>
+                                    <td th:text="${bid.isCompetitive == true ? '&#9989;' : '&#10060;'}"
+                                        class="text-center"></td>
+                                    <td th:text="${bid.isAccepted == true ? '&#9989;' : '&#10060;'}"
+                                        class="text-center"></td>
+                                    <td th:text="${bid.isArchived == true ? '&#9989;' : '&#10060;'}"
+                                        class="text-center"></td>
+                                    <td th:text="${bid.treasurySecurity.securityName}"></td>
+                                    <td th:text="${bid.treasurySecurity.auction.id}"></td>
+                                    <td th:text="${bid.user.username}"></td>
+                                    <td>
+                                        <form th:action="@{/bids/destroy}" th:if="${!bid.isDisabled}" method="post">
+                                            <input type="hidden" name="bidId" th:value="${bid.id}">
+                                            <input type="submit" class="btn btn-danger" value="Delete">
+                                        </form>
+                                        <div th:if="${bid.isDisabled}">
+                                            <b><span style="color: red;">YES</span></b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+
+                            </table>
                         </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer th:replace="fragments/admin/footer :: footer"></footer>
     </div>
 </div>
 
 <!-- FOOTER -->
-<footer th:replace="fragments/admin/footer :: footer"></footer>
+<div th:replace="fragments/admin/scripts :: scripts"></div>
 
 </body>
 </html>
