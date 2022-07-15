@@ -25,7 +25,8 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>id</th>
+                    <th>Created At</th>
                     <th>Amount</th>
                     <th>Rate</th>
                     <th>Competitive?</th>
@@ -33,12 +34,15 @@
                     <th>Archived?</th>
                     <th>Security</th>
                     <th>Auction</th>
+                    <th>User</th>
                     <th>Disabled?</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="bid : ${bids}">
                     <td th:text="${bid.id}"></td>
+                    <!-- https://www.baeldung.com/dates-in-thymeleaf -->
+                    <td th:text="${#temporals.format(bid.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
                     <td th:text="${bid.amount}"></td>
                     <td th:text="${bid.rate}"></td>
                     <td th:text="${bid.isCompetitive == true ? '&#9989;' : '&#10060;'}"></td>
@@ -46,8 +50,9 @@
                     <td th:text="${bid.isArchived == true ? '&#9989;' : '&#10060;'}"></td>
                     <td th:text="${bid.treasurySecurity.securityName}"></td>
                     <td th:text="${bid.treasurySecurity.auction.id}"></td>
+                    <td th:text="${bid.user.username}"></td>
                     <td>
-                        <form th:action="@{/admin/bids/destroy}" th:if="${!bid.isDisabled}" method="post">
+                        <form th:action="@{/bids/destroy}" th:if="${!bid.isDisabled}" method="post">
                             <input type="hidden" name="bidId" th:value="${bid.id}">
                             <input type="submit" class="btn btn-danger" value="Delete">
                         </form>

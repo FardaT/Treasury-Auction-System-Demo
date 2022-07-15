@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,14 +17,10 @@ import javax.persistence.*;
 public class BidDTO {
 
     // FIELDS
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     private TreasurySecurity treasurySecurity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     private AppUser user;
 
     private String isCompetitive;
@@ -32,12 +29,5 @@ public class BidDTO {
     private boolean isAccepted = false;
     private boolean isArchived = false;
     private boolean isDisabled = false; // for soft delete/cancel
-	/*
-	private String treasurySecurity;
-	private boolean isCompetitive;
-	private long amount;
-	private float rate;
-	private boolean isAccepted;
-	private boolean isArchived;
-	 */
+    private LocalDateTime createdAt = LocalDateTime.now();
 }
