@@ -16,4 +16,8 @@ public class TestController {
     public String adminSkeleton() {
         return "admin/admin_skeleton";
     }
+    @GetMapping("/admin_dashboard")
+    public String adminDashboard() {
+        return "admin/admin_dashboard";
+    }
 }

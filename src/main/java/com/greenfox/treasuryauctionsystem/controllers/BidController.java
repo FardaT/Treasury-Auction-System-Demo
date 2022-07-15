@@ -10,7 +10,9 @@ import com.greenfox.treasuryauctionsystem.services.AppUserService;
 import com.greenfox.treasuryauctionsystem.services.AuctionService;
 import com.greenfox.treasuryauctionsystem.services.BidService;
 import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
+
 import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -55,8 +58,12 @@ public class BidController {
     }
 
     // CREATE - show form
-    @GetMapping("admin/bids/create")
-    public String create(Model model, Principal principal, @RequestParam Long auction_id) {
+    @GetMapping("bids/create")
+    public String create(
+            Model model,
+            Principal principal,
+            @RequestParam Long auction_id,
+            RedirectAttributes redirectAttributes) {
 
         // get currently logged in user
         AppUser currentUser = appUserService.getUserByUsername(principal.getName());
@@ -66,6 +73,7 @@ public class BidController {
         Auction auction = auctionService.findById(auction_id);
         AuctionResponseDTO auctionResponseDTO = new AuctionResponseDTO(auction);
         model.addAttribute("auction", auctionResponseDTO);
+        model.addAttribute("ending", auction.getAuctionEndDate());
 
         // As we can see, we passed a list of 3 empty Book objects to the view via the wrapper class.
         BidsCreationDto bidsForm = new BidsCreationDto();
@@ -76,11 +84,17 @@ public class BidController {
         model.addAttribute("form", bidsForm);
         model.addAttribute("currency", ApplicationDetails.currency);
 
-        return "admin/bids_create_form";
+        // you can only place bids for ONGOING auctions
+        if (auction.getAuctionStartDate().isBefore(LocalDateTime.now()) && auction.getAuctionEndDate().isAfter(LocalDateTime.now())) {
+            return "admin/bids_create_form";
+        } else {
+            redirectAttributes.addFlashAttribute("BIDDING_CLOSED", "This auction is either upcoming or finished");
+            return "redirect:/auctions";
+        }
     }
 
     // STORE
-    @PostMapping("admin/bids/store")
+    @PostMapping("bids/store")
     public String store(
             @ModelAttribute BidsCreationDto form,
             Principal principal,
@@ -92,51 +106,55 @@ public class BidController {
         // get currently logged in user
         AppUser currentUser = appUserService.getUserByUsername(principal.getName());
 
-        Map<String, String> saveResultMessage = bidService.saveBid(bids, currentUser);
+        Auction auction = auctionService.findById(Long.valueOf(auction_id));
+        Map<String, String> saveResultMessage = bidService.saveBid(bids, currentUser, auction);
 
-         // validations
+        // validations
         if (!saveResultMessage.isEmpty()) {
 
             if (saveResultMessage.containsKey("AT_LEAST_ONE")) {
                 redirectAttributes.addFlashAttribute("AT_LEAST_ONE", saveResultMessage.get("AT_LEAST_ONE"));
-                return "redirect:/admin/bids/create?auction_id=" + auction_id;
+                return "redirect:/bids/create?auction_id=" + auction_id;
             }
 
-            int index = 0;
             for (String i : saveResultMessage.keySet()) {
 
-                if (saveResultMessage.containsKey("AMOUNT_POSITIVE_" + index)) {
-                    redirectAttributes.addFlashAttribute("AMOUNT_POSITIVE_" + index, saveResultMessage.get("AMOUNT_POSITIVE_" + index));
-                }
-                if (saveResultMessage.containsKey("AMOUNT_HUNDRED_" + index)) {
-                    redirectAttributes.addFlashAttribute("AMOUNT_HUNDRED_" + index, saveResultMessage.get("AMOUNT_HUNDRED_" + index));
-                }
-                if (saveResultMessage.containsKey("AMOUNT_COMPETITIVE_" + index)) {
-                    redirectAttributes.addFlashAttribute("AMOUNT_COMPETITIVE_" + index, saveResultMessage.get("AMOUNT_COMPETITIVE_" + index));
-                }
-                if (saveResultMessage.containsKey("RATE_RANGE_" + index)) {
-                    redirectAttributes.addFlashAttribute("RATE_RANGE_" + index, saveResultMessage.get("RATE_RANGE_" + index));
+                for (int counter = 0; counter < auction.getTreasurySecurityList().size(); counter++) {
+                    if (saveResultMessage.containsKey("ONE_BID_" + counter)) {
+                        redirectAttributes.addFlashAttribute("ONE_BID_" + counter, saveResultMessage.get("ONE_BID_" + counter));
+                    }
+                    if (saveResultMessage.containsKey("AMOUNT_POSITIVE_" + counter)) {
+                        redirectAttributes.addFlashAttribute("AMOUNT_POSITIVE_" + counter, saveResultMessage.get("AMOUNT_POSITIVE_" + counter));
+                    }
+                    if (saveResultMessage.containsKey("AMOUNT_HUNDRED_" + counter)) {
+                        redirectAttributes.addFlashAttribute("AMOUNT_HUNDRED_" + counter, saveResultMessage.get("AMOUNT_HUNDRED_" + counter));
+                    }
+                    if (saveResultMessage.containsKey("AMOUNT_COMPETITIVE_" + counter)) {
+                        redirectAttributes.addFlashAttribute("AMOUNT_COMPETITIVE_" + counter, saveResultMessage.get("AMOUNT_COMPETITIVE_" + counter));
+                    }
+                    if (saveResultMessage.containsKey("RATE_RANGE_" + counter)) {
+                        redirectAttributes.addFlashAttribute("RATE_RANGE_" + counter, saveResultMessage.get("RATE_RANGE_" + counter));
+                    }
                 }
 
-                index++;
             }
 
             if (saveResultMessage.containsKey("AMOUNT_NONCOMPETITIVE")) {
                 redirectAttributes.addFlashAttribute("AMOUNT_NONCOMPETITIVE", saveResultMessage.get("AMOUNT_NONCOMPETITIVE"));
             }
 
-            return "redirect:/admin/bids/create?auction_id=" + auction_id;
+            return "redirect:/bids/create?auction_id=" + auction_id;
         } else {
-            return "redirect:/admin/bids";
+            return "redirect:/profile";
         }
     }
 
     // DESTROY
-    @PostMapping("admin/bids/destroy")
+    @PostMapping("bids/destroy")
     public String destroy(@RequestParam Long bidId) {
 
         bidService.disableBid(bidId);
 
-        return "redirect:/admin/bids";
+        return "redirect:/profile";
     }
 }

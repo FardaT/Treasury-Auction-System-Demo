@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<!-- HEADER -->
+<head th:replace="fragments/admin/header :: header"></head>
+
+<body>
+
+<!-- https://stackoverflow.com/questions/62727660/spring-boot-doesnt-shows-custom-error-pages -->
+
+<!-- CONTENT -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center mt-5">
+            <h3 class="text-danger">Unauthorized access (error code: 403)</h3>
+            <img th:src="@{/images/http-403-forbidden-you-shall-not-pass.jpg}" alt="">
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer th:replace="fragments/admin/footer :: footer"></footer>
+
+</body>
+</html>

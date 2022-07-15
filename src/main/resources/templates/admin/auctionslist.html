@@ -28,6 +28,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <h1>All auctions</h1>
+
+                    <div th:if="${BIDDING_CLOSED != null}" class="alert alert-danger">
+                        <strong>Error!</strong> <span th:text="${BIDDING_CLOSED}"></span>
+                    </div>
+
                 </div>
                 <div class="col-md-6 text-right mt-3">
                     <a th:href="@{admin/auctions/create}">
@@ -57,8 +62,11 @@
                         <th>start time</th>
                         <th>end date</th>
                         <th>end time</th>
+                        <th>Bond</th>
+                        <th>Bill</th>
+                        <th>Note</th>
                         <th>Securities</th>
-                        <th>BID</th>
+                        <th sec:authorize="hasRole('USER')">BID</th>
                     </thead>
                     <tbody>
 
@@ -68,6 +76,18 @@
                         <td th:text="*{startTime}"></td>
                         <td th:text="*{endDate}"></td>
                         <td th:text="*{endTime}"></td>
+                        <td>
+                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'Bond')}">&#9989;</span>
+                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'Bond')}">&#10060;</span>
+                        </td>
+                        <td>
+                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'Bill')}">&#9989;</span>
+                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'Bill')}">&#10060;</span>
+                        </td>
+                        <td>
+                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'Note')}">&#9989;</span>
+                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'Note')}">&#10060;</span>
+                        </td>
                         <td>
                             <!-- Button to Open the Modal -->
                             <button type="button" class="btn btn-primary" data-toggle="modal"
@@ -113,7 +133,8 @@
                             </div>
                         </td>
                         <td>
-                            <a th:href="@{/admin/bids/create(auction_id=${auction.id})}" class="btn btn-success"
+                        <!-- <td sec:authorize="hasRole('USER')"> -->
+                            <a th:href="@{/bids/create(auction_id=${auction.id})}" class="btn btn-success"
                                role="button">Place BID</a>
                         </td>
                     </tr>

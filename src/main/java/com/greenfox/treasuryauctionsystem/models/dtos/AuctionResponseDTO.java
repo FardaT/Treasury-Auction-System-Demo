@@ -19,6 +19,8 @@ public class AuctionResponseDTO {
     private boolean isProcessed;
     private boolean isDisabled;
 
+    private Set<String> treasurySecurityTypeList = new HashSet<>();
+
     public AuctionResponseDTO(Auction auction) {
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -32,32 +34,45 @@ public class AuctionResponseDTO {
         this.endTime = auction.getAuctionEndDate().format(timeFormatter);
         this.isProcessed = auction.isProcessed();
         this.isDisabled = auction.isDisabled();
+
+        for (TreasurySecurity treasurySecurity : treasurySecurityList) {
+            treasurySecurityTypeList.add(treasurySecurity.getSecurityType());
+        }
     }
 
     public Long getId() {
         return id;
     }
 
-  public List<TreasurySecurity> getTreasurySecurityList() {
-    return treasurySecurityList;
-  }
-  public String getStartDate() {
-    return startDate;
-  }
-  public String getStartTime() {
-    return startTime;
-  }
-  public String getEndDate() {
-    return endDate;
-  }
-  public String getEndTime() {
-    return endTime;
-  }
-  public boolean isProcessed() {
-    return isProcessed;
-  }
-  public boolean isDisabled() {
-    return isDisabled;
-  }
-}
+    public List<TreasurySecurity> getTreasurySecurityList() {
+        return treasurySecurityList;
+    }
 
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public boolean isProcessed() {
+        return isProcessed;
+    }
+
+    public boolean isDisabled() {
+        return isDisabled;
+    }
+
+    public Set<String> getTreasurySecurityTypeList() {
+        return treasurySecurityTypeList;
+    }
+}

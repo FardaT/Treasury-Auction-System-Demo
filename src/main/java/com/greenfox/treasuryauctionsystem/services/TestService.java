@@ -10,7 +10,6 @@ import com.greenfox.treasuryauctionsystem.repositories.AppUserRepository;
 import com.greenfox.treasuryauctionsystem.repositories.AuctionRepository;
 import com.greenfox.treasuryauctionsystem.repositories.BidRepository;
 import com.greenfox.treasuryauctionsystem.repositories.TreasurySecurityRepository;
-import com.greenfox.treasuryauctionsystem.seeders.AppUserSeeder;
 import com.greenfox.treasuryauctionsystem.seeders.AuctionSeeder;
 import com.greenfox.treasuryauctionsystem.utils.ApplicationDetails;
 import com.greenfox.treasuryauctionsystem.utils.PasswordResetTokenGenerator;
@@ -29,13 +28,12 @@ public class TestService {
   private TreasurySecurityRepository treasurySecurityRepository;
 
   // SEEDERS
-  private final AppUserSeeder appUserSeeder;
   private final AuctionSeeder auctionSeeder;
 
   @Autowired
   public TestService(AppUserRepository appUserRepository, BidRepository bidRepository,
                      AuctionRepository auctionRepository,
-                     TreasurySecurityRepository treasurySecurityRepository, AppUserSeeder appUserSeeder, AuctionSeeder auctionSeeder) {
+                     TreasurySecurityRepository treasurySecurityRepository, AuctionSeeder auctionSeeder) {
     this.appUserRepository = appUserRepository;
     this.bidRepository = bidRepository;
     this.auctionRepository = auctionRepository;
@@ -43,7 +41,6 @@ public class TestService {
 
     // SEEDERS
     this.auctionSeeder = auctionSeeder;
-    this.appUserSeeder = appUserSeeder;
   }
 
   public void fillDatabase() {
@@ -230,7 +227,6 @@ public class TestService {
   }
 
   public void seedDatabase() {
-    appUserSeeder.saveAppUsers();
     auctionSeeder.saveAuctions();
   }
 }
