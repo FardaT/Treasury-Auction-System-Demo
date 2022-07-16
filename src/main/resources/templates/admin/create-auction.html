@@ -74,6 +74,8 @@
                         <td><span th:if="${ISSUE_DATE_ERROR != null}" th:text="${ISSUE_DATE_ERROR}" style="color: red;"></span></td>
                     </tr>
                 </table>
+                <label for="setBots">Set number of bidder bots for this auction:</label>
+                <input id="setBots" type="number" name="numberOfBots" form="create-auction" value="0"><br>
                 <form action="/admin/auctions/create" method="post" id="create-auction"><button type="submit" class="btn btn-primary sa_create_auction_confirmation">Create auction</button></form>
                 <form hidden action="/admin/auctions/cancel-creation" method="post" id="cancel-auction-creation"><button hidden type="submit" class="btn btn-primary sa_create_auction_confirmation">Delete auction</button></form>
 

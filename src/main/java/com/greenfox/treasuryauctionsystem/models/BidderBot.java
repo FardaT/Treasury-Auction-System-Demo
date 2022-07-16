@@ -35,13 +35,13 @@ public class BidderBot extends AppUser{
     this();
     this.behaviour = behaviour;
   }
-  public List<Bid> generateBudgetAllocation(Auction auction){
+  public List<Bid> generateBids(Auction auction){
     List<Bid> bidList = new ArrayList<>();
     long maxNonCompetitiveBid = 50000L; // 50000 times 100 (down below) to get denominations in $5 mil limit
     for(TreasurySecurity sec : auction.getTreasurySecurityList()){
       int maxCompetitiveBid = (int)(sec.getTotalAmount() * 0.35) / 100; // to get the product of 100 denominations
       // Chance of not bidding for a security - skip to next one in list
-      if(rnd.nextFloat(1.0f)*0.7f > 0.5f){
+      if(rnd.nextFloat(1.0f)*0.8f > 0.5f){
         continue;
       }
       Bid tempBid = new Bid();
@@ -52,7 +52,7 @@ public class BidderBot extends AppUser{
       if(this.behaviour.equals("institutional")){
         boolean weightedBidTypeProbability = rnd.nextFloat(1.0f)*1.5f > 0.5f;
         long institutionalCompetitiveBidAmount = (rnd.nextLong(maxCompetitiveBid - 7000) + 7000) * 100;
-        long institutionalNonCompetitiveBidAmount = (rnd.nextLong(maxNonCompetitiveBid - 5000) + 5000) * 100;
+        long institutionalNonCompetitiveBidAmount = (rnd.nextLong(maxNonCompetitiveBid - 5000L) + 5000L) * 100L;
         // Different rates and amounts for each types of security whether they are competitive or non-competitive bids
         switch (sec.getSecurityType()){
           case "T-Bill":
@@ -63,7 +63,7 @@ public class BidderBot extends AppUser{
             } else {
               tempBid.setCompetitive(false);
               tempBid.setAmount(institutionalNonCompetitiveBidAmount);
-              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount();
+              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount() / 100;
               tempBid.setRate(0.0f);
             }
             break;
@@ -75,7 +75,7 @@ public class BidderBot extends AppUser{
             } else {
               tempBid.setCompetitive(false);
               tempBid.setAmount(institutionalNonCompetitiveBidAmount);
-              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount();
+              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount() / 100;
               tempBid.setRate(0.0f);
             }
             break;
@@ -87,7 +87,7 @@ public class BidderBot extends AppUser{
             } else {
               tempBid.setCompetitive(false);
               tempBid.setAmount(institutionalNonCompetitiveBidAmount);
-              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount();
+              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount() / 100;
               tempBid.setRate(0.0f);
             }
             break;
@@ -106,7 +106,7 @@ public class BidderBot extends AppUser{
             } else {
               tempBid.setCompetitive(false);
               tempBid.setAmount(retailBidAmount);
-              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount();
+              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount() / 100;
               tempBid.setRate(0.0f);
             }
             break;
@@ -122,7 +122,7 @@ public class BidderBot extends AppUser{
             } else {
               tempBid.setCompetitive(false);
               tempBid.setAmount(retailBidAmount);
-              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount();
+              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount() / 100;
               tempBid.setRate(0.0f);
             }
             break;
@@ -138,7 +138,7 @@ public class BidderBot extends AppUser{
             } else {
               tempBid.setCompetitive(false);
               tempBid.setAmount(retailBidAmount);
-              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount();
+              maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount() / 100;
               tempBid.setRate(0.0f);
             }
             break;

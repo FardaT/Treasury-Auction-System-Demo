@@ -173,9 +173,9 @@ public class TestService {
     auction2.setProcessed(false);
     auction2.setDisabled(false);
 
-    BidderBot bot = new BidderBot();
+/*    BidderBot bot = new BidderBot();
     appUserRepository.save(bot);
-    bot.setBids(bot.generateBudgetAllocation(auction2));
+    bot.setBids(bot.generateBids(auction2));*/
 
     //upcoming
     Auction auction3 = new Auction();
@@ -229,9 +229,9 @@ public class TestService {
     bidRepository.save(bid5);
     bidRepository.save(bid6);
 
-    for(Bid bid : bot.getBids()){
+/*    for(Bid bid : bot.getBids()){
       bidRepository.save(bid);
-    }
+    }*/
 
   }
 
