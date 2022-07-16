@@ -81,7 +81,7 @@ public class AuctionSeeder {
         // SECURITIES for the ongoing auction
         TreasurySecurity treasurySecurity1 = new TreasurySecurity();
         treasurySecurity1.setSecurityName("Bond 1");
-        treasurySecurity1.setSecurityType("Bond");
+        treasurySecurity1.setSecurityType("T-Bond");
         treasurySecurity1.setSecurityTerm("30y");
         treasurySecurity1.setTotalAmount(150_000_000);
         treasurySecurity1.setIssueDate(LocalDate.now().plusWeeks(1));
@@ -90,7 +90,7 @@ public class AuctionSeeder {
 
         TreasurySecurity treasurySecurity2 = new TreasurySecurity();
         treasurySecurity2.setSecurityName("Bill 1");
-        treasurySecurity2.setSecurityType("Bill");
+        treasurySecurity2.setSecurityType("T-Bill");
         treasurySecurity2.setSecurityTerm("26w");
         treasurySecurity2.setTotalAmount(55_000_000);
         treasurySecurity2.setIssueDate(LocalDate.now().plusDays(10));
@@ -99,7 +99,7 @@ public class AuctionSeeder {
 
         TreasurySecurity treasurySecurity3 = new TreasurySecurity();
         treasurySecurity3.setSecurityName("Note 1");
-        treasurySecurity3.setSecurityType("Note");
+        treasurySecurity3.setSecurityType("T-Note");
         treasurySecurity3.setSecurityTerm("5y");
         treasurySecurity3.setTotalAmount(220_000_000);
         treasurySecurity3.setIssueDate(LocalDate.now().plusWeeks(2));
@@ -108,7 +108,7 @@ public class AuctionSeeder {
 
         TreasurySecurity treasurySecurity4 = new TreasurySecurity();
         treasurySecurity4.setSecurityName("Bond 2");
-        treasurySecurity4.setSecurityType("Bond");
+        treasurySecurity4.setSecurityType("T-Bond");
         treasurySecurity4.setSecurityTerm("30y");
         treasurySecurity4.setTotalAmount(150_000_000);
         treasurySecurity4.setIssueDate(LocalDate.now().plusWeeks(1));
@@ -117,7 +117,7 @@ public class AuctionSeeder {
 
         TreasurySecurity treasurySecurity5 = new TreasurySecurity();
         treasurySecurity5.setSecurityName("Bill 2");
-        treasurySecurity5.setSecurityType("Bill");
+        treasurySecurity5.setSecurityType("T-Bill");
         treasurySecurity5.setSecurityTerm("26w");
         treasurySecurity5.setTotalAmount(55_000_000);
         treasurySecurity5.setIssueDate(LocalDate.now().plusDays(10));
@@ -126,7 +126,7 @@ public class AuctionSeeder {
 
         TreasurySecurity treasurySecurity6 = new TreasurySecurity();
         treasurySecurity6.setSecurityName("Note 2");
-        treasurySecurity6.setSecurityType("Note");
+        treasurySecurity6.setSecurityType("T-Note");
         treasurySecurity6.setSecurityTerm("5y");
         treasurySecurity6.setTotalAmount(220_000_000);
         treasurySecurity6.setIssueDate(LocalDate.now().plusWeeks(2));

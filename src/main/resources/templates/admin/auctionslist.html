@@ -93,16 +93,16 @@
                                         <td th:text="*{endDate}"></td>
                                         <td th:text="*{endTime}"></td>
                                         <td class="text-center">
-                                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'Bond')}">&#9989;</span>
-                                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'Bond')}">&#10060;</span>
+                                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'T-Bond')}">&#9989;</span>
+                                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'T-Bond')}">&#10060;</span>
                                         </td>
                                         <td class="text-center">
-                                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'Bill')}">&#9989;</span>
-                                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'Bill')}">&#10060;</span>
+                                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'T-Bill')}">&#9989;</span>
+                                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'T-Bill')}">&#10060;</span>
                                         </td>
                                         <td class="text-center">
-                                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'Note')}">&#9989;</span>
-                                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'Note')}">&#10060;</span>
+                                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'T-Note')}">&#9989;</span>
+                                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'T-Note')}">&#10060;</span>
                                         </td>
                                         <td>
                                             <!-- Button to Open the Modal -->
@@ -135,8 +135,8 @@
                                                                     th:object="${security}">
                                                                     <td th:text="*{securityName}"></td>
                                                                     <td th:text="*{securityType}"></td>
-                                                                    <td th:text="*{securityTerm}"></td>
                                                                     <td th:text="*{totalAmount}"></td>
+                                                                    <td th:text="*{securityTerm}"></td>
                                                                     <td th:text="*{issueDate}"></td>
                                                                     <td th:text="*{maturityDate}"></td>
                                                                     <td th:text="*{highRate}"></td>
