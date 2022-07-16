@@ -1,115 +1,164 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Thymeleaf Exercise #</title>
-    <link rel="stylesheet" th:href="@{/style.css}"/>
-    <meta charset="utf-8"/>
-</head>
-<body>
-<form action="/securities">
-    <select th:name="ongoingSortBy" id="ongoingSort">
-        <option value="default" disabled selected>Select sort type</option>
-        <option value="type">type</option>
-        <option value="name">name</option>
-        <option value="issueDate">issue date</option>
-        <option value="maturityDate">maturity date</option>
-        <option value="totalAmount">total amount</option>
-    </select>
-    <select th:name="ongoingOrder" id="ongoingOrder">
-        <option value="null" disabled selected>Select order</option>
-        <option value="asc">ascending</option>
-        <option value="desc">descending</option>
-    </select>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-    <div th:if="${ #lists.isEmpty(ongoing)}">
-        <h3>No ongoing auctions</h3>
+<!-- HEADER -->
+<head th:replace="fragments/admin/header :: header"></head>
+
+<body class="sb-nav-fixed">
+
+<!-- TOPNAV -->
+<nav th:replace="fragments/admin/topnav :: topnav"></nav>
+
+<!-- CONTENT -->
+<div id="layoutSidenav">
+
+    <!-- SIDENAV -->
+    <div th:replace="fragments/admin/sidenav :: sidenav"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <h1 class="mt-4 ml-5">Securities</h1>
+                <div class="card mb-4 ml-5">
+                    <div class="card-body">
+                        This is a list of all securities in the system.
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <!--                    <div class="card-header">-->
+                    <!--                        <i class="fas fa-table mr-1"></i>-->
+                    <!--                        DataTable Example-->
+                    <!--                    </div>-->
+                    <div class="card-body">
+                        <div class="table-responsive">
+
+                            <!-- ONGOING SORTING FORM -->
+                            <form action="/securities" class="form-inline ml-5">
+                                <label for="ongoingSortBy" class="mr-2">Sort securities:</label>
+                                <select th:name="ongoingSortBy" id="ongoingSortBy" class="form-control mr-2">
+                                    <option value="default" disabled selected>Select sort type</option>
+                                    <option value="type">type</option>
+                                    <option value="name">name</option>
+                                    <option value="issueDate">issue date</option>
+                                    <option value="maturityDate">maturity date</option>
+                                    <option value="totalAmount">total amount</option>
+                                </select>
+                                <select th:name="ongoingOrder" id="ongoingOrder" class="form-control mr-2">
+                                    <option value="null" disabled selected>Select order</option>
+                                    <option value="asc">ascending</option>
+                                    <option value="desc">descending</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary">sort</button>
+                            </form>
+
+                            <!-- ONGOING SORTING TABLE -->
+                            <div th:if="${ #lists.isEmpty(ongoing)}">
+                                <h3>No ongoing auctions</h3>
+                            </div>
+                            <div th:unless="${#lists.isEmpty(ongoing)}" class="table-container">
+
+                                <h3 class="ml-5 mt-2">Securities of the ongoing auctions</h3>
+
+                                <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
+                                       cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>name</th>
+                                        <th>type</th>
+                                        <th>term</th>
+                                        <th>total amount</th>
+                                        <th>issue date</th>
+                                        <th>maturity date</th>
+                                        <th>BID</th>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr th:each="security : ${ongoing}" th:object="${security}">
+                                        <td th:text="*{id}"></td>
+                                        <td th:text="*{securityName}"></td>
+                                        <td th:text="*{securityType}"></td>
+                                        <td th:text="*{securityTerm}"></td>
+                                        <td th:text="*{totalAmount}"></td>
+                                        <td th:text="*{issueDate}"></td>
+                                        <td th:text="*{maturityDate}"></td>
+                                        <td>
+                                            <a th:href="@{/bids/create(auction_id=*{auctionId})}"
+                                               class="btn btn-success"
+                                               role="button">Place BID</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <hr>
+
+                            <!-- UPCOMING SORTING FORM -->
+                            <form action="/securities" class="form-inline ml-5">
+                                <label for="upcomingSortBy" class="mr-2">Sort securities:</label>
+                                <select th:name="upcomingSortBy" id="upcomingSortBy" class="form-control mr-2">
+                                    <option value="default" disabled selected>Select sort type</option>
+                                    <option value="type">type</option>
+                                    <option value="name">name</option>
+                                    <option value="issueDate">issue date</option>
+                                    <option value="maturityDate">maturity date</option>
+                                    <option value="totalAmount">total amount</option>
+                                </select>
+                                <select th:name="upcomingOrder" id="upcomingOrder" class="form-control mr-2">
+                                    <option value="null" disabled selected>Select order</option>
+                                    <option value="asc">ascending</option>
+                                    <option value="desc">descending</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary">sort</button>
+                            </form>
+
+                            <!-- UPCOMING SORTING TABLE -->
+                            <div th:if="${ #lists.isEmpty(upcoming)}">
+                                <h3 class="ml-5 mt-2">No upcoming auctions</h3>
+                            </div>
+                            <div th:unless="${#lists.isEmpty(upcoming)}" class="table-container">
+
+                                <h3 class="ml-5 mt-2">Securities of the upcoming auctions</h3>
+
+                                <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
+                                       cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>name</th>
+                                        <th>type</th>
+                                        <th>term</th>
+                                        <th>total amount</th>
+                                        <th>issue date</th>
+                                        <th>maturity date</th>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr th:each="security : ${upcoming}" th:object="${security}">
+                                        <td th:text="*{id}"></td>
+                                        <td th:text="*{securityName}"></td>
+                                        <td th:text="*{securityType}"></td>
+                                        <td th:text="*{securityTerm}"></td>
+                                        <td th:text="*{totalAmount}"></td>
+                                        <td th:text="*{issueDate}"></td>
+                                        <td th:text="*{maturityDate}"></td>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer th:replace="fragments/admin/footer :: footer"></footer>
     </div>
-    <div th:unless="${#lists.isEmpty(ongoing)}" class="table-container">
+</div>
 
-        <h3>Securities of the ongoing auctions</h3>
+<!-- FOOTER -->
+<div th:replace="fragments/admin/scripts :: scripts"></div>
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th>id</th>
-                <th>name</th>
-                <th>type</th>
-                <th>term</th>
-                <th>total amount</th>
-                <th>issue date</th>
-                <th>maturity date</th>
-                <th>BID</th>
-            </thead>
-
-            <tbody>
-            <tr th:each="security : ${ongoing}" th:object="${security}">
-                <td th:text="*{id}"></td>
-                <td th:text="*{securityName}"></td>
-                <td th:text="*{securityType}"></td>
-                <td th:text="*{securityTerm}"></td>
-                <td th:text="*{totalAmount}"></td>
-                <td th:text="*{issueDate}"></td>
-                <td th:text="*{maturityDate}"></td>
-                <td>
-                </td>
-                <td>
-                    <a th:href="@{/bids/create(auction_id=*{auctionId})}" class="btn btn-success"
-                       role="button">Place BID</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <label for="upcomingSortBy">Sort securities</label>
-    <select th:name="upcomingSortBy" id="upcomingSortBy">
-        <option value="default" disabled selected>Select sort type</option>
-        <option value="type">type</option>
-        <option value="name">name</option>
-        <option value="issueDate">issue date</option>
-        <option value="maturityDate">maturity date</option>
-        <option value="totalAmount">total amount</option>
-    </select>
-    <select th:name="upcomingOrder" id="upcomingOrder">
-        <option value="null" disabled selected>Select order</option>
-        <option value="asc">ascending</option>
-        <option value="desc">descending</option>
-    </select>
-    <div th:if="${ #lists.isEmpty(upcoming)}">
-        <h3>No upcoming auctions</h3>
-    </div>
-    <div th:unless="${#lists.isEmpty(upcoming)}" class="table-container">
-
-        <h3>Securities of the upcoming auctions</h3>
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>id</th>
-                <th>name</th>
-                <th>type</th>
-                <th>term</th>
-                <th>total amount</th>
-                <th>issue date</th>
-                <th>maturity date</th>
-                <th>BID</th>
-            </thead>
-
-            <tbody>
-            <tr th:each="security : ${upcoming}" th:object="${security}">
-                <td th:text="*{id}"></td>
-                <td th:text="*{securityName}"></td>
-                <td th:text="*{securityType}"></td>
-                <td th:text="*{securityTerm}"></td>
-                <td th:text="*{totalAmount}"></td>
-                <td th:text="*{issueDate}"></td>
-                <td th:text="*{maturityDate}"></td>
-                <td>
-                </td>
-            </tbody>
-        </table>
-    </div>
-    <button type="submit">sort</button>
-</form>
 </body>
 </html>
