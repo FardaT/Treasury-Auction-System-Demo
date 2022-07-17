@@ -39,19 +39,21 @@ public class BotTimerTask extends TimerTask {
     }
   }
   private void createBots() {
+    // Run Bot generator and save them to database
     for (int i = 0; i < numberOfBots; i++) {
       bidderBots.add(new BidderBot());
     }
     appUserRepository.saveAll(bidderBots);
   }
   private void createBidsForBots() throws InterruptedException {
+    // Iterate Bots to generate bids with a random time interval and save them to database
     for (BidderBot bot: bidderBots) {
-      bot.setBids(bot.generateBids(auction));
-      bidRepository.saveAll(bot.getBids());
-      Thread.sleep((long)((Math.random() * (25000 - 9000)) + 9000));
       if(auction.getAuctionEndDate().isBefore(LocalDateTime.now())){
         break;
       }
+      Thread.sleep((long)((Math.random() * (25000 - 8000)) + 8000));
+      bot.setBids(bot.generateBids(auction));
+      bidRepository.saveAll(bot.getBids());
     }
   }
 }

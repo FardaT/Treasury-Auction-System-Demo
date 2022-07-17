@@ -76,11 +76,11 @@ public class CreateAuctionController {
   public String createAuction(@ModelAttribute(name="auctionTime")AuctionDateDTO auctionDateDTO, RedirectAttributes redirectAttributes){
     try{
       tempAuction = auctionService.setDateToAuction(tempAuction,auctionDateDTO);
-      // generating bots if the bot's input field is greater than 0
+      // Calling bot scheduler util if the bot's input field is greater than 0 (input included with the DateDTO)
       if(auctionDateDTO.getNumberOfBots() > 0 ){
         botTimerTaskUtil.scheduleBotRun(tempAuction, auctionDateDTO.getNumberOfBots());
       }
-      // save auction & reset session object
+      // Save auction & reset session object
       auctionService.create(tempAuction);
       tempAuction = new Auction();
     }catch (InvalidAuctionException ex){

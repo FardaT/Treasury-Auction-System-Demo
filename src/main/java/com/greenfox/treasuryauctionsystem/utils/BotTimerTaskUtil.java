@@ -14,6 +14,8 @@ public class BotTimerTaskUtil {
   public BotTimerTaskUtil(BotTimerTask botTimerTask) {
     this.botTimerTask = botTimerTask;
   }
+
+  // Scheduler util to set-up Timer with auction date
   public void scheduleBotRun(Auction auction, Integer numberOfBots){
     botTimerTask.setNumberOfBots(numberOfBots);
     botTimerTask.setAuction(auction);

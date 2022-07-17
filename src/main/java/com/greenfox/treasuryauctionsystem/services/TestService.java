@@ -79,9 +79,9 @@ public class TestService {
     bid6.setAmount(600);
 
     TreasurySecurity treasurySecurity1 = new TreasurySecurity();
-    treasurySecurity1.setSecurityName("Bond 1");
-    treasurySecurity1.setSecurityType("Bond");
-    treasurySecurity1.setSecurityTerm("30y");
+    treasurySecurity1.setSecurityName("30-year T-Bond");
+    treasurySecurity1.setSecurityType("T-Bond");
+    treasurySecurity1.setSecurityTerm("30-year");
     treasurySecurity1.setTotalAmount(1_500);
     treasurySecurity1.setIssueDate(LocalDate.now().plusWeeks(1));
     treasurySecurity1.setMaturityDate(LocalDate.now().plusWeeks(1).plusYears(30));
@@ -97,9 +97,9 @@ public class TestService {
 //		treasurySecurity2.setHighRate(8.4f);
 
     TreasurySecurity treasurySecurity3 = new TreasurySecurity();
-    treasurySecurity3.setSecurityName("Note 1");
-    treasurySecurity3.setSecurityType("Note");
-    treasurySecurity3.setSecurityTerm("5y");
+    treasurySecurity3.setSecurityName("10-year T-Note");
+    treasurySecurity3.setSecurityType("T-Note");
+    treasurySecurity3.setSecurityTerm("10-year");
     treasurySecurity3.setTotalAmount(220_000_000);
     treasurySecurity3.setIssueDate(LocalDate.now().plusWeeks(2));
     treasurySecurity3.setMaturityDate(LocalDate.now().plusWeeks(2).plusYears(5));
@@ -113,9 +113,9 @@ public class TestService {
     treasurySecurity4.setMaturityDate(LocalDate.now().plusWeeks(2).plusYears(5));
 //		treasurySecurity3.setHighRate(11.2f);
     TreasurySecurity treasurySecurity5 = new TreasurySecurity();
-    treasurySecurity5.setSecurityName("Bill 1");
-    treasurySecurity5.setSecurityType("Bill");
-    treasurySecurity5.setSecurityTerm("26w");
+    treasurySecurity5.setSecurityName("26-week T-Bill");
+    treasurySecurity5.setSecurityType("T-Bill");
+    treasurySecurity5.setSecurityTerm("26-week");
     treasurySecurity5.setTotalAmount(55_000_000);
     treasurySecurity5.setIssueDate(LocalDate.now().plusDays(10));
     treasurySecurity5.setMaturityDate(LocalDate.now().plusDays(10).plusWeeks(26));
@@ -169,13 +169,9 @@ public class TestService {
     auction2.setAuctionStartDate(LocalDateTime.now());
     auction2.setAuctionEndDate(LocalDateTime.now().plusDays(10));
     auction2.addTreasurySecurity(treasurySecurity4);
-    auction1.addTreasurySecurity(treasurySecurity2);
     auction2.setProcessed(false);
     auction2.setDisabled(false);
 
-/*    BidderBot bot = new BidderBot();
-    appUserRepository.save(bot);
-    bot.setBids(bot.generateBids(auction2));*/
 
     //upcoming
     Auction auction3 = new Auction();
@@ -229,9 +225,6 @@ public class TestService {
     bidRepository.save(bid5);
     bidRepository.save(bid6);
 
-/*    for(Bid bid : bot.getBids()){
-      bidRepository.save(bid);
-    }*/
 
   }
 

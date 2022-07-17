@@ -50,9 +50,10 @@ public class BidderBot extends AppUser{
       tempBid.setCreatedAt(LocalDateTime.now());
       // How to act when the bot is institutional investor: more likely to bid competitively, more budget, tend to buy both long and short term securities, smaller variety of rates
       if(this.behaviour.equals("institutional")){
+        // Setting probability for competitive/non-competitive bids as well as bid amount
         boolean weightedBidTypeProbability = rnd.nextFloat(1.0f)*1.5f > 0.5f;
         long institutionalCompetitiveBidAmount = (rnd.nextLong(maxCompetitiveBid - 7000) + 7000) * 100;
-        long institutionalNonCompetitiveBidAmount = (rnd.nextLong(maxNonCompetitiveBid - 5000L) + 5000L) * 100L;
+        long institutionalNonCompetitiveBidAmount = (rnd.nextLong(maxNonCompetitiveBid - 5000) + 5000) * 100;
         // Different rates and amounts for each types of security whether they are competitive or non-competitive bids
         switch (sec.getSecurityType()){
           case "T-Bill":
