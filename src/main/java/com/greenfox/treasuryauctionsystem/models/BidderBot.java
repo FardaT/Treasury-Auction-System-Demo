@@ -53,17 +53,24 @@ public class BidderBot extends AppUser{
         // Setting probability for competitive/non-competitive bids as well as bid amount
         boolean weightedBidTypeProbability = rnd.nextFloat(1.0f)*1.5f > 0.5f;
         long institutionalCompetitiveBidAmount = (rnd.nextLong(maxCompetitiveBid - 7000) + 7000) * 100;
-        long institutionalNonCompetitiveBidAmount = (rnd.nextLong(maxNonCompetitiveBid - 5000) + 5000) * 100;
+        // If about to exceed non-competitive amount, set probability so that only competitive bid can be placed for following securities
+        if(maxNonCompetitiveBid <= 5000){
+          weightedBidTypeProbability = true;
+        }
+        long institutionalNonCompetitiveBidAmount = maxNonCompetitiveBid >= 5000 ? (rnd.nextLong(maxNonCompetitiveBid - 5000) + 5000) * 100 : 5000;
         // Different rates and amounts for each types of security whether they are competitive or non-competitive bids
         switch (sec.getSecurityType()){
           case "T-Bill":
+            // If competitive bid
             if(weightedBidTypeProbability){
               tempBid.setCompetitive(true);
               tempBid.setAmount(institutionalCompetitiveBidAmount);
               tempBid.setRate(rnd.nextFloat(3.000f - 1.100f) + 1.100f);
+              // If non-competitive bid
             } else {
               tempBid.setCompetitive(false);
               tempBid.setAmount(institutionalNonCompetitiveBidAmount);
+              // Randomize next noncompetitive bid based on the remaining amount of the 5.000.000 limit
               maxNonCompetitiveBid = maxNonCompetitiveBid - tempBid.getAmount() / 100;
               tempBid.setRate(0.0f);
             }
