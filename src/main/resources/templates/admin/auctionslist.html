@@ -86,7 +86,7 @@
                                     </thead>
                                     <tbody>
 
-                                    <tr th:each="auction : ${auctions.ongoing}" th:object="${auction}">
+                                    <tr th:each="auction, itemStat : ${auctions.ongoing}" th:object="${auction}">
                                         <td th:text="*{id}"></td>
                                         <td th:text="*{startDate}"></td>
                                         <td th:text="*{startTime}"></td>
@@ -107,12 +107,12 @@
                                         <td>
                                             <!-- Button to Open the Modal -->
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                    data-target="#myModal_ongoing">
+                                                    th:data-target="${'#myModal_ongoing_'+__${itemStat.index}__}">
                                                 Show securities
                                             </button>
 
                                             <!-- The Modal -->
-                                            <div class="modal" id="myModal_ongoing">
+                                            <div class="modal" th:id="${'myModal_ongoing_'+__${itemStat.index}__}">
                                                 <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">
 
@@ -184,17 +184,77 @@
                                         <th>start time</th>
                                         <th>end date</th>
                                         <th>end time</th>
+                                        <th>Bond</th>
+                                        <th>Bill</th>
+                                        <th>Note</th>
+                                        <th>Securities</th>
                                         <th sec:authorize="hasRole('ADMIN')">delete</th>
                                         <!-- <th sec:authorize="hasRole('ADMIN')">delete</th> -->
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="auction : ${auctions.upcoming}" th:object="${auction}">
+                                    <tr th:each="auction, itemStat : ${auctions.upcoming}" th:object="${auction}">
                                         <td th:text="*{id}"></td>
                                         <td th:text="*{startDate}"></td>
                                         <td th:text="*{startTime}"></td>
                                         <td th:text="*{endDate}"></td>
                                         <td th:text="*{endTime}"></td>
+                                        <td class="text-center">
+                                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'T-Bond')}">&#9989;</span>
+                                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'T-Bond')}">&#10060;</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'T-Bill')}">&#9989;</span>
+                                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'T-Bill')}">&#10060;</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'T-Note')}">&#9989;</span>
+                                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'T-Note')}">&#10060;</span>
+                                        </td>
+                                        <td>
+                                            <!-- Button to Open the Modal -->
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    th:data-target="${'#myModal_upcoming_'+__${itemStat.index}__}">
+                                                Show securities
+                                            </button>
+
+                                            <!-- The Modal -->
+                                            <div class="modal" th:id="${'myModal_upcoming_'+__${itemStat.index}__}">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+
+                                                        <!-- Modal body -->
+                                                        <div class="modal-body">
+                                                            <table>
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+                                                                    <th>Type</th>
+                                                                    <th>Total Amount</th>
+                                                                    <th>Term</th>
+                                                                    <th>Issue Date</th>
+                                                                    <th>Maturity Date</th>
+                                                                    <th>High Rate</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr th:each="security : *{treasurySecurityList}"
+                                                                    th:object="${security}">
+                                                                    <td th:text="*{securityName}"></td>
+                                                                    <td th:text="*{securityType}"></td>
+                                                                    <td th:text="*{totalAmount}"></td>
+                                                                    <td th:text="*{securityTerm}"></td>
+                                                                    <td th:text="*{issueDate}"></td>
+                                                                    <td th:text="*{maturityDate}"></td>
+                                                                    <td th:text="*{highRate}"></td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td sec:authorize="hasRole('ADMIN')">
                                             <form th:action="@{/auctions/disable}" method="post">
                                                 <input type="hidden" name="id" th:value="*{id}">
@@ -230,24 +290,39 @@
                                         <th>id</th>
                                         <th>start date</th>
                                         <th>end date</th>
+                                        <th>Bond</th>
+                                        <th>Bill</th>
+                                        <th>Note</th>
                                         <th>Securities</th>
                                         <th sec:authorize="hasRole('ADMIN')">process</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="auction : ${auctions.finished}" th:object="${auction}">
+                                    <tr th:each="auction, itemStat : ${auctions.finished}" th:object="${auction}">
                                         <td th:text="*{id}"></td>
                                         <td th:text="*{startDate}"></td>
                                         <td th:text="*{endDate}"></td>
+                                        <td class="text-center">
+                                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'T-Bond')}">&#9989;</span>
+                                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'T-Bond')}">&#10060;</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'T-Bill')}">&#9989;</span>
+                                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'T-Bill')}">&#10060;</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span th:if="*{#lists.contains(treasurySecurityTypeList, 'T-Note')}">&#9989;</span>
+                                            <span th:unless="*{#lists.contains(treasurySecurityTypeList, 'T-Note')}">&#10060;</span>
+                                        </td>
                                         <td>
                                             <!-- Button to Open the Modal -->
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                    data-target="#myModal_finished">
+                                                    th:data-target="${'#myModal_finished_'+__${itemStat.index}__}">
                                                 Show securities
                                             </button>
 
                                             <!-- The Modal -->
-                                            <div class="modal" id="myModal_finished">
+                                            <div class="modal" th:id="${'myModal_finished_'+__${itemStat.index}__}">
                                                 <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">
 
@@ -256,7 +331,6 @@
                                                             <table>
                                                                 <thead>
                                                                 <tr>
-                                                                    <th>Id</th>
                                                                     <th>Name</th>
                                                                     <th>Type</th>
                                                                     <th>Total Amount</th>
@@ -271,7 +345,6 @@
                                                                 <tbody>
                                                                 <tr th:each="security : *{treasurySecurityList}"
                                                                     th:object="${security}">
-                                                                    <td th:text="*{id}"></td>
                                                                     <td th:text="*{securityName}"></td>
                                                                     <td th:text="*{securityType}"></td>
                                                                     <td th:text="*{totalAmount}"></td>

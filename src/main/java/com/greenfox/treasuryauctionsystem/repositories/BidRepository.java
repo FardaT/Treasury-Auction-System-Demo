@@ -12,6 +12,6 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
 
     // https://docs.spring.io/spring-data/jpa/docs/1.11.1.RELEASE/reference/html/#jpa.query-methods.at-query
 
-    @Query(value = "SELECT * FROM bids ORDER BY treasury_security_id", nativeQuery = true)
+    @Query(value = "SELECT * FROM bids ORDER BY created_at DESC, treasury_security_id", nativeQuery = true)
     List<Bid> findAllOrderBy();
 }
