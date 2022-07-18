@@ -21,8 +21,9 @@ public class AuctionDateDTO {
   }*/
   public AuctionDateDTO(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate auctionStartDateFormat, @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime auctionEndTime, @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime auctionStartTime, Integer numberOfBots) {
     this.auctionStartDateFormat = auctionStartDateFormat;
-    this.auctionStartDate = LocalDateTime.of(auctionStartDateFormat,auctionStartTime);
-    this.auctionEndDate = auctionEndTime.atDate(this.auctionStartDate.toLocalDate());
+    // Next validation checkes if null
+    this.auctionStartDate = auctionStartDateFormat == null || auctionStartTime == null ? null : LocalDateTime.of(auctionStartDateFormat,auctionStartTime);
+    this.auctionEndDate =  auctionStartDate != null ? auctionEndTime.atDate(this.auctionStartDate.toLocalDate()) : null;
     this.numberOfBots = numberOfBots;
   }
 

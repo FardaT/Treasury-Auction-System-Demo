@@ -336,8 +336,8 @@ public class AuctionServiceImpl implements AuctionService {
     if (treasurySecurity.getTotalAmount() == null) {
       errors.put("TOTALAMOUNT_ERROR", "Total amount must not be null");
     }
-    if (treasurySecurity.getTotalAmount() < 1000000) {
-      errors.put("TOTALAMOUNT_ERROR", "Total amount must be at least $1.000.000");
+    if (treasurySecurity.getTotalAmount() < 10000000) {
+      errors.put("TOTALAMOUNT_ERROR", "Total amount must be at least $10.000.000");
     }
     if (treasurySecurity.getTotalAmount() % 100 != 0) {
       errors.put("TOTALAMOUNT_ERROR",
