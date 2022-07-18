@@ -8,6 +8,7 @@ import com.greenfox.treasuryauctionsystem.models.dtos.AuctionDateDTO;
 import com.greenfox.treasuryauctionsystem.models.dtos.TempSecurityDTO;
 import com.greenfox.treasuryauctionsystem.services.AppUserService;
 import com.greenfox.treasuryauctionsystem.services.AuctionService;
+import com.greenfox.treasuryauctionsystem.utils.BotTimerTaskUtil;
 import java.security.Principal;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CreateAuctionController {
   private final AuctionService auctionService;
   private final AppUserService appUserService;
+  private final BotTimerTaskUtil botTimerTaskUtil;
   private Auction tempAuction = new Auction();
   @Autowired
-  public CreateAuctionController(AuctionService auctionService, AppUserService appUserService) {
+  public CreateAuctionController(AuctionService auctionService, AppUserService appUserService,
+                                 BotTimerTaskUtil botTimerTaskUtil) {
     this.auctionService = auctionService;
     this.appUserService = appUserService;
+    this.botTimerTaskUtil = botTimerTaskUtil;
   }
   @GetMapping("/auctions/create")
   public String renderAuctionCreationPage(Model model, Principal principal){
@@ -72,6 +76,11 @@ public class CreateAuctionController {
   public String createAuction(@ModelAttribute(name="auctionTime")AuctionDateDTO auctionDateDTO, RedirectAttributes redirectAttributes){
     try{
       tempAuction = auctionService.setDateToAuction(tempAuction,auctionDateDTO);
+      // Calling bot scheduler util if the bot's input field is greater than 0 (input included with the DateDTO)
+      if(auctionDateDTO.getNumberOfBots() > 0 ){
+        botTimerTaskUtil.scheduleBotRun(tempAuction, auctionDateDTO.getNumberOfBots());
+      }
+      // Save auction & reset session object
       auctionService.create(tempAuction);
       tempAuction = new Auction();
     }catch (InvalidAuctionException ex){

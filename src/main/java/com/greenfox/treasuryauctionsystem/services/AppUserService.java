@@ -1,13 +1,12 @@
 package com.greenfox.treasuryauctionsystem.services;
 
 import com.greenfox.treasuryauctionsystem.models.AppUser;
+import com.greenfox.treasuryauctionsystem.models.BidderBot;
 import com.greenfox.treasuryauctionsystem.models.dtos.AppUserDTO;
 import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInput;
 import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
 import org.springframework.stereotype.Service;
-
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -44,5 +43,7 @@ public interface AppUserService {
 	AppUser disableAppUser (Long appUserId);
 
 	AppUser getUserByUsername(String username);
+
+	void saveBotUser(BidderBot bidderBot);
 
 }

@@ -6,17 +6,24 @@ import java.time.LocalTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class AuctionDateDTO {
-  /*@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)*/
   private LocalDateTime auctionStartDate;
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private LocalDateTime auctionEndDate;
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   LocalDate auctionStartDateFormat;
+  // To get the number of bots set for an auction along with the dates
+  Integer numberOfBots;
 
-  public AuctionDateDTO(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate auctionStartDateFormat, @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime auctionEndTime, @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime auctionStartTime) {
+/*  public AuctionDateDTO(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate auctionStartDateFormat, @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime auctionEndTime, @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime auctionStartTime) {
     this.auctionStartDateFormat = auctionStartDateFormat;
     this.auctionStartDate = LocalDateTime.of(auctionStartDateFormat,auctionStartTime);
     this.auctionEndDate = auctionEndTime.atDate(this.auctionStartDate.toLocalDate());
+  }*/
+  public AuctionDateDTO(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate auctionStartDateFormat, @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime auctionEndTime, @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime auctionStartTime, Integer numberOfBots) {
+    this.auctionStartDateFormat = auctionStartDateFormat;
+    this.auctionStartDate = LocalDateTime.of(auctionStartDateFormat,auctionStartTime);
+    this.auctionEndDate = auctionEndTime.atDate(this.auctionStartDate.toLocalDate());
+    this.numberOfBots = numberOfBots;
   }
 
   public LocalDateTime getAuctionStartDate() {
@@ -41,5 +48,13 @@ public class AuctionDateDTO {
 
   public void setAuctionStartDateFormat(LocalDate auctionStartDateFormat) {
     this.auctionStartDateFormat = auctionStartDateFormat;
+  }
+
+  public Integer getNumberOfBots() {
+    return numberOfBots;
+  }
+
+  public void setNumberOfBots(Integer numberOfBots) {
+    this.numberOfBots = numberOfBots;
   }
 }
