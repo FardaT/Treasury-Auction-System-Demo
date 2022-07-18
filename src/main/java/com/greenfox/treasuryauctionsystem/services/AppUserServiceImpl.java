@@ -4,6 +4,7 @@ import com.greenfox.treasuryauctionsystem.exceptions.AppUserNotFoundException;
 import com.greenfox.treasuryauctionsystem.exceptions.AppUserStatusException;
 import com.greenfox.treasuryauctionsystem.exceptions.IllegalArgumentException;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
+import com.greenfox.treasuryauctionsystem.models.BidderBot;
 import com.greenfox.treasuryauctionsystem.models.dtos.AppUserDTO;
 import com.greenfox.treasuryauctionsystem.models.dtos.ForgottenPasswordEmailInput;
 import com.greenfox.treasuryauctionsystem.models.dtos.PasswordReset;
@@ -271,5 +272,10 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
   @Override
   public AppUser getUserByUsername(String username) {
     return appUserRepository.findByUsername(username);
+  }
+
+  @Override
+  public void saveBotUser(BidderBot bidderBot) {
+    appUserRepository.save(bidderBot);
   }
 }

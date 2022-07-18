@@ -164,6 +164,10 @@
                             <!-- *********************** -->
 
                             <div class="ml-5">
+
+                                <label for="setBots">Set number of bidder bots for this auction:</label>
+                                <input id="setBots" type="number" name="numberOfBots" form="create-auction" value="0"><br>
+
                                 <form action="/admin/auctions/create" method="post" id="create-auction">
                                     <button type="submit" class="btn btn-primary sa_create_auction_confirmation">Create
                                         auction
@@ -182,7 +186,9 @@
                 </div>
             </div>
         </main>
+
         <footer th:replace="fragments/admin/footer :: footer"></footer>
+
     </div>
 </div>
 

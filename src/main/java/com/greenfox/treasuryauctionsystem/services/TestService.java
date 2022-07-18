@@ -4,6 +4,7 @@ package com.greenfox.treasuryauctionsystem.services;
 import com.greenfox.treasuryauctionsystem.models.AppUser;
 import com.greenfox.treasuryauctionsystem.models.Auction;
 import com.greenfox.treasuryauctionsystem.models.Bid;
+import com.greenfox.treasuryauctionsystem.models.BidderBot;
 import com.greenfox.treasuryauctionsystem.models.TreasurySecurity;
 import com.greenfox.treasuryauctionsystem.repositories.AppUserRepository;
 import com.greenfox.treasuryauctionsystem.repositories.AuctionRepository;
@@ -78,43 +79,43 @@ public class TestService {
     bid6.setAmount(600);
 
     TreasurySecurity treasurySecurity1 = new TreasurySecurity();
-    treasurySecurity1.setSecurityName("Bond 1");
-    treasurySecurity1.setSecurityType("Bond");
-    treasurySecurity1.setSecurityTerm("30y");
+    treasurySecurity1.setSecurityName("30-year T-Bond");
+    treasurySecurity1.setSecurityType("T-Bond");
+    treasurySecurity1.setSecurityTerm("30-year");
     treasurySecurity1.setTotalAmount(1_500);
     treasurySecurity1.setIssueDate(LocalDate.now().plusWeeks(1));
     treasurySecurity1.setMaturityDate(LocalDate.now().plusWeeks(1).plusYears(30));
 //		treasurySecurity1.setHighRate(9.9f);
 
     TreasurySecurity treasurySecurity2 = new TreasurySecurity();
-    treasurySecurity2.setSecurityName("Bill 1");
-    treasurySecurity2.setSecurityType("Bill");
-    treasurySecurity2.setSecurityTerm("26w");
+    treasurySecurity2.setSecurityName("26-week T-Bill");
+    treasurySecurity2.setSecurityType("T-Bill");
+    treasurySecurity2.setSecurityTerm("26-week");
     treasurySecurity2.setTotalAmount(55_000_000);
     treasurySecurity2.setIssueDate(LocalDate.now().plusDays(10));
     treasurySecurity2.setMaturityDate(LocalDate.now().plusDays(10).plusWeeks(26));
 //		treasurySecurity2.setHighRate(8.4f);
 
     TreasurySecurity treasurySecurity3 = new TreasurySecurity();
-    treasurySecurity3.setSecurityName("Note 1");
-    treasurySecurity3.setSecurityType("Note");
-    treasurySecurity3.setSecurityTerm("5y");
+    treasurySecurity3.setSecurityName("10-year T-Note");
+    treasurySecurity3.setSecurityType("T-Note");
+    treasurySecurity3.setSecurityTerm("10-year");
     treasurySecurity3.setTotalAmount(220_000_000);
     treasurySecurity3.setIssueDate(LocalDate.now().plusWeeks(2));
     treasurySecurity3.setMaturityDate(LocalDate.now().plusWeeks(2).plusYears(5));
 
     TreasurySecurity treasurySecurity4 = new TreasurySecurity();
-    treasurySecurity4.setSecurityName("Note 1");
-    treasurySecurity4.setSecurityType("Note");
-    treasurySecurity4.setSecurityTerm("5y");
+    treasurySecurity4.setSecurityName("5-year T-Note");
+    treasurySecurity4.setSecurityType("T-Note");
+    treasurySecurity4.setSecurityTerm("5-year");
     treasurySecurity4.setTotalAmount(220_000_000);
     treasurySecurity4.setIssueDate(LocalDate.now().plusWeeks(2));
     treasurySecurity4.setMaturityDate(LocalDate.now().plusWeeks(2).plusYears(5));
 //		treasurySecurity3.setHighRate(11.2f);
     TreasurySecurity treasurySecurity5 = new TreasurySecurity();
-    treasurySecurity5.setSecurityName("Bill 1");
-    treasurySecurity5.setSecurityType("Bill");
-    treasurySecurity5.setSecurityTerm("26w");
+    treasurySecurity5.setSecurityName("26-week T-Bill");
+    treasurySecurity5.setSecurityType("T-Bill");
+    treasurySecurity5.setSecurityTerm("26-week");
     treasurySecurity5.setTotalAmount(55_000_000);
     treasurySecurity5.setIssueDate(LocalDate.now().plusDays(10));
     treasurySecurity5.setMaturityDate(LocalDate.now().plusDays(10).plusWeeks(26));
@@ -147,6 +148,9 @@ public class TestService {
     appUser2.setActivated(true);
     appUser2.setApproved(true);
     appUser2.setDisabled(false);
+
+
+
     // appUser2.setReactivationToken("a_reactivationtoken");
     // appUser2.setReactivationTokenExpiration(LocalDateTime.now());
 
@@ -167,6 +171,7 @@ public class TestService {
     auction2.addTreasurySecurity(treasurySecurity4);
     auction2.setProcessed(false);
     auction2.setDisabled(false);
+
 
     //upcoming
     Auction auction3 = new Auction();
@@ -219,6 +224,7 @@ public class TestService {
     bidRepository.save(bid4);
     bidRepository.save(bid5);
     bidRepository.save(bid6);
+
 
   }
 
