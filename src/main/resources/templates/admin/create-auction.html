@@ -98,7 +98,8 @@
                                                name="totalAmount"
                                                form="addSecurityForm"
                                                class="form-control"
-                                               th:value="${errorSecurityValue != null} ? ${errorSecurityValue.totalAmount} : ''">
+                                               required
+                                               th:value="${errorSecurityValue != null} ? ${errorSecurityValue.totalAmount} : '0'">
                                         <div class="input-group-append">
                                             <span class="input-group-text" th:text="${currency}"></span>
                                         </div>
@@ -139,7 +140,7 @@
                                 <tr>
                                     <th>Security type</th>
                                     <th>Security term</th>
-                                    <th>Total amount</th>
+                                    <th>Offering amount</th>
                                     <th>Issue Date</th>
                                     <th>Maturity Date</th>
                                     <th>Remove</th>
@@ -166,7 +167,7 @@
                             <div class="ml-5">
 
                                 <label for="setBots">Set number of bidder bots for this auction:</label>
-                                <input id="setBots" type="number" name="numberOfBots" form="create-auction" value="0"><br>
+                                <input id="setBots" type="number" name="numberOfBots" form="create-auction" value="0" class="form-control w-25"><br>
 
                                 <form action="/admin/auctions/create" method="post" id="create-auction">
                                     <button type="submit" class="btn btn-primary sa_create_auction_confirmation">Create
