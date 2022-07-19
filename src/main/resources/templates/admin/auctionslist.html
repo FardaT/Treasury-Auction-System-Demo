@@ -31,7 +31,13 @@
                 <!-- TITLE & BUTTON -->
                 <div class="row">
                     <div class="col-md-6">
-                        <h1 class="mt-4 ml-5">Auctions</h1>
+                        <h2 class="mt-4 ml-5">Auctions</h2>
+                        <div class="card mb-4 ml-5">
+                            <div class="card-body">
+                                This is a list of all auctions in the system. If you wish to check the bids please visit the
+                                <a th:href="@{/admin/bids}">bids page</a>.
+                            </div>
+                        </div>
 
                         <div th:if="${BIDDING_CLOSED != null}" class="alert alert-danger">
                             <strong>Error!</strong> <span th:text="${BIDDING_CLOSED}"></span>
@@ -40,7 +46,7 @@
                     </div>
                     <div class="col-md-6 text-right mt-3">
                         <a th:href="@{admin/auctions/create}">
-                            <button class="btn btn-success">Create new auction</button>
+                            <button class="btn-lg btn-info">New Auction</button>
                         </a>
                     </div>
                 </div>
@@ -71,18 +77,20 @@
 
                                 <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
                                        cellspacing="0">
-                                    <thead>
+                                    <thead class="thead-dark">
                                     <tr>
-                                        <th>id</th>
-                                        <th>start date</th>
-                                        <th>start time</th>
-                                        <th>end date</th>
-                                        <th>end time</th>
+                                        <th>ID</th>
+                                        <th>Start date</th>
+                                        <th>Start time</th>
+                                        <th>End date</th>
+                                        <th>End time</th>
                                         <th>Bond</th>
                                         <th>Bill</th>
                                         <th>Note</th>
                                         <th>Securities</th>
                                         <th sec:authorize="hasRole('USER')">BID</th>
+                                    </tr>
+
                                     </thead>
                                     <tbody>
 
@@ -106,9 +114,9 @@
                                         </td>
                                         <td>
                                             <!-- Button to Open the Modal -->
-                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            <button type="button" class="btn btn-outline-info" data-toggle="modal"
                                                     th:data-target="${'#myModal_ongoing_'+__${itemStat.index}__}">
-                                                Show securities
+                                                Show
                                             </button>
 
                                             <!-- The Modal -->
@@ -119,7 +127,7 @@
                                                         <!-- Modal body -->
                                                         <div class="modal-body">
                                                             <table>
-                                                                <thead>
+                                                                <thead class="thead-dark">
                                                                 <tr>
                                                                     <th>Name</th>
                                                                     <th>Type</th>
@@ -151,8 +159,8 @@
                                         <td>
                                             <!-- <td sec:authorize="hasRole('USER')"> -->
                                             <a th:href="@{/bids/create(auction_id=${auction.id})}"
-                                               class="btn btn-success"
-                                               role="button">Place BID</a>
+                                               class="btn btn-info"
+                                               role="button">BID</a>
                                         </td>
                                     </tr>
 
@@ -177,18 +185,18 @@
 
                                 <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
                                        cellspacing="0">
-                                    <thead>
+                                    <thead class="thead-dark">
                                     <tr>
-                                        <th>id</th>
-                                        <th>start date</th>
-                                        <th>start time</th>
-                                        <th>end date</th>
-                                        <th>end time</th>
+                                        <th>ID</th>
+                                        <th>Start date</th>
+                                        <th>Start time</th>
+                                        <th>End date</th>
+                                        <th>End time</th>
                                         <th>Bond</th>
                                         <th>Bill</th>
                                         <th>Note</th>
                                         <th>Securities</th>
-                                        <th sec:authorize="hasRole('ADMIN')">delete</th>
+                                        <th sec:authorize="hasRole('ADMIN')">Delete</th>
                                         <!-- <th sec:authorize="hasRole('ADMIN')">delete</th> -->
                                     </tr>
                                     </thead>
@@ -213,9 +221,9 @@
                                         </td>
                                         <td>
                                             <!-- Button to Open the Modal -->
-                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            <button type="button" class="btn btn-outline-info" data-toggle="modal"
                                                     th:data-target="${'#myModal_upcoming_'+__${itemStat.index}__}">
-                                                Show securities
+                                                Show
                                             </button>
 
                                             <!-- The Modal -->
@@ -226,7 +234,7 @@
                                                         <!-- Modal body -->
                                                         <div class="modal-body">
                                                             <table>
-                                                                <thead>
+                                                                <thead class="thead-dark">
                                                                 <tr>
                                                                     <th>Name</th>
                                                                     <th>Type</th>
@@ -258,7 +266,7 @@
                                         <td sec:authorize="hasRole('ADMIN')">
                                             <form th:action="@{/auctions/disable}" method="post">
                                                 <input type="hidden" name="id" th:value="*{id}">
-                                                <input type="submit" class="btn btn-danger sa_click_twoButtons"
+                                                <input type="submit" class="btn btn-outline-danger sa_click_twoButtons"
                                                        value="Delete">
                                             </form>
                                         </td>
@@ -285,16 +293,16 @@
 
                                 <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
                                        cellspacing="0">
-                                    <thead>
+                                    <thead class="thead-dark">
                                     <tr>
-                                        <th>id</th>
-                                        <th>start date</th>
-                                        <th>end date</th>
+                                        <th>ID</th>
+                                        <th>Start date</th>
+                                        <th>End date</th>
                                         <th>Bond</th>
                                         <th>Bill</th>
                                         <th>Note</th>
                                         <th>Securities</th>
-                                        <th sec:authorize="hasRole('ADMIN')">process</th>
+                                        <th sec:authorize="hasRole('ADMIN')">Process</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -316,9 +324,9 @@
                                         </td>
                                         <td>
                                             <!-- Button to Open the Modal -->
-                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            <button type="button" class="btn btn-outline-info" data-toggle="modal"
                                                     th:data-target="${'#myModal_finished_'+__${itemStat.index}__}">
-                                                Show securities
+                                                Show
                                             </button>
 
                                             <!-- The Modal -->
@@ -329,7 +337,7 @@
                                                         <!-- Modal body -->
                                                         <div class="modal-body">
                                                             <table>
-                                                                <thead>
+                                                                <thead class="thead-dark">
                                                                 <tr>
                                                                     <th>Name</th>
                                                                     <th>Type</th>
@@ -364,7 +372,7 @@
                                         <td th:unless="*{isProcessed}" sec:authorize="hasRole('ADMIN')">
                                             <form th:action="@{/auctions/process}" method="post">
                                                 <input type="hidden" name="id" th:value="*{id}">
-                                                <input type="submit" class="btn btn-success sa_click_twoButtons"
+                                                <input type="submit" class="btn btn-info sa_click_twoButtons"
                                                        value="Process">
                                             </form>
                                         </td>

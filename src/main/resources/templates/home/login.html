@@ -16,7 +16,7 @@
             <div id="auth-column" class="col-md-6">
                 <div id="auth-box" class="col-md-12">
                     <form id="auth-form" class="form" th:action="@{/login}" method="post">
-                        <h3 class="text-info1">Login</h3>
+                        <h3 class="text-info1 text-center">Login</h3>
                         <div th:if="${param.error}" class="alert alert-danger">
                             Invalid username or password.
                         </div>
@@ -34,8 +34,6 @@
                         <div class="form-group">
                             <input type="submit" name="submit" class="btn btn-info btn-md" value="Submit">
                         </div>
-
-                        <br>
 
                         <div class="text-right">
                             <a th:href="@{/register}" class="text-info">Register here</a>
