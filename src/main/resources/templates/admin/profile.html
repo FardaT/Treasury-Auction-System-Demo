@@ -79,7 +79,7 @@
                                     <td th:text="${bid.getTreasurySecurity().getMaturityDate()}"></td>
                                     <td th:text="${bid.getTreasurySecurity().getHighRate()}"></td>
                                     <td class="text-center">
-                                        <form th:action="@{/admin/profile/destroy}" th:if="${!bid.isDisabled}"
+                                        <form th:action="@{/bids/destroy}" th:if="${!bid.isDisabled}"
                                               method="post">
                                             <input type="hidden" name="bidId" th:value="${bid.id}">
                                             <input type="submit" class="btn btn-danger" value="Delete">
