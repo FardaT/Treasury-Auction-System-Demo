@@ -13,7 +13,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping({"/public"})
+@RequestMapping({"/api"})
 public class RestApiController {
 
 	private final AppUserService appUserService;
@@ -35,8 +35,4 @@ public class RestApiController {
 		return appUserService.getAllAppUsersDto();
 	}
 
-	/*@GetMapping("/bids")
-	public List<BidResponseDTO> getBids(Principal principal) {
-		return bidService.getAllBidsDto(principal.getName());
-	}*/
 }
