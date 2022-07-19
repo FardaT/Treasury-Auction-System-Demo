@@ -1,15 +1,14 @@
 package com.greenfox.treasuryauctionsystem.controllers.rest_controllers;
 
 import com.greenfox.treasuryauctionsystem.models.dtos.AppUserDTO;
-import com.greenfox.treasuryauctionsystem.models.dtos.BidResponseDTO;
+import com.greenfox.treasuryauctionsystem.models.dtos.AuctionApiResponseDTO;
 import com.greenfox.treasuryauctionsystem.services.AppUserService;
-import com.greenfox.treasuryauctionsystem.services.BidService;
+import com.greenfox.treasuryauctionsystem.services.AuctionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -17,12 +16,12 @@ import java.util.List;
 public class RestApiController {
 
 	private final AppUserService appUserService;
-	private final BidService bidService;
+	private final AuctionService auctionService;
 
 	@Autowired
-	public RestApiController (AppUserService appUserService, BidService bidService) {
+	public RestApiController (AppUserService appUserService, AuctionService auctionService) {
 		this.appUserService = appUserService;
-		this.bidService = bidService;
+		this.auctionService = auctionService;
 	}
 
 	@GetMapping
@@ -33,6 +32,20 @@ public class RestApiController {
 	@GetMapping("/appusers")
 	public List<AppUserDTO> appUsers () {
 		return appUserService.getAllAppUsersDto();
+	}
+	@GetMapping("/auctions/upcoming")
+	public List<AuctionApiResponseDTO> upcomingAuctions () {
+		return auctionService.getAllUpcomingAuctions();
+	}
+
+	@GetMapping("/auctions/ongoing")
+	public List<AuctionApiResponseDTO> ongoingAuctions () {
+		return auctionService.getAllOngoingAuctions();
+	}
+
+	@GetMapping("/auctions/finished")
+	public List<AuctionApiResponseDTO> finishedAuctions () {
+		return auctionService.getAllFinishedAuctions();
 	}
 
 }
