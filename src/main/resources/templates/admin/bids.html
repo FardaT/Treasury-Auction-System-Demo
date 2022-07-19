@@ -44,10 +44,10 @@
                                     <th>Competitive</th>
                                     <th>Accepted</th>
                                     <th>Archived</th>
+                                    <th>Active</th>
                                     <th>Security</th>
                                     <th>Auction</th>
                                     <th>User</th>
-                                    <th>Disabled</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -63,18 +63,11 @@
                                         class="text-center"></td>
                                     <td th:text="${bid.isArchived == true ? '&#9989;' : '&#10060;'}"
                                         class="text-center"></td>
+                                    <td th:text="${bid.isDisabled == true ? '&#10060;' : '&#9989;'}"
+                                        class="text-center"></td>
                                     <td th:text="${bid.treasurySecurity.securityName}"></td>
                                     <td th:text="${bid.treasurySecurity.auction.id}"></td>
                                     <td th:text="${bid.user.username}"></td>
-                                    <td>
-                                        <form th:action="@{/bids/destroy}" th:if="${!bid.isDisabled}" method="post">
-                                            <input type="hidden" name="bidId" th:value="${bid.id}">
-                                            <input type="submit" class="btn btn-danger" value="Delete">
-                                        </form>
-                                        <div th:if="${bid.isDisabled}">
-                                            <b><span style="color: red;">YES</span></b>
-                                        </div>
-                                    </td>
                                 </tr>
                                 </tbody>
 

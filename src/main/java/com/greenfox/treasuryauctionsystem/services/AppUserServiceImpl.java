@@ -209,7 +209,6 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 		for (AppUser item : appUserRepository.findAll()) {
 			appUserDTOList.add(new AppUserDTO(
 					item.getUsername(),
-					item.getEmail(),
 					item.getInstitution(),
 					item.isAdmin(),
 					item.isActivated(),
