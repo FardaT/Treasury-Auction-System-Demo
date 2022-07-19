@@ -47,7 +47,6 @@
                                     <th>Security</th>
                                     <th>Auction</th>
                                     <th>User</th>
-                                    <th>Disabled</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -66,15 +65,6 @@
                                     <td th:text="${bid.treasurySecurity.securityName}"></td>
                                     <td th:text="${bid.treasurySecurity.auction.id}"></td>
                                     <td th:text="${bid.user.username}"></td>
-                                    <td>
-                                        <form th:action="@{/bids/destroy}" th:if="${!bid.isDisabled}" method="post">
-                                            <input type="hidden" name="bidId" th:value="${bid.id}">
-                                            <input type="submit" class="btn btn-danger" value="Delete">
-                                        </form>
-                                        <div th:if="${bid.isDisabled}">
-                                            <b><span style="color: red;">YES</span></b>
-                                        </div>
-                                    </td>
                                 </tr>
                                 </tbody>
 
