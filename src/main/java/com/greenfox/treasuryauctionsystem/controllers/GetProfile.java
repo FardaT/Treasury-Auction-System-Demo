@@ -30,19 +30,9 @@ public class GetProfile {
 	@GetMapping("/profile")
 	public String getProfile (Principal principal, Model model) {
 		AppUser currentUser = appUserService.getUserByUsername(principal.getName());
-		//List<BidResponseDTO> allBidsDto = bidService.getAllBidsDto(principal.getName());
 		model.addAttribute("user", currentUser);
-		//model.addAttribute("bids", allBidsDto);
 		model.addAttribute("bids", currentUser.getBids());
 
 		return "/admin/profile";
 	}
-	@PostMapping("admin/profile/destroy")
-	public String destroy(@RequestParam Long bidId) {
-
-		bidService.disableBid(bidId);
-
-		return "redirect:/profile";
-	}
-
 }
