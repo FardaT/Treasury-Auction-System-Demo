@@ -7,7 +7,6 @@ import com.greenfox.treasuryauctionsystem.repositories.BidRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 @Slf4j
-public class BotTimerTask extends TimerTask {
+public class BotTimerTask implements Runnable {
   private BidRepository bidRepository;
   private AppUserRepository appUserRepository;
   private Auction auction;
@@ -51,7 +50,7 @@ public class BotTimerTask extends TimerTask {
       if(auction.getAuctionEndDate().isBefore(LocalDateTime.now())){
         break;
       }
-      Thread.sleep((long)((Math.random() * (25000 - 8000)) + 8000));
+      Thread.sleep((long)((Math.random() * (19000 - 8000)) + 8000));
       bot.setBids(bot.generateBids(auction));
       bidRepository.saveAll(bot.getBids());
     }
