@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <!-- HEADER -->
 <head th:replace="fragments/admin/header :: header"></head>
@@ -72,7 +72,7 @@
                                         <th>Total Amount</th>
                                         <th>Issue Date</th>
                                         <th>Maturity Date</th>
-                                        <th>Bid</th>
+                                        <th sec:authorize="hasRole('USER')">Bid</th>
                                     </thead>
 
                                     <tbody>
@@ -84,7 +84,7 @@
                                         <td th:text="*{totalAmount}"></td>
                                         <td th:text="*{issueDate}"></td>
                                         <td th:text="*{maturityDate}"></td>
-                                        <td>
+                                        <td sec:authorize="hasRole('USER')">
                                             <a th:href="@{/bids/create(auction_id=*{auctionId})}"
                                                class="btn btn-info"
                                                role="button">BID</a>
