@@ -17,4 +17,10 @@ public class LoginController {
     }
     return "home/login";
   }
+
+  @GetMapping("/")
+  public String redirectIfLoggedIn(){
+    return "redirect:/auctions";
+  }
+
 }
