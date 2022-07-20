@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <!-- HEADER -->
 <head th:replace="fragments/admin/header :: header"></head>
@@ -21,7 +21,7 @@
                 <h1 class="mt-4 ml-5">Create auction</h1>
                 <div class="card mb-4 ml-5">
                     <div class="card-body">
-                        This is where you can create new auctions in the system.
+                        This is a page where you can create a new auction.
                     </div>
                 </div>
 
@@ -56,17 +56,15 @@
                                 </form>
 
                                 <div th:if="${INVALID_AUCTION != null}">
-                                    <p th:text="${INVALID_AUCTION}" style="color: red;"></p>
+                                    <p th:text="${INVALID_AUCTION}" style="color: #a42222;"></p>
                                 </div>
 
                             </div>
 
-                            <hr>
-
                             <!-- *********************** -->
                             <!-- ADD SECURITY -->
                             <!-- *********************** -->
-
+                            <hr><br>
                             <div class="ml-5 mb-2">
                                 <form action="/admin/auctions/add-security" method="post" id="addSecurityForm"
                                       class="form-inline">
@@ -114,7 +112,7 @@
 
                                     <!--th:value="${errorSecurityValue != null} ? ${#temporals.formatISO(errorSecurityValue.issueDate)} : ''"-->
 
-                                    <button type="submit" form="addSecurityForm" class="btn btn-primary">
+                                    <button type="submit" form="addSecurityForm" class="btn btn-info">
                                         Add
                                     </button>
 
@@ -129,7 +127,7 @@
                                    style="color: red;"></p>
                                 <p th:if="${ISSUE_DATE_ERROR != null}" th:text="${ISSUE_DATE_ERROR}"
                                    style="color: red;"></p>
-                            </div>
+                            </div> <br>
 
                             <!-- *********************** -->
                             <!-- LISTING ADDED SECURITIES -->
@@ -137,7 +135,8 @@
 
                             <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
                                    cellspacing="0">
-                                <tr>
+
+                                <tr class="thead-dark">
                                     <th>Security type</th>
                                     <th>Security term</th>
                                     <th>Offering amount</th>
@@ -154,11 +153,11 @@
                                     <td>
                                         <form th:action="'/admin/auctions/remove-security/' + *{securityTerm} + '_' + *{securityType}"
                                               method="post">
-                                            <button type="submit" class="btn btn-primary">Remove</button>
+                                            <button type="submit" class="btn btn-outline-danger">Remove</button>
                                         </form>
                                     </td>
                                 </tr>
-                            </table>
+                            </table> <br>
 
                             <!-- *********************** -->
                             <!-- CREATE AUCTION -->
@@ -170,14 +169,14 @@
                                 <input id="setBots" type="number" name="numberOfBots" form="create-auction" value="0" class="form-control w-25"><br>
 
                                 <form action="/admin/auctions/create" method="post" id="create-auction">
-                                    <button type="submit" class="btn btn-primary sa_create_auction_confirmation">Create
-                                        auction
+                                    <button type="submit" class="btn btn-info btn-lg sa_create_auction_confirmation">Create
+                                        Auction
                                     </button>
                                 </form>
                                 <form hidden action="/admin/auctions/cancel-creation" method="post"
                                       id="cancel-auction-creation">
-                                    <button hidden type="submit" class="btn btn-primary sa_create_auction_confirmation">
-                                        Delete auction
+                                    <button hidden type="submit" class="btn btn-dark btn-lg sa_create_auction_confirmation">
+                                        Delete Auction
                                     </button>
                                 </form>
                             </div>

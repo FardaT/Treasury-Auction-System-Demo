@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <!-- HEADER -->
 <head th:replace="fragments/admin/header :: header"></head>
@@ -25,19 +25,20 @@
                         <a th:href="@{/auctions}">auctions page</a>.
                     </div>
                 </div>
+                <hr>
                 <div class="card mb-4">
-                    <!--                    <div class="card-header">-->
-                    <!--                        <i class="fas fa-table mr-1"></i>-->
-                    <!--                        DataTable Example-->
-                    <!--                    </div>-->
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
-                                   cellspacing="0">
+                    <div class="card-header">
+                        <!--     <i class="fas fa-table mr-1"></i>
+                          Bids
+                           </div>-->
+                        <div class="card-body">
+                            <div class="table-responsive ">
+                                <table cellspacing="0" class="table table-bordered w-auto ml-5 mr-auto" id="dataTable"
+                                       width="100%">
 
-                                <thead>
+                                <thead class="thead-dark">
                                 <tr>
-                                    <th>id</th>
+                                    <th>ID</th>
                                     <th>Created At</th>
                                     <th>Amount</th>
                                     <th>Rate</th>
@@ -71,7 +72,8 @@
                                 </tr>
                                 </tbody>
 
-                            </table>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
