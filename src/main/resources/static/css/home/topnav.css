@@ -2,7 +2,7 @@
 box-sizing:border-box}
 
 .navbar{width: 100%;
-background-image: linear-gradient(to right, #255f69, #122636, #2a3d4b) ;
+background-image: linear-gradient(to right, #255f69, #1e4467, #142228) ;
 }
 
 .navbar-brand{color:white!important;}
@@ -22,7 +22,7 @@ background-image: linear-gradient(to right, #255f69, #122636, #2a3d4b) ;
 
 @-webkit-keyframes glow {
     from {
-        text-shadow: 0 0 10px rgba(157, 155, 155, 0.47), 0 0 10px #808880, 0 0 10px rgba(26, 27, 37, 0.62);
+        text-shadow: 0 0 10px rgba(157, 155, 155, 0.47), 0 0 10px #8eb48e, 0 0 10px rgba(26, 27, 37, 0.62);
     }
 
     to {
