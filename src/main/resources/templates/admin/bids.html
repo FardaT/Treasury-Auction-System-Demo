@@ -36,48 +36,41 @@
                                 <table cellspacing="0" class="table table-bordered w-auto ml-5 mr-auto" id="dataTable"
                                        width="100%">
 
-                                    <thead class="thead-dark">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Created At</th>
-                                        <th>Amount</th>
-                                        <th>Rate</th>
-                                        <th>Competitive</th>
-                                        <th>Accepted</th>
-                                        <th>Archived</th>
-                                        <th>Security</th>
-                                        <th>Auction</th>
-                                        <th>User</th>
-                                        <th>Disabled</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="bid : ${bids}">
-                                        <td th:text="${bid.id}"></td>
-                                        <!-- https://www.baeldung.com/dates-in-thymeleaf -->
-                                        <td th:text="${#temporals.format(bid.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
-                                        <td th:text="${bid.amount}"></td>
-                                        <td th:text="${bid.rate}"></td>
-                                        <td class="text-center"
-                                            th:text="${bid.isCompetitive == true ? '&#9989;' : '&#10060;'}"></td>
-                                        <td class="text-center"
-                                            th:text="${bid.isAccepted == true ? '&#9989;' : '&#10060;'}"></td>
-                                        <td class="text-center"
-                                            th:text="${bid.isArchived == true ? '&#9989;' : '&#10060;'}"></td>
-                                        <td th:text="${bid.treasurySecurity.securityName}"></td>
-                                        <td th:text="${bid.treasurySecurity.auction.id}"></td>
-                                        <td th:text="${bid.user.username}"></td>
-                                        <td>
-                                            <form method="post" th:action="@{/bids/destroy}" th:if="${!bid.isDisabled}">
-                                                <input name="bidId" th:value="${bid.id}" type="hidden">
-                                                <input class="btn btn-outline-danger " type="submit" value="Delete">
-                                            </form>
-                                            <div th:if="${bid.isDisabled}">
-                                                <b><span style="color: red;">YES</span></b>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Created At</th>
+                                    <th>Amount</th>
+                                    <th>Rate</th>
+                                    <th>Competitive</th>
+                                    <th>Accepted</th>
+                                    <th>Archived</th>
+                                    <th>Active</th>
+                                    <th>Security</th>
+                                    <th>Auction</th>
+                                    <th>User</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="bid : ${bids}">
+                                    <td th:text="${bid.id}"></td>
+                                    <!-- https://www.baeldung.com/dates-in-thymeleaf -->
+                                    <td th:text="${#temporals.format(bid.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
+                                    <td th:text="${bid.amount}"></td>
+                                    <td th:text="${bid.rate}"></td>
+                                    <td th:text="${bid.isCompetitive == true ? '&#9989;' : '&#10060;'}"
+                                        class="text-center"></td>
+                                    <td th:text="${bid.isAccepted == true ? '&#9989;' : '&#10060;'}"
+                                        class="text-center"></td>
+                                    <td th:text="${bid.isArchived == true ? '&#9989;' : '&#10060;'}"
+                                        class="text-center"></td>
+                                    <td th:text="${bid.isDisabled == true ? '&#10060;' : '&#9989;'}"
+                                        class="text-center"></td>
+                                    <td th:text="${bid.treasurySecurity.securityName}"></td>
+                                    <td th:text="${bid.treasurySecurity.auction.id}"></td>
+                                    <td th:text="${bid.user.username}"></td>
+                                </tr>
+                                </tbody>
 
                                 </table>
                             </div>
