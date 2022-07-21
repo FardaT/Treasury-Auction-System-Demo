@@ -71,7 +71,7 @@ public class AuctionSeeder {
         user2.setActivationTokenExpiration(Utility.setExpiration(ApplicationDetails.expiration));
         user2.setAdmin(false);
         user2.setActivated(true);
-        user2.setApproved(true);
+        user2.setApproved(false);
         user2.setDisabled(false);
 
         // ******************************* //
@@ -133,6 +133,62 @@ public class AuctionSeeder {
         treasurySecurity6.setMaturityDate(LocalDate.now().plusWeeks(2).plusYears(5));
         treasurySecurity6.setHighRate(2.722f);
 
+        // SECURITIES for the upcoming auction
+        TreasurySecurity treasurySecurity7 = new TreasurySecurity();
+        treasurySecurity7.setSecurityName("30-year T-Bond");
+        treasurySecurity7.setSecurityType("T-Bond");
+        treasurySecurity7.setSecurityTerm("30-year");
+        treasurySecurity7.setTotalAmount(95_000_000);
+        treasurySecurity7.setIssueDate(LocalDate.now().plusWeeks(1));
+        treasurySecurity7.setMaturityDate(LocalDate.now().plusWeeks(1).plusYears(30));
+        treasurySecurity7.setHighRate(3.350f);
+
+        TreasurySecurity treasurySecurity8 = new TreasurySecurity();
+        treasurySecurity8.setSecurityName("26-week T-Bill");
+        treasurySecurity8.setSecurityType("T-Bill");
+        treasurySecurity8.setSecurityTerm("26-week");
+        treasurySecurity8.setTotalAmount(65_000_000);
+        treasurySecurity8.setIssueDate(LocalDate.now().plusDays(10));
+        treasurySecurity8.setMaturityDate(LocalDate.now().plusDays(10).plusWeeks(26));
+        treasurySecurity8.setHighRate(1.808f);
+
+        TreasurySecurity treasurySecurity9 = new TreasurySecurity();
+        treasurySecurity9.setSecurityName("26-week T-Bill");
+        treasurySecurity9.setSecurityType("T-Bill");
+        treasurySecurity9.setSecurityTerm("26-week");
+        treasurySecurity9.setTotalAmount(65_000_000);
+        treasurySecurity9.setIssueDate(LocalDate.now().plusDays(10));
+        treasurySecurity9.setMaturityDate(LocalDate.now().plusDays(10).plusWeeks(26));
+        treasurySecurity9.setHighRate(1.808f);
+
+        // SECURITIES for the finished auction
+        TreasurySecurity treasurySecurity10 = new TreasurySecurity();
+        treasurySecurity10.setSecurityName("30-year T-Bond");
+        treasurySecurity10.setSecurityType("T-Bond");
+        treasurySecurity10.setSecurityTerm("30-year");
+        treasurySecurity10.setTotalAmount(95_000_000);
+        treasurySecurity10.setIssueDate(LocalDate.now().plusWeeks(1));
+        treasurySecurity10.setMaturityDate(LocalDate.now().plusWeeks(1).plusYears(30));
+        treasurySecurity10.setHighRate(3.350f);
+
+        TreasurySecurity treasurySecurity11 = new TreasurySecurity();
+        treasurySecurity11.setSecurityName("30-year T-Bond");
+        treasurySecurity11.setSecurityType("T-Bond");
+        treasurySecurity11.setSecurityTerm("30-year");
+        treasurySecurity11.setTotalAmount(95_000_000);
+        treasurySecurity11.setIssueDate(LocalDate.now().plusWeeks(1));
+        treasurySecurity11.setMaturityDate(LocalDate.now().plusWeeks(1).plusYears(30));
+        treasurySecurity11.setHighRate(3.350f);
+
+        TreasurySecurity treasurySecurity12 = new TreasurySecurity();
+        treasurySecurity12.setSecurityName("5-year T-Note");
+        treasurySecurity12.setSecurityType("T-Note");
+        treasurySecurity12.setSecurityTerm("5-year");
+        treasurySecurity12.setTotalAmount(100_000_000);
+        treasurySecurity12.setIssueDate(LocalDate.now().plusWeeks(2));
+        treasurySecurity12.setMaturityDate(LocalDate.now().plusWeeks(2).plusYears(5));
+        treasurySecurity12.setHighRate(1.645f);
+
         // ******************************* //
         // ************ AUCTIONS ************ //
         // ******************************* //
@@ -161,6 +217,9 @@ public class AuctionSeeder {
         Auction upcoming = new Auction();
         upcoming.setAuctionStartDate(LocalDateTime.now().plusDays(1));
         upcoming.setAuctionEndDate(LocalDateTime.now().plusDays(1).plusMinutes(45));
+        upcoming.addTreasurySecurity(treasurySecurity7);
+        upcoming.addTreasurySecurity(treasurySecurity8);
+        upcoming.addTreasurySecurity(treasurySecurity9);
         upcoming.setProcessed(false);
         upcoming.setDisabled(false);
 
@@ -168,6 +227,9 @@ public class AuctionSeeder {
         Auction finished = new Auction();
         finished.setAuctionStartDate(LocalDateTime.now().minusDays(3).minusHours(2));
         finished.setAuctionEndDate(LocalDateTime.now().minusDays(3).minusHours(1));
+        finished.addTreasurySecurity(treasurySecurity10);
+        finished.addTreasurySecurity(treasurySecurity11);
+        finished.addTreasurySecurity(treasurySecurity12);
         finished.setProcessed(false);
         finished.setDisabled(false);
 
