@@ -92,7 +92,9 @@ $(".sa_create_auction_confirmation").click(function (e) {
         showCancelButton: true,
         showCloseButton:true,
         confirmButtonText: 'Submit',
+        confirmButtonColor: '#1e1d1d',
         denyButtonText: `Delete changes`,
+        denyButtonColor: '#c42e2e',
     }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {

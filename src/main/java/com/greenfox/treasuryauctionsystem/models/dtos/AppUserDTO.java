@@ -15,7 +15,6 @@ import java.util.List;
 public class AppUserDTO {
 
 	private String username;
-	private String email;
 	private String institution;
 	private boolean isAdmin;
 	private boolean isActivated;

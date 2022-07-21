@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <!-- HEADER -->
 <head th:replace="fragments/admin/header :: header"></head>
@@ -24,6 +24,7 @@
                         This is a list of all securities in the system.
                     </div>
                 </div>
+                <hr>
 
                 <div class="card mb-4">
                     <!--                    <div class="card-header">-->
@@ -37,19 +38,19 @@
                             <form action="/securities" class="form-inline ml-5">
                                 <label for="ongoingSortBy" class="mr-2">Sort securities:</label>
                                 <select th:name="ongoingSortBy" id="ongoingSortBy" class="form-control mr-2">
-                                    <option value="default" disabled selected>Select sort type</option>
-                                    <option value="type">type</option>
-                                    <option value="name">name</option>
-                                    <option value="issueDate">issue date</option>
-                                    <option value="maturityDate">maturity date</option>
-                                    <option value="totalAmount">total amount</option>
+                                    <option value="default" disabled selected>Select type</option>
+                                    <option value="type">Type</option>
+                                    <option value="name">Name</option>
+                                    <option value="issueDate">Issue Date</option>
+                                    <option value="maturityDate">Maturity Date</option>
+                                    <option value="totalAmount">Total Amount</option>
                                 </select>
                                 <select th:name="ongoingOrder" id="ongoingOrder" class="form-control mr-2">
                                     <option value="null" disabled selected>Select order</option>
-                                    <option value="asc">ascending</option>
-                                    <option value="desc">descending</option>
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Descending</option>
                                 </select>
-                                <button type="submit" class="btn btn-primary">sort</button>
+                                <button type="submit" class="btn btn-info">Sort</button>
                             </form>
 
                             <!-- ONGOING SORTING TABLE -->
@@ -58,20 +59,20 @@
                             </div>
                             <div th:unless="${#lists.isEmpty(ongoing)}" class="table-container">
 
-                                <h3 class="ml-5 mt-2">Securities of the ongoing auctions</h3>
+                                <h3 class="ml-5 mt-2">Ongoing Auction Securities</h3>
 
                                 <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
                                        cellspacing="0">
-                                    <thead>
+                                    <thead class="thead-dark text-center">
                                     <tr>
-                                        <th>id</th>
-                                        <th>name</th>
-                                        <th>type</th>
-                                        <th>term</th>
-                                        <th>total amount</th>
-                                        <th>issue date</th>
-                                        <th>maturity date</th>
-                                        <th>BID</th>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Term</th>
+                                        <th>Total Amount</th>
+                                        <th>Issue Date</th>
+                                        <th>Maturity Date</th>
+                                        <th sec:authorize="hasRole('USER')">Bid</th>
                                     </thead>
 
                                     <tbody>
@@ -83,56 +84,56 @@
                                         <td th:text="*{totalAmount}"></td>
                                         <td th:text="*{issueDate}"></td>
                                         <td th:text="*{maturityDate}"></td>
-                                        <td>
+                                        <td sec:authorize="hasRole('USER')">
                                             <a th:href="@{/bids/create(auction_id=*{auctionId})}"
-                                               class="btn btn-success"
-                                               role="button">Place BID</a>
+                                               class="btn btn-info"
+                                               role="button">BID</a>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
-
+                            <br>
                             <hr>
 
                             <!-- UPCOMING SORTING FORM -->
                             <form action="/securities" class="form-inline ml-5">
                                 <label for="upcomingSortBy" class="mr-2">Sort securities:</label>
                                 <select th:name="upcomingSortBy" id="upcomingSortBy" class="form-control mr-2">
-                                    <option value="default" disabled selected>Select sort type</option>
-                                    <option value="type">type</option>
-                                    <option value="name">name</option>
-                                    <option value="issueDate">issue date</option>
-                                    <option value="maturityDate">maturity date</option>
-                                    <option value="totalAmount">total amount</option>
+                                    <option value="default" disabled selected>Select type</option>
+                                    <option value="type">Type</option>
+                                    <option value="name">Name</option>
+                                    <option value="issueDate">Issue Date</option>
+                                    <option value="maturityDate">Maturity Date</option>
+                                    <option value="totalAmount">Total Amount</option>
                                 </select>
                                 <select th:name="upcomingOrder" id="upcomingOrder" class="form-control mr-2">
                                     <option value="null" disabled selected>Select order</option>
-                                    <option value="asc">ascending</option>
-                                    <option value="desc">descending</option>
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Descending</option>
                                 </select>
-                                <button type="submit" class="btn btn-primary">sort</button>
+                                <button type="submit" class="btn btn-info">Sort</button>
                             </form>
 
                             <!-- UPCOMING SORTING TABLE -->
                             <div th:if="${ #lists.isEmpty(upcoming)}">
-                                <h3 class="ml-5 mt-2">No upcoming auctions</h3>
+                                <h4 class="ml-5 mt-2">There are no upcoming auctions.</h4>
                             </div>
                             <div th:unless="${#lists.isEmpty(upcoming)}" class="table-container">
 
-                                <h3 class="ml-5 mt-2">Securities of the upcoming auctions</h3>
+                                <h3 class="ml-5 mt-2">Upcoming Auction Securities</h3>
 
                                 <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
                                        cellspacing="0">
-                                    <thead>
+                                    <thead class="thead-dark text-center">
                                     <tr>
-                                        <th>id</th>
-                                        <th>name</th>
-                                        <th>type</th>
-                                        <th>term</th>
-                                        <th>total amount</th>
-                                        <th>issue date</th>
-                                        <th>maturity date</th>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Term</th>
+                                        <th>Total Amount</th>
+                                        <th>Issue Date</th>
+                                        <th>Maturity Date</th>
                                     </thead>
 
                                     <tbody>

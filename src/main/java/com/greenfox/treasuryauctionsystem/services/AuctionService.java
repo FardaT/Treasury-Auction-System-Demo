@@ -1,6 +1,7 @@
 package com.greenfox.treasuryauctionsystem.services;
 
 import com.greenfox.treasuryauctionsystem.models.Auction;
+import com.greenfox.treasuryauctionsystem.models.dtos.AuctionApiResponseDTO;
 import com.greenfox.treasuryauctionsystem.models.dtos.AuctionDateDTO;
 import com.greenfox.treasuryauctionsystem.exceptions.NoSuchAuctionException;
 import com.greenfox.treasuryauctionsystem.models.dtos.AuctionResponseDTO;
@@ -13,6 +14,12 @@ import org.springframework.stereotype.Service;
 public interface AuctionService {
 
   Map<String, List<AuctionResponseDTO>> getAllAuctionsByStatus();
+
+  List<AuctionApiResponseDTO> getAllUpcomingAuctions ();
+
+  List<AuctionApiResponseDTO> getAllFinishedAuctions ();
+
+  List<AuctionApiResponseDTO> getAllOngoingAuctions ();
 
   void disable(Long id)throws NoSuchAuctionException;
 

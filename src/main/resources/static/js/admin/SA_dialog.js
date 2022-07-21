@@ -39,8 +39,8 @@ $(document).ready(function () {
             text: "You won't be able to revert this!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#608bb9',
+            cancelButtonColor: '#c25555',
             confirmButtonText: 'Yes, proceed!'
         }).then((result) => {
             if (result.isConfirmed) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <!-- HEADER -->
 <head th:replace="fragments/admin/header :: header"></head>
@@ -33,7 +33,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
 
-                            <h3 class="mt-5 ml-5">Auction details</h3>
+                            <h3 class="mt-5 ml-5">Auction Details</h3>
 
                             <form action="">
                                 <input type="hidden" id="ending" th:value="${ending}">
@@ -41,11 +41,11 @@
 
                             <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
                                    cellspacing="0">
-                                <thead>
+                                <thead class="thead-dark text-center">
                                 <tr>
-                                    <th>id</th>
-                                    <th>start_date</th>
-                                    <th>end_date</th>
+                                    <th>ID</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
                                 </tr>
                                 </thead>
                                 <tr>
@@ -56,33 +56,34 @@
                                 </tr>
                             </table>
 
-                            <div class="text-center">
-                                <h3>
+                            <div class="text-left ml-5">
+                                <h5>
                                     Remaining time: <span id="demo"></span>
-                                </h3>
+                                </h5>
                             </div>
+                            <hr>
 
-                            <h3 class="ml-5">Create new bid</h3>
+                            <h4 style="text-align:center">Create a new bid:</h4>
 
                             <div th:if="${AT_LEAST_ONE} != null">
                                 <p th:text="${AT_LEAST_ONE}"
-                                   style="color: red;"></p>
+                                   style="color: rgba(255,0,0,0.65);"></p>
                             </div>
 
                             <div th:if="${AMOUNT_NONCOMPETITIVE} != null">
                                 <p th:text="${AMOUNT_NONCOMPETITIVE}"
-                                   style="color: red;"></p>
+                                   style="color: rgba(255,0,0,0.65);"></p>
                             </div>
 
                             <form class="form-inline" th:action="@{/bids/store}" th:object="${form}" method="post">
 
                                 <input type="hidden" th:name="auction_id" th:value="${auction.id}">
 
-                                <table class="table table-bordered w-auto ml-5" id="dataTable" width="100%"
+                                <table class="table table-bordered w-auto m-auto" id="dataTable" width="100%"
                                        cellspacing="0">
-                                    <thead>
+                                    <thead class="thead-dark text-center">
                                     <tr>
-                                        <th>Security name</th>
+                                        <th>Security Name</th>
                                         <th>Type</th>
                                         <th>Offering Amount</th>
                                         <th>Amount</th>
@@ -109,7 +110,7 @@
                                             <select class="form-control isCompetitive" id="isCompetitive"
                                                     th:field="*{bidDTOS[__${itemStat.index}__].isCompetitive}">
                                                 <option th:value="1" th:text="Competitive"></option>
-                                                <option th:value="0" th:text="Noncompetitive"></option>
+                                                <option th:value="0" th:text="Non-competitive"></option>
                                             </select>
                                         </td>
 
@@ -149,8 +150,8 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        <td colspan="5" style="text-align:center">
+                                            <button type="submit" class="btn btn-info btn-lg">Submit</button>
                                         </td>
                                     </tr>
                                     </tbody>
