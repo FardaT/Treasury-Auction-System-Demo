@@ -341,4 +341,10 @@ class AuctionServiceImplTest {
       assertEquals(0, treasurySecurityRepository.findById(5L).get().getHighRate());
     }
   }
+
+  @Test
+  void validateSecurityForAuction_WithValidEntries_ReturnTrue() {
+
+
+  }
 }
