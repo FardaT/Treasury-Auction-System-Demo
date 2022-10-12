@@ -9,6 +9,9 @@ jar {
                 'Main-Class': 'com.greenfox.treasuryauctionsystem.TreasuryAuctionSystemApplication'
         )
     }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 group = 'com.greenfox'
@@ -26,7 +29,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
