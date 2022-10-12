@@ -13,12 +13,11 @@ import com.greenfox.treasuryauctionsystem.repositories.TreasurySecurityRepositor
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 class AuctionServiceImplTest_2 {
-
+/*
   @Mock
   private AuctionRepository auctionRepository;
   @Mock
@@ -58,6 +57,6 @@ class AuctionServiceImplTest_2 {
     verify(auctionRepository).save(new Auction());
 
     assertThrows(InvalidAuctionException.class, () -> auction.getTreasurySecurityList().isEmpty());
-  }
+  }*/
 
 }
