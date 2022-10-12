@@ -9,10 +9,13 @@ jar {
                 'Main-Class': 'com.greenfox.treasuryauctionsystem.TreasuryAuctionSystemApplication'
         )
     }
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
 }
+task copyToLib(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile)
+}
+
+stage.dependsOn(copyToLib)
 
 group = 'com.greenfox'
 version = '0.0.1-SNAPSHOT'
