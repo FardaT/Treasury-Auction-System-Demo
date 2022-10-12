@@ -1,1 +1,1 @@
-web: java -jar build/libs/Treasury-Auction-System-0.0.1-SNAPSHOT.jar
+web: java -jar build/libs/treasury-auction-system-0.0.1-SNAPSHOT.jar
