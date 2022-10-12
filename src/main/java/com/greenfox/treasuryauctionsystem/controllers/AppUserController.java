@@ -128,7 +128,7 @@ public class AppUserController {
 		}
 	}
 
-	@GetMapping("/resetpassword")
+	@GetMapping("resetpassword")
 	public String showResetPasswordForm () {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
@@ -137,7 +137,7 @@ public class AppUserController {
 		return "home/resetpasswordform";
 	}
 
-	@PostMapping("/resetpassword")
+	@PostMapping("resetpassword")
 	public String getEmailForPasswordReset (@ModelAttribute ForgottenPasswordEmailInput emailInput,
 	                                        Model model, RedirectAttributes redirAttrs) {
 		AppUser user = appUserService.findUserByEmail(emailInput);
@@ -152,7 +152,7 @@ public class AppUserController {
 		}
 	}
 
-	@GetMapping("/resetpassword/reset")
+	@GetMapping("resetpassword/reset")
 	public String showResetForm (@RequestParam String token, Model model) {
 		AppUser user = appUserService.validateToken(token);
 
@@ -165,7 +165,7 @@ public class AppUserController {
 		}
 	}
 
-	@PostMapping("/resetpassword/newpassword")
+	@PostMapping("resetpassword/newpassword")
 	public String saveNewPassword (@ModelAttribute PasswordReset passwordReset, Model model,
 	                               RedirectAttributes redirAttrs) {
 

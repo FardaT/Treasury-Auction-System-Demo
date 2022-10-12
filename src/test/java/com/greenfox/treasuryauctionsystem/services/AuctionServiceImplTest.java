@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AuctionServiceImplTest {
-/*
   private AppUserRepository appUserRepository;
   private BidRepository bidRepository;
   private AuctionRepository auctionRepository;
@@ -346,5 +345,5 @@ class AuctionServiceImplTest {
   void validateSecurityForAuction_WithValidEntries_ReturnTrue() {
 
 
-  }*/
+  }
 }

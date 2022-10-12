@@ -40,7 +40,7 @@ public class CreateAuctionController {
     this.botTimerTaskUtil = botTimerTaskUtil;
   }
 
-    @GetMapping("/auctions/create")
+    @GetMapping("auctions/create")
     public String renderAuctionCreationPage(Model model, Principal principal) {
         AppUser currentUser = appUserService.getUserByUsername(principal.getName());
         model.addAttribute("user", currentUser);
@@ -49,7 +49,7 @@ public class CreateAuctionController {
         return "admin/create-auction";
     }
 
-    @PostMapping("/auctions/create")
+    @PostMapping("auctions/create")
     public String createAuction(@ModelAttribute(name="auctionTime")AuctionDateDTO auctionDateDTO, RedirectAttributes redirectAttributes) {
       try {
           tempAuction = auctionService.setDateToAuction(tempAuction, auctionDateDTO);
@@ -67,7 +67,7 @@ public class CreateAuctionController {
         return "redirect:/auctions";
     }
 
-    @PostMapping("/auctions/add-security")
+    @PostMapping("auctions/add-security")
     public String addSecurityToTempAuction(@ModelAttribute TempSecurityDTO tempSecurityDTO, RedirectAttributes redirectAttributes) {
         Map<String, String> addSecurityResultMessage = auctionService.validateSecurityForAuction(
                 tempAuction, tempSecurityDTO);
@@ -94,13 +94,13 @@ public class CreateAuctionController {
         }
     }
 
-    @PostMapping("/auctions/cancel-creation")
+    @PostMapping("auctions/cancel-creation")
     public String cancelAuctionCreation() {
         tempAuction = new Auction();
         return "redirect:/auctions";
     }
 
-    @PostMapping("/auctions/remove-security/{securityName}")
+    @PostMapping("auctions/remove-security/{securityName}")
     public String deleteSecurityfromTempAuction(@PathVariable("securityName") String securityName) {
         for (TreasurySecurity sec : tempAuction.getTreasurySecurityList()) {
             if (sec.getSecurityName().replace(' ', '_').equals(securityName)) {

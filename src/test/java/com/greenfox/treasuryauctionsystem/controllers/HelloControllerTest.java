@@ -17,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class HelloControllerTest {
 
-/*
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -33,6 +32,6 @@ public class HelloControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get("/hello")).andExpect(status().isFound());
 		//mockMvc.perform(MockMvcRequestBuilders.get("/hello")).andExpect(status().isUnauthorized());
 		//mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(status().is2xxSuccessful());
-	}*/
+	}
 
 }
