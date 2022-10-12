@@ -3,7 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
 }
-jar {
+/*jar {
     manifest {
         attributes(
                 'Main-Class': 'com.greenfox.treasuryauctionsystem.TreasuryAuctionSystemApplication'
@@ -15,10 +15,10 @@ build.mustRunAfter clean
 
 task copyToLib(type: Copy) {
     into "$buildDir/libs"
-    from(configurations.runtimeClasspath)
+    from(configurations.compile)
 }
 
-stage.dependsOn(copyToLib)
+stage.dependsOn(copyToLib)*/
 
 group = 'com.greenfox'
 version = '0.0.1-SNAPSHOT'
