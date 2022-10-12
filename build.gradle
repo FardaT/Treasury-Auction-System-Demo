@@ -10,9 +10,12 @@ jar {
         )
     }
 }
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
+
 task copyToLib(type: Copy) {
     into "$buildDir/libs"
-    from(configurations.compile)
+    from(configurations.implementation)
 }
 
 stage.dependsOn(copyToLib)
